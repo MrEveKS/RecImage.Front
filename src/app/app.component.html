@@ -4,41 +4,49 @@
     </div>
 </div>
 
-<nav class="navbar fixed-top navbar-dark bg-dark">
-    <div class="input-group col">
-        <div class="input-group-prepend">
-            <span class="input-group-text">Zoom</span>
-        </div>
-        <select name="inputZoom" class="form-control" [(ngModel)]="zoom">
-            <option *ngFor="let z of zooms" [value]="z.value">{{z.title}}</option>
-        </select>
-        <div class="custom-file">
-            <input type="file" class="custom-file-input" name="customFile" (change)="filesSelect($event.target.files)"
-                accept="image/*" required>
-            <label class="custom-file-label"
-                for="customFile">{{ files && files.length ? files[0].name : 'Choose file...'}}</label>
-        </div>
+<nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
+    <button class="navbar-toggler hidden-sm-up m-1" type="button" (click)="isNavbarCollapsed = !isNavbarCollapsed"
+        data-target="#navbarsDefault" aria-controls="navbarsDefault" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-        <div class="input-group-prepend">
-            <span class="input-group-text">Size</span>
+    <div [ngbCollapse]="isNavbarCollapsed" class="collapse navbar-collapse" id="navbarsDefault">
+        <div class="input-group m-1">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Zoom</span>
+            </div>
+            <select name="inputZoom" class="form-control" [(ngModel)]="zoom">
+                <option *ngFor="let z of zooms" [value]="z.value">{{z.title}}</option>
+            </select>
         </div>
-        <select name="inputSize" class="form-control" [(ngModel)]="size">
-            <option *ngFor="let s of sizes" [value]="s.value">{{s.title}}</option>
-        </select>
-        <div class="input-group-append">
-            <button class="btn btn-outline-success" type="button" (click)="changeImage()">Ok</button>
+        <div class="input-group m-1">
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" name="customFile"
+                    (change)="filesSelect($event.target.files)" accept="image/*" required>
+                <label class="custom-file-label"
+                    for="customFile">{{ files && files.length ? files[0].name : 'Choose file...'}}</label>
+            </div>
+        </div>
+        <div class="input-group m-1">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Size</span>
+            </div>
+            <select name="inputSize" class="form-control" [(ngModel)]="size">
+                <option *ngFor="let s of sizes" [value]="s.value">{{s.title}}</option>
+            </select>
+            <div class="input-group-append">
+                <button class="btn btn-outline-success" type="button" (click)="changeImage()">Ok</button>
+            </div>
         </div>
     </div>
 </nav>
-
-<span class="zoom-span fade-in" (mouseout)="overSpan()" (click)="spanZoomClick()" #zoomSpan></span>
 
 <div class="container-fluid main-container" #container>
     <table class="point-container" [style.zoom]="zoom">
         <tbody>
             <tr *ngFor="let item of points | async">
                 <td *ngFor="let point of item" (click)="spanClick(point.character, point.webColor)"
-                    (mouseenter)="hoverElement(point.character, point.webColor)" (mouseout)="overElement()"
                     [attr.color]="point.character" #child>{{ point.character }}</td>
             </tr>
         </tbody>

@@ -21,6 +21,10 @@ div td {
   font-family: "Courier New", Courier, monospace;
 }
 
+.navbar {
+  min-height: 64px;
+}
+
 .loader {
   position: absolute;
   width: 100%;
@@ -32,7 +36,7 @@ div td {
 }
 
 .main-container {
-  padding-top: 4rem;
+  padding-top: 4.2rem;
   height: 100%;
   overflow: auto;
 }

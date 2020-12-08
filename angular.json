@@ -1,7 +1,7 @@
 {
     "version": 1,
     "projects": {
-      "a-proj": {
+      "recimage": {
         "projectType": "application",
         "root": "",
         "sourceRoot": "src",
@@ -9,31 +9,69 @@
           "build": {
             "builder": "@angular-devkit/build-angular:browser",
             "options": {
-              "outputPath": "dist/a-proj",
+              "outputPath": "dist/recimage",
               "index": "src/index.html",
               "main": "src/main.ts",
               "polyfills": "src/polyfills.ts",
               "tsConfig": "tsconfig.json",
-              "aot": true
+              "assets" : [
+                {
+                  "glob": "**/*",
+                  "input": "src/assets/",
+                  "output": "/assets/"
+                },
+                {
+                  "glob": "favicon.ico",
+                  "input": "src/",
+                  "output": "/"
+                }
+              ],
+              "styles": [
+                "node_modules/bootstrap/dist/css/bootstrap.min.css", "styles.css"
+              ],
+              "scripts": [
+              ],
+              "aot": true,
+            "webWorkerTsConfig": "tsconfig.worker.json"
             },
             "configurations": {
                 "production": {
+                  "fileReplacements": [
+                    {
+                      "replace": "src/environments/environment.ts",
+                      "with": "src/environments/environment.prod.ts"
+                    }
+                  ],
                   "optimization": true,
                   "outputHashing": "all",
                   "sourceMap": true,
                   "namedChunks": false,
+                  "aot": true,
+                  "extractLicenses": true,
                   "vendorChunk": false,
-                  "buildOptimizer": true
+                  "buildOptimizer": true,
+                  "budgets": [
+                    {
+                      "type": "initial",
+                      "maximumWarning": "2mb",
+                      "maximumError": "5mb"
+                    }
+                  ]
                 }
               }
           },
           "serve": {
             "builder": "@angular-devkit/build-angular:dev-server",
             "options": {
-              "browserTarget": "a-proj:build"
+              "browserTarget": "recimage:build"
+            },
+            "configurations": {
+              "production": {
+                "browserTarget": "recimage:build:production"
+              }
             }
           }
         }
       }},
-    "defaultProject": "a-proj"
+    "defaultProject": "recimage"
   }
