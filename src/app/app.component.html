@@ -16,7 +16,7 @@
             <div class="input-group-prepend">
                 <span class="input-group-text">Zoom</span>
             </div>
-            <select name="inputZoom" class="form-control" [(ngModel)]="zoom">
+            <select name="inputZoom" class="form-control" [ngModel]="zoom | async" (ngModelChange)="updateZoom($event)">
                 <option *ngFor="let z of zooms" [value]="z.value">{{z.title}}</option>
             </select>
         </div>
@@ -36,14 +36,15 @@
                 <option *ngFor="let s of sizes" [value]="s.value">{{s.title}}</option>
             </select>
             <div class="input-group-append">
-                <button class="btn btn-outline-success" type="button" (click)="changeImage()">Ok</button>
+                <button class="btn btn-outline-success" type="button" (click)="changeImage()"
+                    [disabled]="!files || !files.length">Ok</button>
             </div>
         </div>
     </div>
 </nav>
 
-<div class="container-fluid main-container" #container>
-    <table class="point-container" [style.zoom]="zoom">
+<div class="container-fluid main-container">
+    <table class="point-container" #tableContainer>
         <tbody>
             <tr *ngFor="let item of points | async">
                 <td *ngFor="let point of item" (click)="spanClick(point.character, point.webColor)"

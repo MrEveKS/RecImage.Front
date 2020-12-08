@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, ElementRef, OnInit, QueryList, Renderer2, ViewChildren } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { catchError, finalize } from 'rxjs/operators';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
+import { from, Observable, of } from 'rxjs';
+import { catchError, filter, finalize, tap } from 'rxjs/operators';
 import { HttpService } from '../services/http.service';
 
 import { IColoredChar } from './models/colored-char.interface';
@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
     public files: FileList;
     public size: number;
 
-    public zoom: number;
+    public zoom: Observable<number>;
 
     public zooms: ISelectValue<number>[];
     public sizes: ISelectValue<number>[];
@@ -27,18 +27,22 @@ export class AppComponent implements OnInit {
 
     public isNavbarCollapsed = true;
 
+    @ViewChild('tableContainer', { read: ElementRef })
+    private _container: ElementRef<HTMLTableElement>;
     @ViewChildren('child')
     private _cells: QueryList<ElementRef<HTMLTableCellElement>>;
 
     constructor(private _http: HttpService,
-        private _renderer: Renderer2) {
+        private _renderer: Renderer2,
+        private cdr: ChangeDetectorRef) {
     }
 
     public ngOnInit(): void {
         this._initialize();
 
-        this.size = this.sizes[4].value;
-        this.zoom = this.zooms[4].value;
+        this.size = this.sizes[2].value;
+        this.zoom = of(this.zooms[4].value);
+        this._containerResize();
     }
 
     public changeImage(): void {
@@ -56,26 +60,36 @@ export class AppComponent implements OnInit {
 
     }
 
+    public updateZoom(zoom: number): void {
+        this.zoom = of(zoom);
+        this._containerResize();
+    }
+
     public filesSelect(files: FileList): void {
         this.files = files;
     }
 
     public spanClick(num: number, color: string): void {
-        this._doAsync(() => {
-            const number = num.toString();
-            const spans = this._cells.filter((cell) => cell.nativeElement.getAttribute('color') === number);
-
-            spans.forEach((ref) => {
-                const span = ref.nativeElement;
-                this._renderer.setStyle(span, 'color', color);
-                this._renderer.setStyle(span, 'background-color', color);
-                this._renderer.addClass(span, 'colored');
-            });
-        });
+        if (!color) return;
+        const number = num.toString();
+        from(this._cells.map<HTMLTableCellElement>((ref) => ref.nativeElement))
+            .pipe(filter(
+                (cell) => cell.getAttribute('color') === number),
+                tap((span) => {
+                    this._renderer.setStyle(span, 'color', color);
+                    this._renderer.setStyle(span, 'background-color', color);
+                    this._renderer.addClass(span, 'colored');
+                })
+            )
+            .subscribe();
     }
 
-    private _doAsync(action: () => void): void {
-        setInterval(action, 0);
+    private _containerResize(): void {
+        const container = this._container.nativeElement;
+        this.zoom.pipe(
+            tap((val) => { this._renderer.setStyle(container, 'transform', `scale(${val})`);
+            this.cdr.detectChanges();})
+        ).subscribe();
     }
 
     private _initialize(): void {
@@ -86,7 +100,6 @@ export class AppComponent implements OnInit {
             { title: '75%', value: .75 },
             { title: '100%', value: 1 },
         ];
-
 
         this.sizes = [
             { title: '50', value: 50 },

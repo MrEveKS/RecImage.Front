@@ -36,9 +36,14 @@ div td {
 }
 
 .main-container {
-  padding-top: 4.2rem;
-  height: 100%;
+  margin-top: 4.2rem;
+  height: calc(100% - 4.2rem);
   overflow: auto;
+  display: grid;
+}
+
+.main-container table {
+  transform-origin: 0 0;
 }
 
 .point-container td {
