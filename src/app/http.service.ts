@@ -15,7 +15,7 @@ export class HttpService {
     }
 
     postFile(fileToUpload: File, size: number): Observable<IColoredChar[][]> {
-        const domen = isDevMode() ? 'https://localhost:5001' : 'http://back.u1234490.plsk.regruhosting.ru';
+        const domen = isDevMode() && false ? 'https://localhost:5001' : 'http://back.u1234490.plsk.regruhosting.ru';
         const endpoint = `${domen}/api/generate/convertToChar/`;
         const formData: FormData = new FormData();
         formData.append('image', fileToUpload, fileToUpload.name);

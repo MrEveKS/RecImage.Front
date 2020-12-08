@@ -1,6 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ElementRef, Inject, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { catchError, finalize } from 'rxjs/operators';
 import { HttpService, IColoredChar } from './http.service';
 
 export interface ISelectValue<TValue> {
@@ -26,6 +27,8 @@ export class AppComponent implements OnInit {
     public zooms: ISelectValue<number>[];
     public sizes: ISelectValue<number>[];
 
+    public loading: boolean;
+
     @ViewChild('container', { read: ElementRef })
     private _container: ElementRef<HTMLSpanElement>;
     @ViewChildren('child')
@@ -48,8 +51,17 @@ export class AppComponent implements OnInit {
     }
 
     public changeImage() {
+        this.loading = true;
         const fileToUpload = this.files.item(0);
-        this.points = this._http.postFile(fileToUpload, this.size);
+        this.points = this._http.postFile(fileToUpload, this.size)
+            .pipe(
+                catchError(err => {
+                    console.error(err);
+                    this.loading = false;
+                    return of([]);
+                }),
+                finalize(() => this.loading = false)
+            );
 
     }
 
@@ -103,16 +115,22 @@ export class AppComponent implements OnInit {
 
     public spanClick(num: number, color: string): void {
         if (this._overTime) clearTimeout(this._overTime);
-        const number = num.toString();
-        const spans = this._cells.filter((cell) => cell.nativeElement.getAttribute('color') === number);
+        this._doAsync(() => {
+            const number = num.toString();
+            const spans = this._cells.filter((cell) => cell.nativeElement.getAttribute('color') === number);
 
-        spans.forEach((ref) => {
-            const span = ref.nativeElement;
-            this._renderer.setStyle(span, 'color', color);
-            this._renderer.setStyle(span, 'background-color', color);
-            this._renderer.addClass(span, 'colored');
+            spans.forEach((ref) => {
+                const span = ref.nativeElement;
+                this._renderer.setStyle(span, 'color', color);
+                this._renderer.setStyle(span, 'background-color', color);
+                this._renderer.addClass(span, 'colored');
+            });
+            this.overSpan();
         });
-        this.overSpan();
+    }
+
+    private _doAsync(action: () => void): void {
+        setInterval(action, 0);
     }
 
     private _initialize(): void {
