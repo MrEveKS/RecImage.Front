@@ -17,7 +17,7 @@ div {
 }
 
 div,
-div span {
+div td {
   font-family: "Courier New", Courier, monospace;
 }
 
@@ -27,8 +27,9 @@ div span {
   overflow: auto;
 }
 
-.point-container span {
+.point-container td {
   position: relative;
+  padding: 2px 0 0 0;
 
   width: 25px;
   min-width: 25px;
@@ -36,13 +37,12 @@ div span {
   min-height: 25px;
 
   text-align: center;
+  vertical-align: middle;
   cursor: pointer;
-  display: block;
   font-size: 12px;
-  line-height: 28px;
 }
 
-.point-container span:not(.colored)::after {
+.point-container td:not(.colored)::after {
   content: "";
   position: absolute;
   top: 1px;

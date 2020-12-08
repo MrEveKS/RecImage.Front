@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, ElementRef, Inject, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Inject, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpService, IColoredChar } from './http.service';
 
@@ -11,7 +11,8 @@ export interface ISelectValue<TValue> {
 @Component({
     selector: 'my-app',
     styleUrls: ['./app.component.css'],
-    templateUrl: './app.component.html'
+    templateUrl: './app.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit {
 
@@ -28,7 +29,7 @@ export class AppComponent implements OnInit {
     @ViewChild('container', { read: ElementRef })
     private _container: ElementRef<HTMLSpanElement>;
     @ViewChildren('child')
-    private _spans: QueryList<ElementRef<HTMLSpanElement>>;
+    private _cells: QueryList<ElementRef<HTMLTableCellElement>>;
     @ViewChild('zoomSpan', { read: ElementRef })
     private _zoomSpan: ElementRef<HTMLSpanElement>;
 
@@ -49,6 +50,7 @@ export class AppComponent implements OnInit {
     public changeImage() {
         const fileToUpload = this.files.item(0);
         this.points = this._http.postFile(fileToUpload, this.size);
+
     }
 
     public filesSelect(files: FileList) {
@@ -63,13 +65,13 @@ export class AppComponent implements OnInit {
         this._overTime = setTimeout(() => {
             console.log(num);
             const span = this._zoomSpan.nativeElement;
-            const targets = this._document.querySelectorAll<HTMLSpanElement>('span:hover');
+            const targets = this._document.querySelectorAll<HTMLTableCellElement>('td:hover');
             if (!targets || !targets.length) return;
-            const targetSpan = targets[0];
+            const targetCell = targets[0];
             const container = this._container.nativeElement;
 
-            const top = (targetSpan.offsetTop + targetSpan.offsetHeight / 2) * this.zoom - container.scrollTop - spanSize / 2;
-            const left = (targetSpan.offsetLeft + targetSpan.offsetWidth / 2) * this.zoom - container.scrollLeft - spanSize / 2;
+            const top = (targetCell.offsetTop + targetCell.offsetHeight / 2) * this.zoom - container.scrollTop - spanSize / 2;
+            const left = (targetCell.offsetLeft + targetCell.offsetWidth / 2) * this.zoom - container.scrollLeft - spanSize / 2;
             this._renderer.setStyle(span, 'top', `${top}px`);
             this._renderer.setStyle(span, 'left', `${left}px`);
 
@@ -102,7 +104,7 @@ export class AppComponent implements OnInit {
     public spanClick(num: number, color: string): void {
         if (this._overTime) clearTimeout(this._overTime);
         const number = num.toString();
-        const spans = this._spans.filter((span) => span.nativeElement.getAttribute('color') === number);
+        const spans = this._cells.filter((cell) => cell.nativeElement.getAttribute('color') === number);
 
         spans.forEach((ref) => {
             const span = ref.nativeElement;

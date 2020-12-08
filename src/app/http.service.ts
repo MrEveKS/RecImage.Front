@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, isDevMode } from '@angular/core';
 import { Observable } from 'rxjs';
 
 export interface IColoredChar {
@@ -15,7 +15,8 @@ export class HttpService {
     }
 
     postFile(fileToUpload: File, size: number): Observable<IColoredChar[][]> {
-        const endpoint = 'http://back.u1234490.plsk.regruhosting.ru/api/generate/convertToChar/';
+        const domen = isDevMode() ? 'https://localhost:5001' : 'http://back.u1234490.plsk.regruhosting.ru';
+        const endpoint = `${domen}/api/generate/convertToChar/`;
         const formData: FormData = new FormData();
         formData.append('image', fileToUpload, fileToUpload.name);
         formData.append('size', size.toString());

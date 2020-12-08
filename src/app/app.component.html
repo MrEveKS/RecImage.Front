@@ -28,11 +28,13 @@
 <span class="zoom-span fade-in" (mouseout)="overSpan()" (click)="spanZoomClick()" #zoomSpan></span>
 
 <div class="container-fluid main-container" #container>
-    <div class="point-container" [style.zoom]="zoom">
-        <div class="point-line" *ngFor="let item of points | async">
-            <span *ngFor="let point of item" (click)="spanClick(point.character, point.webColor)"
-                (mouseenter)="hoverElement($event, point.character, point.webColor)" (mouseout)="overElement()"
-                [attr.color]="point.character" #child>{{point.character}}</span>
-        </div>
-    </div>
+    <table class="point-container" [style.zoom]="zoom">
+        <tbody>
+            <tr *ngFor="let item of points | async">
+                <td *ngFor="let point of item" (click)="spanClick(point.character, point.webColor)"
+                    (mouseenter)="hoverElement(point.character, point.webColor)" (mouseout)="overElement()"
+                    [attr.color]="point.character" #child>{{ point.character }}</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
