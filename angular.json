@@ -24,6 +24,11 @@
                   "glob": "favicon.ico",
                   "input": "src/",
                   "output": "/"
+                },
+                {
+                  "glob": "web.config",
+                  "input": "src/",
+                  "output": "/"
                 }
               ],
               "styles": [
