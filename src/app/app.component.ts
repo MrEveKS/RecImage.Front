@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { from, Observable, of } from 'rxjs';
 import { catchError, filter, finalize, tap } from 'rxjs/operators';
 import { HttpService } from '../services/http.service';
@@ -11,7 +11,7 @@ import { ISelectValue } from './models/select-value.interface';
     templateUrl: './app.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
 
     public points: Observable<IColoredChar[][]>;
 
@@ -42,6 +42,9 @@ export class AppComponent implements OnInit {
 
         this.size = this.sizes[2].value;
         this.zoom = of(this.zooms[4].value);
+    }
+
+    public ngAfterViewInit(): void {
         this._containerResize();
     }
 
@@ -87,8 +90,10 @@ export class AppComponent implements OnInit {
     private _containerResize(): void {
         const container = this._container.nativeElement;
         this.zoom.pipe(
-            tap((val) => { this._renderer.setStyle(container, 'transform', `scale(${val})`);
-            this.cdr.detectChanges();})
+            tap((val) => {
+                this._renderer.setStyle(container, 'transform', `scale(${val})`);
+                this.cdr.detectChanges();
+            })
         ).subscribe();
     }
 
