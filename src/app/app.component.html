@@ -16,13 +16,13 @@
             <div class="input-group w-100" (click)="changeColored($event)">
                 <div class="color-select input-group-text w-100">
                     <input type="checkbox" name="colored" [(ngModel)]="colored" aria-label="Checkbox for following text input">
-                    <label class="form-check-label" for="colored">Colored</label>
+                    <label class="form-check-label" for="colored">Цветное</label>
                 </div>
             </div>
         </div>
         <div class="input-group m-1">
             <div class="input-group-prepend">
-                <span class="input-group-text">Color Size</span>
+                <span class="input-group-text">Качество</span>
             </div>
             <select name="inputZoom" class="form-control" [(ngModel)]="colorSize">
                 <option *ngFor="let c of colorSizes" [value]="c.value">{{c.title}}</option>
@@ -30,7 +30,7 @@
         </div>
         <div class="input-group m-1">
             <div class="input-group-prepend">
-                <span class="input-group-text">Zoom</span>
+                <span class="input-group-text">Масштаб</span>
             </div>
             <select name="inputZoom" class="form-control" [ngModel]="zoom | async" (ngModelChange)="updateZoom($event)">
                 <option *ngFor="let z of zooms" [value]="z.value">{{z.title}}</option>
@@ -41,12 +41,12 @@
                 <input type="file" class="custom-file-input" name="customFile"
                     (change)="filesSelect($event.target.files)" accept="image/*" required>
                 <label class="custom-file-label"
-                    for="customFile">{{ files && files.length ? files[0].name : 'Choose file...'}}</label>
+                    for="customFile">{{ files && files.length ? files[0].name : 'Выберите фаил...'}}</label>
             </div>
         </div>
         <div class="input-group m-1">
             <div class="input-group-prepend">
-                <span class="input-group-text">Size</span>
+                <span class="input-group-text">Размер</span>
             </div>
             <select name="inputSize" class="form-control" [(ngModel)]="size">
                 <option *ngFor="let s of sizes" [value]="s.value">{{s.title}}</option>

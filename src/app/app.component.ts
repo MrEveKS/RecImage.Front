@@ -151,9 +151,11 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     private _initialize(): void {
         this.colorSizes = [
-            { title: 'Small', value: 20 },
-            { title: 'Middle', value: 15 },
-            { title: 'Big', value: 10 },
+            { title: 'Очень низкое', value: 30 },
+            { title: 'Низкое', value: 20 },
+            { title: 'Среднее', value: 15 },
+            { title: 'Высокое', value: 10 },
+            { title: 'Очень высокое', value: 7 },
         ];
 
         this.zooms = [
