@@ -13,6 +13,22 @@
 
     <div [ngbCollapse]="isNavbarCollapsed" class="collapse navbar-collapse" id="navbarsDefault">
         <div class="input-group m-1">
+            <div class="input-group w-100" (click)="changeColored($event)">
+                <div class="color-select input-group-text w-100">
+                    <input type="checkbox" name="colored" [(ngModel)]="colored" aria-label="Checkbox for following text input">
+                    <label class="form-check-label" for="colored">Colored</label>
+                </div>
+            </div>
+        </div>
+        <div class="input-group m-1">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Color Size</span>
+            </div>
+            <select name="inputZoom" class="form-control" [(ngModel)]="colorSize">
+                <option *ngFor="let c of colorSizes" [value]="c.value">{{c.title}}</option>
+            </select>
+        </div>
+        <div class="input-group m-1">
             <div class="input-group-prepend">
                 <span class="input-group-text">Zoom</span>
             </div>
@@ -51,4 +67,12 @@
             </tr>
         </tbody>
     </table>
+</div>
+
+<div class="container-fluid progress-container">
+    <div class="progress">
+        <div class="progress-bar" role="progressbar" aria-valuenow="progress" [style.width]="progress + '%'"
+            aria-valuemin="0" aria-valuemax="100">
+        </div>
+    </div>
 </div>

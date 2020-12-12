@@ -6,6 +6,12 @@ import { HttpService } from '../services/http.service';
 import { ISelectValue } from './models/select-value.interface';
 import { IRecColor } from './models/rec-color.interface';
 
+export interface IConvertOptions {
+    colored: boolean;
+    size: number;
+    colorStep: number;
+}
+
 @Component({
     selector: 'main-app',
     styleUrls: ['./app.component.css'],
@@ -18,13 +24,16 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     public files: FileList;
     public size: number;
-
     public zoom: Observable<number>;
+    public colored = true;
+    public colorSize: number;
 
+    public colorSizes: ISelectValue<number>[];
     public zooms: ISelectValue<number>[];
     public sizes: ISelectValue<number>[];
 
     public loading: boolean;
+    public progress = 0;
 
     public isNavbarCollapsed = true;
 
@@ -35,6 +44,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     private _colCell: { [key: string]: HTMLTableCellElement[] };
 
     private _coloredCells: { [key: string]: string };
+    private _updated: { [key: string]: boolean };
+    private _totalColors = 0;
 
     constructor(private _http: HttpService,
         private _renderer: Renderer2,
@@ -44,6 +55,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     public ngOnInit(): void {
         this._initialize();
 
+        this.colorSize = this.colorSizes[0].value;
         this.size = this.sizes[2].value;
         this.zoom = of(this.zooms[4].value);
     }
@@ -56,7 +68,9 @@ export class AppComponent implements OnInit, AfterViewInit {
     public changeImage(): void {
         this.loading = true;
         const fileToUpload = this.files.item(0);
-        this.points = this._http.postFile<IRecColor>(fileToUpload, this.size)
+        this.points = this._http.postFile<IRecColor>(fileToUpload, {
+            colorStep: this.colorSize, colored: this.colored, size: this.size
+        })
             .pipe(
                 catchError(err => {
                     console.error(err);
@@ -64,6 +78,9 @@ export class AppComponent implements OnInit, AfterViewInit {
                     return of([]);
                 }),
                 switchMap((res: IRecColor) => {
+                    this.progress = 0;
+                    this._updated = {};
+                    this._totalColors = Object.keys(res.cellsColor).length;
                     this._coloredCells = res.cellsColor;
                     return of(res.cells);
                 }),
@@ -88,6 +105,9 @@ export class AppComponent implements OnInit, AfterViewInit {
     public spanClick(number: string): void {
         if (!number) return;
         const color = this._coloredCells[number];
+        if (this._updated[color]) return;
+        this._updated[color] = true;
+        this.progress = Object.keys(this._updated).length / this._totalColors * 100;
         from(this._colCell[number])
             .pipe(
                 tap((span) => {
@@ -97,6 +117,13 @@ export class AppComponent implements OnInit, AfterViewInit {
                 })
             )
             .subscribe();
+    }
+
+    public changeColored(event: MouseEvent): void {
+        const target = event.target;
+        if (!(target instanceof HTMLInputElement)) {
+            this.colored = !this.colored;
+        }
     }
 
     private _gropCells(): void {
@@ -123,6 +150,12 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
 
     private _initialize(): void {
+        this.colorSizes = [
+            { title: 'Small', value: 20 },
+            { title: 'Middle', value: 15 },
+            { title: 'Big', value: 10 },
+        ];
+
         this.zooms = [
             { title: '10%', value: .1 },
             { title: '25%', value: .25 },

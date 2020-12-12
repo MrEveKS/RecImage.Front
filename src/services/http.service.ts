@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { IConvertOptions } from 'src/app/app.component';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -16,11 +17,14 @@ export class HttpService {
     constructor(private _http: HttpClient) {
     }
 
-    postFile<T>(fileToUpload: File, size: number): Observable<T> {
+    postFile<T>(fileToUpload: File, options: IConvertOptions): Observable<T> {
         const endpoint = `${this._url}generate/convertToChar/`;
         const formData: FormData = new FormData();
         formData.append('image', fileToUpload, fileToUpload.name);
-        formData.append('size', size.toString());
+        Object.keys(options).forEach((key) => {
+            formData.append(key, options[key].toString());
+        });
+
         return this._http
             .post<T>(endpoint, formData, this._httpParams);
     }
