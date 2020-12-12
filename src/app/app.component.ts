@@ -55,7 +55,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     public ngOnInit(): void {
         this._initialize();
 
-        this.colorSize = this.colorSizes[0].value;
+        this.colorSize = this.colorSizes[1].value;
         this.size = this.sizes[2].value;
         this.zoom = of(this.zooms[4].value);
     }
