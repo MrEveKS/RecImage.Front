@@ -1,13 +1,13 @@
 {
   "name": "recimage",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Rec Image",
   "author": "Evgenii vikkes@yandex.ru",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "start:open": "ng serve --open",
-    "start:hmr": "ng serve --hmr",
+    "start:hmr": "ng serve --hmr --open",
     "build": "ng build",
     "lint": "eslint . --ext .ts",
     "build:prod": "ng build --prod"

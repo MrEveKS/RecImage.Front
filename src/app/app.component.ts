@@ -1,10 +1,11 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { from, Observable, of } from 'rxjs';
-import { catchError, filter, finalize, tap } from 'rxjs/operators';
+import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
 import { HttpService } from '../services/http.service';
 
-import { IColoredChar } from './models/colored-char.interface';
 import { ISelectValue } from './models/select-value.interface';
+import { IRecColor } from './models/rec-color.interface';
+
 @Component({
     selector: 'main-app',
     styleUrls: ['./app.component.css'],
@@ -13,7 +14,7 @@ import { ISelectValue } from './models/select-value.interface';
 })
 export class AppComponent implements OnInit, AfterViewInit {
 
-    public points: Observable<IColoredChar[][]>;
+    public points: Observable<string[][]> = of([]);
 
     public files: FileList;
     public size: number;
@@ -31,6 +32,9 @@ export class AppComponent implements OnInit, AfterViewInit {
     private _container: ElementRef<HTMLTableElement>;
     @ViewChildren('child')
     private _cells: QueryList<ElementRef<HTMLTableCellElement>>;
+    private _colCell: { [key: string]: HTMLTableCellElement[] };
+
+    private _coloredCells: { [key: string]: string };
 
     constructor(private _http: HttpService,
         private _renderer: Renderer2,
@@ -46,13 +50,23 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     public ngAfterViewInit(): void {
         this._containerResize();
+        this._cells.notifyOnChanges = this._gropCells.bind(this);
     }
 
     public changeImage(): void {
         this.loading = true;
         const fileToUpload = this.files.item(0);
-        this.points = this._http.postFile<IColoredChar[][]>(fileToUpload, this.size)
+        this.points = this._http.postFile<IRecColor>(fileToUpload, this.size)
             .pipe(
+                catchError(err => {
+                    console.error(err);
+                    this.loading = false;
+                    return of([]);
+                }),
+                switchMap((res: IRecColor) => {
+                    this._coloredCells = res.cellsColor;
+                    return of(res.cells);
+                }),
                 catchError(err => {
                     console.error(err);
                     this.loading = false;
@@ -60,7 +74,6 @@ export class AppComponent implements OnInit, AfterViewInit {
                 }),
                 finalize(() => this.loading = false)
             );
-
     }
 
     public updateZoom(zoom: number): void {
@@ -72,16 +85,28 @@ export class AppComponent implements OnInit, AfterViewInit {
         this.files = files;
     }
 
-    public spanClick(num: number, color: string): void {
-        if (!color) return;
-        const number = num.toString();
-        from(this._cells.map<HTMLTableCellElement>((ref) => ref.nativeElement))
-            .pipe(filter(
-                (cell) => cell.getAttribute('color') === number),
+    public spanClick(number: string): void {
+        if (!number) return;
+        const color = this._coloredCells[number];
+        from(this._colCell[number])
+            .pipe(
                 tap((span) => {
                     this._renderer.setStyle(span, 'color', color);
                     this._renderer.setStyle(span, 'background-color', color);
                     this._renderer.addClass(span, 'colored');
+                })
+            )
+            .subscribe();
+    }
+
+    private _gropCells(): void {
+        this._colCell = {};
+        from(this._cells.map<HTMLTableCellElement>((ref) => ref.nativeElement))
+            .pipe(
+                tap((cell) => {
+                    const colIndex = cell.getAttribute('color');
+                    !this._colCell[colIndex] && (this._colCell[colIndex] = []);
+                    this._colCell[colIndex].push(cell);
                 })
             )
             .subscribe();

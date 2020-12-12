@@ -46,9 +46,8 @@
 <div class="container-fluid main-container">
     <table class="point-container" #tableContainer>
         <tbody>
-            <tr *ngFor="let item of points | async">
-                <td *ngFor="let point of item" (click)="spanClick(point.character, point.webColor)"
-                    [attr.color]="point.character" #child>{{ point.character }}</td>
+            <tr *ngFor="let items of points | async">
+                <td *ngFor="let cell of items" (click)="spanClick(cell)" [attr.color]="cell" #child>{{ cell }}</td>
             </tr>
         </tbody>
     </table>
