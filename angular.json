@@ -21,18 +21,8 @@
                   "output": "/assets/"
                 },
                 {
-                  "glob": "favicon.ico",
-                  "input": "src/",
-                  "output": "/"
-                },
-                {
-                  "glob": "web.config",
-                  "input": "src/",
-                  "output": "/"
-                },
-                {
-                  "glob": "sitemap.xml",
-                  "input": "src/",
+                  "glob": "**/*",
+                  "input": "src/site-data",
                   "output": "/"
                 }
               ],

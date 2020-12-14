@@ -6,12 +6,6 @@ import { HttpService } from '../services/http.service';
 import { ISelectValue } from './models/select-value.interface';
 import { IRecColor } from './models/rec-color.interface';
 
-export interface IConvertOptions {
-    colored: boolean;
-    size: number;
-    colorStep: number;
-}
-
 @Component({
     selector: 'main-app',
     styleUrls: ['./app.component.css'],

@@ -1,16 +1,21 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-
-import { AppComponent } from './app.component';
-
 import { HttpClientModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
+import { RouterModule, Routes } from '@angular/router';
 
+import { AppComponent } from './app.component';
+import { APP_BASE_HREF } from '@angular/common';
 
+const appRoutes: Routes = [
+    { path: '', component: AppComponent },
+    { path: '**', redirectTo: '/' }
+];
 @NgModule({
-    imports: [BrowserModule, FormsModule, HttpClientModule, NgbModule],
+    providers: [{ provide: APP_BASE_HREF, useValue: '' }],
+    imports: [NgbModule, BrowserModule, FormsModule, HttpClientModule, RouterModule.forRoot(appRoutes)],
     declarations: [AppComponent],
     bootstrap: [AppComponent]
 })

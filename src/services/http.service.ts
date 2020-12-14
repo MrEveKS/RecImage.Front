@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IConvertOptions } from 'src/app/app.component';
+import { IConvertOptions } from 'src/app/models/convert-options.interface';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
