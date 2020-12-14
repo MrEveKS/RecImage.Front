@@ -7,6 +7,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
+import { PreviewComponent } from './preview/preview.component';
+import { PointComponent } from './point/point.component';
+
+
 import { APP_BASE_HREF } from '@angular/common';
 
 const appRoutes: Routes = [
@@ -16,7 +20,7 @@ const appRoutes: Routes = [
 @NgModule({
     providers: [{ provide: APP_BASE_HREF, useValue: '' }],
     imports: [NgbModule, BrowserModule, FormsModule, HttpClientModule, RouterModule.forRoot(appRoutes)],
-    declarations: [AppComponent],
+    declarations: [AppComponent, PreviewComponent, PointComponent],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

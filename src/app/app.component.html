@@ -1,4 +1,4 @@
-<div class="loader justify-content-center" [hidden]="!loading">
+<div class="loader justify-content-center" [hidden]="!imagePoint.loading">
     <div class="spinner-border" role="status">
         <span class="sr-only">Loading...</span>
     </div>
@@ -33,7 +33,7 @@
             <div class="input-group-prepend">
                 <span class="input-group-text">Масштаб</span>
             </div>
-            <select name="inputZoom" class="form-control" [(ngModel)]="zoom">
+            <select name="inputZoom" class="form-control" [ngModel]="zoom" (ngModelChange)="imagePoint.resize($event)">
                 <option *ngFor="let z of zooms" [value]="z.value">{{z.title}}</option>
             </select>
         </div>
@@ -41,8 +41,8 @@
             <div class="custom-file">
                 <input type="file" class="custom-file-input" name="customFile"
                     (change)="filesSelect($event.target.files)" accept="image/*" required>
-                <label class="custom-file-label"
-                    for="customFile">{{ files && files.length ? files[0].name : 'Выберите фаил...'}}</label>
+                <label class="custom-file-label" for="customFile">{{ files && files.length ? files[0].name : 'Выберите
+                    фаил...'}}</label>
             </div>
         </div>
         <div class="input-group m-1">
@@ -53,39 +53,12 @@
                 <option *ngFor="let s of sizes" [value]="s.value">{{s.title}}</option>
             </select>
             <div class="input-group-append">
-                <button class="btn btn-outline-success" type="button" (click)="changeImage()"
+                <button class="btn btn-outline-success" type="button" (click)="imagePoint.load()"
                     [disabled]="!files || !files.length">Ok</button>
             </div>
         </div>
     </div>
 </nav>
 
-<div class="container-fluid main-container">
-    <div class="container jumbotron" [hidden]="!firstLoad">
-        <h1 class="display-4">Rec Image</h1>
-        <p class="lead">Увлекательное времяпрепровождение - раскраска по пикселям. Раскрашивая квадрат за квадратом, мы
-            получим полноценное пиксельное изображение разных картинок.</p>
-        <hr class="my-4">
-        <p>Автор рекомендуем автоматические настройки для быстрой работоспособность сайта. Но вы можете изменить по
-            желанию в этой онлайн раскраски. Например увеличить масштаб для более чёткого изображения, выбрать как вы
-            хотите раскрасить "черно белым" или "цветным" и многое другое . Все, что вам нужно сделать, это просто
-            выбрать любое свое изображение или выбрать из предложенных.</p>
-    </div>
-    <table class="point-container" ng-if="points | async" [ngStyle]="{ transform: 'scale(' + zoom + ')' }">
-        <tbody>
-            <tr *ngFor="let items of points | async">
-                <td *ngFor="let cell of items" (click)="spanClick(cell)"
-                    [ngStyle]="{'background-color': cellsColoredCells[cell], color: cellsColoredCells[cell]}"
-                    [ngClass]="{empty: !updated[cellsColoredCells[cell]] }">{{ cell }}</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
-<div class="container-fluid progress-container">
-    <div class="progress">
-        <div class="progress-bar" role="progressbar" aria-valuenow="progress" [style.width]="progress + '%'"
-            aria-valuemin="0" aria-valuemax="100">
-        </div>
-    </div>
-</div>
+<point [files]="files" [colorSize]="colorSize" [colored]="colored" [size]="size" #imagePoint>
+</point>

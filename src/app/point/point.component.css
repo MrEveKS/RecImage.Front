@@ -1,0 +1,74 @@
+td {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Chrome/Safari/Opera */
+  -khtml-user-select: none; /* Konqueror */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none;
+}
+
+td {
+  font-family: "Courier New", Courier, monospace;
+}
+
+.main-container {
+  margin-top: 4.2rem;
+  height: calc(100% - 4.2rem - 16px);
+  overflow: auto;
+  display: grid;
+}
+
+.main-container table {
+  transform-origin: 0 0;
+}
+
+.point-container {
+  width: 1%;
+}
+
+.point-container td {
+  position: relative;
+  padding: 2px 0 0 0;
+
+  width: 25px;
+  min-width: 25px;
+  max-width: 25px;
+  height: 25px;
+  min-height: 25px;
+
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.point-container td.empty {
+  background-color: transparent !important;
+  color: #212529 !important;
+}
+
+.point-container td.empty::after {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  border: 1px solid #eee;
+
+  width: 23px;
+  min-width: 23px;
+  height: 23px;
+  min-height: 23px;
+}
+
+.point-container .point-line {
+  flex: 1 1 10px;
+  display: flex;
+}
+
+.progress-container {
+  padding: 0;
+}
+
+.progress-container .progress {
+  border-radius: 0;
+}
