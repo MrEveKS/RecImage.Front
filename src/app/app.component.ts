@@ -1,6 +1,6 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
-import { from, Observable, of } from 'rxjs';
-import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { catchError, finalize, switchMap } from 'rxjs/operators';
 import { HttpService } from '../services/http.service';
 
 import { ISelectValue } from './models/select-value.interface';
@@ -18,13 +18,13 @@ export interface IConvertOptions {
     templateUrl: './app.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit {
 
     public points: Observable<string[][]> = of([]);
 
     public files: FileList;
     public size: number;
-    public zoom: Observable<number>;
+    public zoom: number;
     public colored = true;
     public colorSize: number;
 
@@ -34,22 +34,15 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     public loading: boolean;
     public progress = 0;
+    public firstLoad = true;
+    public cellsColoredCells: { [key: string]: string };
+    public updated: { [key: string]: boolean };
 
     public isNavbarCollapsed = true;
 
-    @ViewChild('tableContainer', { read: ElementRef })
-    private _container: ElementRef<HTMLTableElement>;
-    @ViewChildren('child')
-    private _cells: QueryList<ElementRef<HTMLTableCellElement>>;
-    private _colCell: { [key: string]: HTMLTableCellElement[] };
-
-    private _coloredCells: { [key: string]: string };
-    private _updated: { [key: string]: boolean };
     private _totalColors = 0;
 
-    constructor(private _http: HttpService,
-        private _renderer: Renderer2,
-        private cdr: ChangeDetectorRef) {
+    constructor(private _http: HttpService, private _cdr: ChangeDetectorRef) {
     }
 
     public ngOnInit(): void {
@@ -57,12 +50,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
         this.colorSize = this.colorSizes[1].value;
         this.size = this.sizes[2].value;
-        this.zoom = of(this.zooms[4].value);
-    }
-
-    public ngAfterViewInit(): void {
-        this._containerResize();
-        this._cells.notifyOnChanges = this._gropCells.bind(this);
+        this.zoom = this.zooms[4].value;
     }
 
     public changeImage(): void {
@@ -79,9 +67,9 @@ export class AppComponent implements OnInit, AfterViewInit {
                 }),
                 switchMap((res: IRecColor) => {
                     this.progress = 0;
-                    this._updated = {};
+                    this.updated = {};
                     this._totalColors = Object.keys(res.cellsColor).length;
-                    this._coloredCells = res.cellsColor;
+                    this.cellsColoredCells = res.cellsColor;
                     return of(res.cells);
                 }),
                 catchError(err => {
@@ -89,13 +77,12 @@ export class AppComponent implements OnInit, AfterViewInit {
                     this.loading = false;
                     return of([]);
                 }),
-                finalize(() => this.loading = false)
+                finalize(() => {
+                    console.log('finalize');
+                    this.loading = false;
+                    this.firstLoad = false;
+                })
             );
-    }
-
-    public updateZoom(zoom: number): void {
-        this.zoom = of(zoom);
-        this._containerResize();
     }
 
     public filesSelect(files: FileList): void {
@@ -104,19 +91,13 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     public spanClick(number: string): void {
         if (!number) return;
-        const color = this._coloredCells[number];
-        if (this._updated[color]) return;
-        this._updated[color] = true;
-        this.progress = Object.keys(this._updated).length / this._totalColors * 100;
-        from(this._colCell[number])
-            .pipe(
-                tap((span) => {
-                    this._renderer.setStyle(span, 'color', color);
-                    this._renderer.setStyle(span, 'background-color', color);
-                    this._renderer.addClass(span, 'colored');
-                })
-            )
-            .subscribe();
+        setTimeout(() => {
+            const color = this.cellsColoredCells[number];
+            if (this.updated[color]) return;
+            this.updated[color] = true;
+            this.progress = Object.keys(this.updated).length / this._totalColors * 100;
+            this._cdr.detectChanges();
+        }, 0);
     }
 
     public changeColored(event: MouseEvent): void {
@@ -124,29 +105,6 @@ export class AppComponent implements OnInit, AfterViewInit {
         if (!(target instanceof HTMLInputElement)) {
             this.colored = !this.colored;
         }
-    }
-
-    private _gropCells(): void {
-        this._colCell = {};
-        from(this._cells.map<HTMLTableCellElement>((ref) => ref.nativeElement))
-            .pipe(
-                tap((cell) => {
-                    const colIndex = cell.getAttribute('color');
-                    !this._colCell[colIndex] && (this._colCell[colIndex] = []);
-                    this._colCell[colIndex].push(cell);
-                })
-            )
-            .subscribe();
-    }
-
-    private _containerResize(): void {
-        const container = this._container.nativeElement;
-        this.zoom.pipe(
-            tap((val) => {
-                this._renderer.setStyle(container, 'transform', `scale(${val})`);
-                this.cdr.detectChanges();
-            })
-        ).subscribe();
     }
 
     private _initialize(): void {

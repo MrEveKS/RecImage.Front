@@ -46,12 +46,17 @@ div td {
   transform-origin: 0 0;
 }
 
+.point-container {
+  width: 1%;
+}
+
 .point-container td {
   position: relative;
   padding: 2px 0 0 0;
 
   width: 25px;
   min-width: 25px;
+  max-width: 25px;
   height: 25px;
   min-height: 25px;
 
@@ -61,7 +66,12 @@ div td {
   font-size: 12px;
 }
 
-.point-container td:not(.colored)::after {
+.point-container td.empty {
+  background-color: transparent !important;
+  color: #212529 !important;
+}
+
+.point-container td.empty::after {
   content: "";
   position: absolute;
   top: 1px;
@@ -105,4 +115,8 @@ div td {
 
 .custom-file .custom-file-label:after {
   content: "Выбрать";
+}
+
+.jumbotron {
+  background-color: transparent;
 }

@@ -29,10 +29,15 @@
                   "glob": "web.config",
                   "input": "src/",
                   "output": "/"
+                },
+                {
+                  "glob": "sitemap.xml",
+                  "input": "src/",
+                  "output": "/"
                 }
               ],
               "styles": [
-                "node_modules/bootstrap/dist/css/bootstrap.min.css", "styles.css"
+                "styles.scss"
               ],
               "scripts": [
               ],

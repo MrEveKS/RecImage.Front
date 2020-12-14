@@ -15,7 +15,8 @@
         <div class="input-group m-1">
             <div class="input-group w-100" (click)="changeColored($event)">
                 <div class="color-select input-group-text w-100">
-                    <input type="checkbox" name="colored" [(ngModel)]="colored" aria-label="Checkbox for following text input">
+                    <input type="checkbox" name="colored" [(ngModel)]="colored"
+                        aria-label="Checkbox for following text input">
                     <label class="form-check-label" for="colored">Цветное</label>
                 </div>
             </div>
@@ -32,7 +33,7 @@
             <div class="input-group-prepend">
                 <span class="input-group-text">Масштаб</span>
             </div>
-            <select name="inputZoom" class="form-control" [ngModel]="zoom | async" (ngModelChange)="updateZoom($event)">
+            <select name="inputZoom" class="form-control" [(ngModel)]="zoom">
                 <option *ngFor="let z of zooms" [value]="z.value">{{z.title}}</option>
             </select>
         </div>
@@ -60,10 +61,22 @@
 </nav>
 
 <div class="container-fluid main-container">
-    <table class="point-container" #tableContainer>
+    <div class="container jumbotron" [hidden]="!firstLoad">
+        <h1 class="display-4">Rec Image</h1>
+        <p class="lead">Увлекательное времяпровождение - раскраска по пикселям. Раскрашивая квадрат за квадратом, мы
+            получим полноценное пиксельное изображение разных картинок.</p>
+        <hr class="my-4">
+        <p>Автор рекомендуем автоматические настройки для быстрой работоспособность сайта. Но вы можете изменить по
+            желанию в этой онлайн раскраски. Например увеличить масштаб для более чёткого изображения, выбрать как вы
+            хотите раскрасить "черно белым" или "цветным" и многое другое . Все, что вам нужно сделать, это просто
+            выбрать любое свое изображение или выбрать из предложенных.</p>
+    </div>
+    <table class="point-container" ng-if="points | async" [ngStyle]="{ transform: 'scale(' + zoom + ')' }">
         <tbody>
             <tr *ngFor="let items of points | async">
-                <td *ngFor="let cell of items" (click)="spanClick(cell)" [attr.color]="cell" #child>{{ cell }}</td>
+                <td *ngFor="let cell of items" (click)="spanClick(cell)"
+                    [ngStyle]="{'background-color': cellsColoredCells[cell], color: cellsColoredCells[cell]}"
+                    [ngClass]="{empty: !updated[cellsColoredCells[cell]] }">{{ cell }}</td>
             </tr>
         </tbody>
     </table>
