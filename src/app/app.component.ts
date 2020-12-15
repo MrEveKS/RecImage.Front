@@ -5,7 +5,7 @@ import { ISelectValue } from './models/select-value.interface';
 
 @Component({
     selector: 'main-app',
-    styleUrls: ['./app.component.css'],
+    styleUrls: ['./app.component.scss'],
     templateUrl: './app.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })

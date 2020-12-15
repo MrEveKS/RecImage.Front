@@ -8,7 +8,7 @@ import { IRecColor } from "../models/rec-color.interface";
 
 @Component({
     selector: 'point',
-    styleUrls: ['./point.component.css'],
+    styleUrls: ['./point.component.scss'],
     templateUrl: './point.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })

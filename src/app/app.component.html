@@ -6,12 +6,11 @@
 
 <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
     <button class="navbar-toggler hidden-sm-up m-1" type="button" (click)="isNavbarCollapsed = !isNavbarCollapsed"
-        data-target="#navbarsDefault" aria-controls="navbarsDefault" aria-expanded="false"
-        aria-label="Toggle navigation">
+        data-target="#menuDefault" aria-controls="menuDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div [ngbCollapse]="isNavbarCollapsed" class="collapse navbar-collapse" id="navbarsDefault">
+    <div [ngbCollapse]="isNavbarCollapsed" class="collapse navbar-collapse" id="menuDefault">
         <div class="input-group m-1">
             <div class="input-group w-100" (click)="changeColored($event)">
                 <div class="color-select input-group-text w-100">
