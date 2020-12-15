@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from "@angular/core";
 import { Observable, of } from "rxjs";
 import { catchError, finalize, switchMap } from "rxjs/operators";
 
@@ -12,7 +12,7 @@ import { IRecColor } from "../models/rec-color.interface";
     templateUrl: './point.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PointComponent {
+export class PointComponent implements OnInit {
 
     public loading: boolean;
     public firstLoad = true;
@@ -34,8 +34,30 @@ export class PointComponent {
 
     private _totalColors = 0;
 
-    constructor(private _http: HttpService, private _cdr: ChangeDetectorRef) {
+    private _clicked: { [key: number]: boolean };
+    private _worker: Worker;
+    private _workerIsInit: boolean;
+
+    constructor(private _http: HttpService,
+        private _cdr: ChangeDetectorRef) {
         this._cdr.detach();
+    }
+
+    public ngOnInit(): void {
+        if (typeof Worker !== 'undefined') {
+            this._workerIsInit = true;
+            this._worker = new Worker('./point.worker', {
+                type: 'module',
+            });
+
+            this._worker.addEventListener('message',
+                (message: MessageEvent) => {
+                    this._updateCell(message.data);
+                    this._updateProgress();
+                });
+        } else {
+            this._workerIsInit = false;
+        }
     }
 
     public resize(zoom: number): void {
@@ -45,7 +67,7 @@ export class PointComponent {
 
     public load(): void {
         this.loading = true;
-        const fileToUpload = this.files.item(0);
+        const fileToUpload = this.files.item(0) as File;
         this.points = this._http.postFile<IRecColor>(fileToUpload, {
             colorStep: this.colorSize, colored: this.colored, size: this.size
         })
@@ -53,6 +75,7 @@ export class PointComponent {
                 switchMap((res: IRecColor) => {
                     this.progress = 0;
                     this.updated = {};
+                    this._clicked = {};
                     this._totalColors = Object.keys(res.cellsColor).length;
                     this.cellsColoredCells = res.cellsColor;
                     return of(res.cells);
@@ -64,7 +87,9 @@ export class PointComponent {
                 finalize(() => {
                     this.loading = false;
                     this.firstLoad = false;
-                    this._cdr.detectChanges();
+                    setTimeout(() => {
+                        this._cdr.detectChanges();
+                    }, 0);
                 })
             );
         this._cdr.detectChanges();
@@ -72,10 +97,24 @@ export class PointComponent {
 
     public spanClick(number: string): void {
         if (!number) return;
+        if (this._clicked[number]) return;
+        this._clicked[number] = true;
+        if (this._workerIsInit) {
+            this._worker.postMessage(number);
+        } else {
+            this._updateCell(number);
+            this._updateProgress();
+        }
+    }
+
+    private _updateCell(number: string): void {
+        const color = this.cellsColoredCells[number];
+        if (this.updated[color]) return;
+        this.updated[color] = true;
+    }
+
+    private _updateProgress(): void {
         setTimeout(() => {
-            const color = this.cellsColoredCells[number];
-            if (this.updated[color]) return;
-            this.updated[color] = true;
             this.progress = Object.keys(this.updated).length / this._totalColors * 100;
             this._cdr.detectChanges();
         }, 0);

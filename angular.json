@@ -1,11 +1,24 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
+  "cli": {
+    "packageManager": "yarn",
+    "warnings": {
+      "typescriptMismatch": false
+    }
+  },
+  "newProjectRoot": "projects",
   "projects": {
     "recimage": {
       "projectType": "application",
       "root": "",
       "sourceRoot": "src",
+      "schematics": {
+        "@schematics/angular:component": {
+          "inlineStyle": true,
+          "style": "scss"
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -14,7 +27,7 @@
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.json",
+            "tsConfig": "tsconfig.app.json",
             "assets": [
               {
                 "glob": "**/*",
@@ -31,9 +44,18 @@
               "styles.scss"
             ],
             "scripts": [],
-            "aot": true
+            "aot": true,
+            "webWorkerTsConfig": "tsconfig.worker.json"
           },
           "configurations": {
+            "dev": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ]
+            },
             "production": {
               "fileReplacements": [
                 {
@@ -43,7 +65,7 @@
               ],
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
+              "sourceMap": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,

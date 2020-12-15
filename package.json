@@ -28,6 +28,7 @@
     "@angular/router": "~11.0.0",
     "@angular/service-worker": "~11.0.0",
     "@ng-bootstrap/ng-bootstrap": "^8.0.0",
+    "@types/lunr": "^2.3.3",
     "bootstrap": "^4.5.3",
     "rxjs": "^6.6.3",
     "zone.js": "~0.11.3"

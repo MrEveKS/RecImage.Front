@@ -20,7 +20,14 @@ const appRoutes: Routes = [
 ];
 @NgModule({
     providers: [{ provide: APP_BASE_HREF, useValue: '' }],
-    imports: [NgbCollapseModule, BrowserModule, FormsModule, HttpClientModule, RouterModule.forRoot(appRoutes), ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })],
+    imports: [
+        NgbCollapseModule,
+        BrowserModule,
+        FormsModule,
+        HttpClientModule,
+        RouterModule.forRoot(appRoutes),
+        ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ],
     declarations: [AppComponent, PreviewComponent, PointComponent],
     bootstrap: [AppComponent]
 })

@@ -3,7 +3,7 @@
     <table class="point-container" [ngStyle]="{ transform: 'scale(' + zoom + ')' }">
         <tbody>
             <tr *ngFor="let items of points | async">
-                <td *ngFor="let cell of items" (click)="spanClick(cell)"
+                <td *ngFor="let cell of items" (click)="spanClick(cell)" [attr.color]="cell"
                     [ngStyle]="{'background-color': cellsColoredCells[cell], color: cellsColoredCells[cell]}"
                     [ngClass]="{empty: !updated[cellsColoredCells[cell]] }">{{ cell }}</td>
             </tr>

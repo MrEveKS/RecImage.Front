@@ -13,16 +13,16 @@ export class AppComponent implements OnInit {
 
     public points: Observable<string[][]> = of([]);
 
-    public colorSize: number;
-    public zoom: number;
-    public size: number;
+    public colorSize!: number;
+    public zoom!: number;
+    public size!: number;
 
-    public files: FileList;
+    public files!: FileList;
     public colored = true;
 
-    public colorSizes: ISelectValue<number>[];
-    public zooms: ISelectValue<number>[];
-    public sizes: ISelectValue<number>[];
+    public colorSizes!: ISelectValue<number>[];
+    public zooms!: ISelectValue<number>[];
+    public sizes!: ISelectValue<number>[];
 
     public isNavbarCollapsed = true;
 
