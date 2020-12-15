@@ -1,14 +1,14 @@
 <div class="container-fluid main-container">
     <preview [hidden]="!firstLoad"></preview>
-    <table class="point-container" [ngStyle]="{ transform: 'scale(' + zoom + ')' }">
-        <tbody>
-            <tr *ngFor="let items of points | async">
-                <td *ngFor="let cell of items" (click)="spanClick(cell)" [attr.color]="cell"
-                    [ngStyle]="{'background-color': cellsColoredCells[cell], color: cellsColoredCells[cell]}"
-                    [ngClass]="{empty: !updated[cellsColoredCells[cell]] }">{{ cell }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="point-container" [ngStyle]="{ transform: 'scale(' + zoom + ')' }">
+        <div *ngFor="let items of points | async">
+            <div class="cell" *ngFor="let cell of items" (click)="spanClick(cell)" [attr.color]="cell"
+                [ngStyle]="{'background-color': cellsColoredCells[cell], color: cellsColoredCells[cell]}"
+                [ngClass]="{empty: !updated[cellsColoredCells[cell]] }">
+                {{ cell }}
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="container-fluid progress-container">

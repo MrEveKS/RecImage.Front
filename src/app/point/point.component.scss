@@ -1,53 +1,39 @@
-td {
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Chrome/Safari/Opera */
-  -khtml-user-select: none; /* Konqueror */
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none;
-}
-
-td {
-  font-family: "Courier New", Courier, monospace;
-}
-
 .main-container {
   margin-top: 4.2rem;
   height: calc(100% - 4.2rem - 16px);
   overflow: auto;
-  display: grid;
 }
 
-.main-container table {
-  transform-origin: 0 0;
+.cell {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
-.point-container {
-  width: 1%;
-}
+.cell {
+  font-family: "Courier New", Courier, monospace;
 
-.point-container td {
   position: relative;
-  padding: 2px 0 0 0;
+  padding: 5px 0 0 0;
 
   width: 25px;
-  min-width: 25px;
-  max-width: 25px;
   height: 25px;
   min-height: 25px;
-
   text-align: center;
-  vertical-align: middle;
+  display: inline-block;
   cursor: pointer;
   font-size: 12px;
 }
 
-.point-container td.empty {
+.cell.empty {
   background-color: transparent !important;
   color: #212529 !important;
 }
 
-.point-container td.empty::after {
+.cell.empty::after {
   content: "";
   position: absolute;
   top: 1px;
@@ -55,14 +41,19 @@ td {
   border: 1px solid #eee;
 
   width: 23px;
-  min-width: 23px;
   height: 23px;
   min-height: 23px;
 }
 
-.point-container .point-line {
-  flex: 1 1 10px;
-  display: flex;
+.point-container {
+  transform-origin: 0 0;
+  width: 1%;
+  height: 1%;
+}
+
+.point-container > div {
+  white-space: nowrap;
+  height: 25px;
 }
 
 .progress-container {

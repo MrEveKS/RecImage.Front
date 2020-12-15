@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from "@angular/core";
-import { Observable, of } from "rxjs";
+import { asyncScheduler, Observable, of, scheduled } from "rxjs";
 import { catchError, finalize, switchMap } from "rxjs/operators";
 
 import { HttpService } from "../../services/http.service";
@@ -87,9 +87,7 @@ export class PointComponent implements OnInit {
                 finalize(() => {
                     this.loading = false;
                     this.firstLoad = false;
-                    setTimeout(() => {
-                        this._cdr.detectChanges();
-                    }, 0);
+                    this._detectChangesAsync();
                 })
             );
         this._cdr.detectChanges();
@@ -114,9 +112,11 @@ export class PointComponent implements OnInit {
     }
 
     private _updateProgress(): void {
-        setTimeout(() => {
-            this.progress = Object.keys(this.updated).length / this._totalColors * 100;
-            this._cdr.detectChanges();
-        }, 0);
+        this.progress = Object.keys(this.updated).length / this._totalColors * 100;
+        this._detectChangesAsync();
+    }
+
+    private _detectChangesAsync(): void {
+        scheduled(of(this._cdr.detectChanges()), asyncScheduler);
     }
 }
