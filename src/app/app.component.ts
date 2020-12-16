@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
 import { ISelectValue } from './models/select-value.interface';
@@ -7,7 +7,6 @@ import { ISelectValue } from './models/select-value.interface';
     selector: 'main-app',
     styleUrls: ['./app.component.scss'],
     templateUrl: './app.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit {
 
@@ -19,9 +18,9 @@ export class AppComponent implements OnInit {
 
     public files!: FileList;
     public colored = true;
+    public colorSave = true;
 
     public colorSizes!: ISelectValue<number>[];
-    public zooms!: ISelectValue<number>[];
     public sizes!: ISelectValue<number>[];
 
     public isNavbarCollapsed = true;
@@ -31,18 +30,11 @@ export class AppComponent implements OnInit {
 
         this.colorSize = this.colorSizes[1].value;
         this.size = this.sizes[2].value;
-        this.zoom = this.zooms[4].value;
+        this.zoom = 100;
     }
 
     public filesSelect(files: FileList): void {
         this.files = files;
-    }
-
-    public changeColored(event: MouseEvent): void {
-        const target = event.target;
-        if (!(target instanceof HTMLInputElement)) {
-            this.colored = !this.colored;
-        }
     }
 
     private _initialize(): void {
@@ -52,14 +44,6 @@ export class AppComponent implements OnInit {
             { title: 'Среднее', value: 15 },
             { title: 'Высокое', value: 10 },
             { title: 'Очень высокое', value: 7 },
-        ];
-
-        this.zooms = [
-            { title: '10%', value: .1 },
-            { title: '25%', value: .25 },
-            { title: '50%', value: .50 },
-            { title: '75%', value: .75 },
-            { title: '100%', value: 1 },
         ];
 
         this.sizes = [

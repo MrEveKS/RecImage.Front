@@ -48,3 +48,21 @@ div {
 .custom-file .custom-file-label:after {
   content: "Выбрать";
 }
+
+.range-input {
+  background-clip: padding-box;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  border-radius: 0.25rem;
+  background-color: #fff;
+  background-clip: padding-box;
+  padding-right: 3px;
+}
+
+.range-input .input-group-prepend {
+  margin-right: 3px;
+}
+
+.form-control-range {
+  padding: 0;
+  border: none;
+}

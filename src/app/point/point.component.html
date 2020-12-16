@@ -1,13 +1,8 @@
 <div class="container-fluid main-container">
-    <preview [hidden]="!firstLoad"></preview>
-    <div class="point-container" [ngStyle]="{ transform: 'scale(' + zoom + ')' }">
-        <div *ngFor="let items of points | async">
-            <div class="cell" *ngFor="let cell of items" (click)="spanClick(cell)" [attr.color]="cell"
-                [ngStyle]="{'background-color': cellsColoredCells[cell], color: cellsColoredCells[cell]}"
-                [ngClass]="{empty: !updated[cellsColoredCells[cell]] }">
-                {{ cell }}
-            </div>
-        </div>
+    <preview *ngIf="firstLoad"></preview>
+    <div class="convas-container">
+        <canvas (click)="onCkick($event)" [hidden]="firstLoad"
+            [ngStyle]="{ 'transform' : 'scale(' + (zoom / 100) + ')'}" #container></canvas>
     </div>
 </div>
 

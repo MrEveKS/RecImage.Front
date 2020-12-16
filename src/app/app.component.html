@@ -6,17 +6,20 @@
 
 <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
     <button class="navbar-toggler hidden-sm-up m-1" type="button" (click)="isNavbarCollapsed = !isNavbarCollapsed"
-        data-target="#menuDefault" aria-controls="menuDefault" aria-expanded="false" aria-label="Toggle navigation">
+        data-target="#menuDefault" aria-controls="menuDefault" aria-expanded="false">
         <span class="navbar-toggler-icon"></span>
     </button>
 
     <div [ngbCollapse]="isNavbarCollapsed" class="collapse navbar-collapse" id="menuDefault">
         <div class="input-group m-1">
-            <div class="input-group w-100" (click)="changeColored($event)">
+            <div class="input-group w-100">
                 <div class="color-select input-group-text w-100">
-                    <input type="checkbox" name="colored" [(ngModel)]="colored"
-                        aria-label="Checkbox for following text input">
-                    <label class="form-check-label" for="colored">Цветное</label>
+                    <label class="form-check-label">
+                        <input type="checkbox" [(ngModel)]="colored">
+                        Цветное</label>
+                    <label class="form-check-label ml-auto">
+                        <input type="checkbox" [(ngModel)]="colorSave">
+                        Сохранять</label>
                 </div>
             </div>
         </div>
@@ -28,13 +31,12 @@
                 <option *ngFor="let c of colorSizes" [value]="c.value">{{c.title}}</option>
             </select>
         </div>
-        <div class="input-group m-1">
+        <div class="input-group range-input m-1">
             <div class="input-group-prepend">
                 <span class="input-group-text">Масштаб</span>
             </div>
-            <select name="inputZoom" class="form-control" [ngModel]="zoom" (ngModelChange)="imagePoint.resize($event)">
-                <option *ngFor="let z of zooms" [value]="z.value">{{z.title}}</option>
-            </select>
+            <input type="range" class="form-control form-control-range" min="10" max="150" [ngModel]="zoom"
+                (ngModelChange)="imagePoint.resize($event)">
         </div>
         <div class="input-group m-1">
             <div class="custom-file">
@@ -59,5 +61,5 @@
     </div>
 </nav>
 
-<point [files]="files" [colorSize]="colorSize" [colored]="colored" [size]="size" #imagePoint>
+<point [files]="files" [colorSize]="colorSize" [colored]="colored" [size]="size" [colorSave]="colorSave" #imagePoint>
 </point>
