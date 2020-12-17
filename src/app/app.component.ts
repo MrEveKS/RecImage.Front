@@ -40,10 +40,10 @@ export class AppComponent implements OnInit {
     private _initialize(): void {
         this.colorSizes = [
             { title: 'Очень низкое', value: 30 },
-            { title: 'Низкое', value: 20 },
-            { title: 'Среднее', value: 15 },
-            { title: 'Высокое', value: 10 },
-            { title: 'Очень высокое', value: 7 },
+            { title: 'Низкое', value: 24 },
+            { title: 'Среднее', value: 18 },
+            { title: 'Высокое', value: 12 },
+            { title: 'Очень высокое', value: 6 },
         ];
 
         this.sizes = [

@@ -1,14 +1,12 @@
 import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
-import { of } from "rxjs";
-import { catchError } from "rxjs/operators";
+import { fromEvent, of } from "rxjs";
+import { catchError, finalize } from "rxjs/operators";
 
 import { HttpService } from "../../services/http.service";
 
+import { IColRow } from "../models/col-row.interface";
+import { IPointOptions } from "../models/point-options.interface";
 import { IRecColor } from "../models/rec-color.interface";
-export interface IColRow {
-    col: number;
-    row: number;
-}
 
 @Component({
     selector: 'point',
@@ -39,15 +37,13 @@ export class PointComponent implements OnInit, AfterViewInit {
     private _currentUpdated: { [key: string]: boolean } = {};
     private _updated: { [key: string]: boolean } = {};
 
-    private _worker: Worker;
-    // private _workerIsInit = false;
-
+    private _colorPointWorker: Worker;
     _
     @ViewChild('container', { read: ElementRef })
     private _container: ElementRef<HTMLCanvasElement>;
     private _context: CanvasRenderingContext2D;
 
-    private _loadedFileName: string;
+    private _currentOptions: IPointOptions = {} as IPointOptions;
     private _defaultRecSize = 25;
 
     /**
@@ -65,21 +61,11 @@ export class PointComponent implements OnInit, AfterViewInit {
 
     public ngOnInit(): void {
         this._cash = {};
+        this._colorPointWorker = new Worker('./workers/color-point.worker', {
+            type: 'module',
+        });
 
-        if (typeof Worker !== 'undefined') {
-            // this._workerIsInit = true;
-            this._worker = new Worker('./point.worker', {
-                type: 'module',
-            });
-
-            this._worker.addEventListener('message',
-                (message: MessageEvent) => {
-                    //this._updateCell(message.data);
-                    this._updateProgress();
-                });
-        } else {
-            // this._workerIsInit = false;
-        }
+        fromEvent(this._colorPointWorker, 'message').subscribe((message: MessageEvent) => this._colorPointGenerated(message));
     }
 
     public resize(zoom: number): void {
@@ -89,28 +75,41 @@ export class PointComponent implements OnInit, AfterViewInit {
     public load(): void {
         this.loading = true;
         const fileToUpload = this.files.item(0) as File;
-        this._loadedFileName = fileToUpload.name;
+        if (this._currentOptions.fileName !== fileToUpload.name) {
+            this._updated = {}
+        }
+
+        this._currentOptions = {
+            fileName: fileToUpload.name,
+            colorSize: this.colorSize,
+            colored: this.colored,
+            size: this.size
+        };
         const fromCash = this._loadFromCash();
 
         (fromCash
             ? of(fromCash)
             : this._http.postFile<IRecColor>(fileToUpload, {
                 colorStep: this.colorSize, colored: this.colored, size: this.size
-            })).pipe(catchError((error: Error) => {
-                this.loading = false;
-                console.log(error);
-                return of({});
-            }))
+            })).pipe(
+                catchError((error: Error) => {
+                    this.loading = false;
+                    console.log(error);
+                    return of({});
+                }),
+                finalize(() => {
+                    this.loading = false;
+                    this.firstLoad = false;
+                    this.colorSave && this._updateProgress();
+                })
+            )
             .subscribe((res: IRecColor) => {
                 this._totalColors = Object.keys(res.cellsColor).length;
                 this._saveToCash(res);
                 this._emptyData();
+                this._generateColorPoint();
                 this._resizeConvas();
-                this._initilizePoints();
-
-                this.loading = false;
-                this.firstLoad = false;
-                this.colorSave && this._updateProgress();
+                this._generateConvas();
             });
     }
 
@@ -122,46 +121,85 @@ export class PointComponent implements OnInit, AfterViewInit {
         convas.width = points[0].length * this._defaultRecSize;
     }
 
-    private _initilizePoints(): void {
-        const recColor = this._loadFromCash();
-        const cells = recColor.cells;
-        const size = this._defaultRecSize;
-        const context = this._context;
-        const cellsColor = recColor.cellsColor;
+    private _colorPointGenerated(message: MessageEvent): void {
+        this.colorPoint = message.data;
+        this._generateConvas();
+    }
 
+    private _generateColorPoint(): void {
+        const recColor = this._loadFromCash();
+        this.colorPoint = {};
+        const cells = recColor.cells;
+        const cellsColor = recColor.cellsColor;
         for (let row = 0; row < cells.length; row++) {
             for (let col = 0; col < cells[row].length; col++) {
                 const num = cells[row][col];
                 const color = cellsColor[num];
                 !this.colorPoint[color] && (this.colorPoint[color] = []);
-                this.colorPoint[color].push({ col, row });
-
-                const x = col * size;
-                const y = row * size;
-
-                if (this._updated[color]) {
-                    context.fillStyle = color;
-                    context.fillRect(x, y, size, size);
-                    this._currentUpdated[color] = true;
-                } else {
-                    context.fillStyle = '#fff';
-                    context.fillRect(x, y, size, size);
-                    context.fillStyle = '#666';
-                    this._context.strokeStyle = '#ccc';
-                    context.lineWidth = 1;
-                    if (num > 999) {
-                        context.font = "9px Arial";
-                        context.textAlign = "center";
-                        context.textBaseline = "middle";
-                    } else {
-                        context.font = "11px Arial";
-                        context.textAlign = "center";
-                        context.textBaseline = "middle";
-                    }
-                    context.strokeRect(x + 2, y + 2, size - 4, size - 4);
-                    context.fillText(num.toString(), (x - size / 2) + size, (y - size / 2) + size);
-                }
+                this.colorPoint[color].push({ col, row, num });
             }
+        }
+    }
+
+    private _generateConvas(): void {
+        const size: number = this._defaultRecSize;
+        const updated: { [key: string]: boolean } = this._updated;
+        const colorPoint: { [key: string]: IColRow[] } = this.colorPoint;
+        const updatedColors = Object.keys(updated).filter((key) => updated[key]);
+        const colors = Object.keys(colorPoint).filter((key) => updatedColors.indexOf(key) === -1);
+
+        const context = this._context;
+
+        for (let index = 0, length = updatedColors.length; index < length; index += 1) {
+            const color = updatedColors[index];
+            const points = colorPoint[color];
+            if (!points) continue;
+            context.fillStyle = color;
+            for (let pointIndex = 0; pointIndex < points.length; pointIndex++) {
+                const point = points[pointIndex];
+                const x = point.col * size;
+                const y = point.row * size;
+
+                context.fillRect(x, y, size, size);
+                this._currentUpdated[color] = true;
+            }
+        }
+
+        const bigNumber = 1000;
+        for (let index = 0; index < colors.length; index++) {
+            const color = colors[index];
+            const points = colorPoint[color];
+            const big = points.filter((p) => p.num >= bigNumber);
+            const small = points.filter((p) => p.num < bigNumber);
+
+            context.strokeStyle = '#ccc';
+
+            context.font = "9px Arial";
+            context.textAlign = "center";
+            context.textBaseline = "middle";
+
+            this._fillContext(big, size);
+
+            context.font = "11px Arial";
+            context.textAlign = "center";
+            context.textBaseline = "middle";
+
+            this._fillContext(small, size);
+        }
+    }
+
+    private _fillContext(points: IColRow[], size: number) {
+        for (let pointIndex = 0; pointIndex < points.length; pointIndex++) {
+            const point = points[pointIndex];
+            const x = point.col * size;
+            const y = point.row * size;
+
+            this._context.fillStyle = '#fff';
+            this._context.fillRect(x, y, size, size);
+            this._context.fillStyle = '#666';
+
+            this._context.strokeRect(x + 2, y + 2, size - 4, size - 4);
+            this._context.fillText(point.num.toString(), (x - size / 2) + size, (y - size / 2) + size);
         }
     }
 
@@ -209,26 +247,26 @@ export class PointComponent implements OnInit, AfterViewInit {
     }
 
     private _loadFromCash(): IRecColor {
-        if (!this._cash[this._loadedFileName]
-            || !this._cash[this._loadedFileName][this.colorSize]
-            || !this._cash[this._loadedFileName][this.colorSize][this.size]
-            || !this._cash[this._loadedFileName][this.colorSize][this.size][this.colored.toString()]) return null;
-        return this._cash[this._loadedFileName][this.colorSize][this.size][this.colored.toString()] || null;
+        if (!this._cash[this._currentOptions.fileName]
+            || !this._cash[this._currentOptions.fileName][this._currentOptions.colorSize]
+            || !this._cash[this._currentOptions.fileName][this._currentOptions.colorSize][this._currentOptions.size]
+            || !this._cash[this._currentOptions.fileName][this._currentOptions.colorSize][this._currentOptions.size][this._currentOptions.colored.toString()]) return null;
+        return this._cash[this._currentOptions.fileName][this._currentOptions.colorSize][this._currentOptions.size][this._currentOptions.colored.toString()] || null;
     }
 
     private _saveToCash(res: IRecColor): void {
-        const boolKey = this.colored.toString();
-        if (!this._cash[this._loadedFileName]) {
-            this._cash[this._loadedFileName] = {};
-            this._cash[this._loadedFileName][this.colorSize] = {};
-            this._cash[this._loadedFileName][this.colorSize][this.size] = {};
-        } else if (!this._cash[this._loadedFileName][this.colorSize]) {
-            this._cash[this._loadedFileName][this.colorSize] = {};
-            this._cash[this._loadedFileName][this.colorSize][this.size] = {};
-        } else if (!this._cash[this._loadedFileName][this.colorSize][this.size]) {
-            this._cash[this._loadedFileName][this.colorSize][this.size] = {};
+        const boolKey = this._currentOptions.colored.toString();
+        if (!this._cash[this._currentOptions.fileName]) {
+            this._cash[this._currentOptions.fileName] = {};
+            this._cash[this._currentOptions.fileName][this._currentOptions.colorSize] = {};
+            this._cash[this._currentOptions.fileName][this._currentOptions.colorSize][this._currentOptions.size] = {};
+        } else if (!this._cash[this._currentOptions.fileName][this._currentOptions.colorSize]) {
+            this._cash[this._currentOptions.fileName][this._currentOptions.colorSize] = {};
+            this._cash[this._currentOptions.fileName][this._currentOptions.colorSize][this._currentOptions.size] = {};
+        } else if (!this._cash[this._currentOptions.fileName][this._currentOptions.colorSize][this._currentOptions.size]) {
+            this._cash[this._currentOptions.fileName][this._currentOptions.colorSize][this._currentOptions.size] = {};
         }
 
-        this._cash[this._loadedFileName][this.colorSize][this.size][boolKey] = res;
+        this._cash[this._currentOptions.fileName][this._currentOptions.colorSize][this._currentOptions.size][boolKey] = res;
     }
 }
