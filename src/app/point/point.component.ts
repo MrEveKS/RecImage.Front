@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
-import { fromEvent, of } from "rxjs";
+import { of } from "rxjs";
 import { catchError, finalize } from "rxjs/operators";
 
 import { HttpService } from "../../services/http.service";
@@ -37,8 +37,6 @@ export class PointComponent implements OnInit, AfterViewInit {
     private _currentUpdated: { [key: string]: boolean } = {};
     private _updated: { [key: string]: boolean } = {};
 
-    private _colorPointWorker: Worker;
-    _
     @ViewChild('container', { read: ElementRef })
     private _container: ElementRef<HTMLCanvasElement>;
     private _context: CanvasRenderingContext2D;
@@ -61,11 +59,6 @@ export class PointComponent implements OnInit, AfterViewInit {
 
     public ngOnInit(): void {
         this._cash = {};
-        this._colorPointWorker = new Worker('./workers/color-point.worker', {
-            type: 'module',
-        });
-
-        fromEvent(this._colorPointWorker, 'message').subscribe((message: MessageEvent) => this._colorPointGenerated(message));
     }
 
     public resize(zoom: number): void {
@@ -119,11 +112,6 @@ export class PointComponent implements OnInit, AfterViewInit {
 
         convas.height = points.length * this._defaultRecSize;
         convas.width = points[0].length * this._defaultRecSize;
-    }
-
-    private _colorPointGenerated(message: MessageEvent): void {
-        this.colorPoint = message.data;
-        this._generateConvas();
     }
 
     private _generateColorPoint(): void {

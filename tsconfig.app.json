@@ -1,11 +1,10 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "./out-tsc/app",
     "types": []
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["src/**/*.worker.ts"],
+  "files": ["src/main.ts", "src/polyfills.ts"],
+  "include": ["src/**/*.d.ts"],
   "angularCompilerOptions": {
     "enableIvy": true,
     "disableTypeScriptVersionCheck": true

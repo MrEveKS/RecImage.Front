@@ -2,7 +2,6 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
-    "outDir": "./out-tsc",
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
@@ -15,6 +14,5 @@
     "lib": ["es2018", "dom"],
     "skipLibCheck": true,
     "noUnusedLocals": true
-  },
-  "exclude": ["dist", "node_modules", "out-tsc"],
+  }
 }
