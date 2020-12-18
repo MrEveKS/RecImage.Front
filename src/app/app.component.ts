@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, of } from 'rxjs';
 
 import { ISelectValue } from './models/select-value.interface';
 
@@ -9,8 +8,6 @@ import { ISelectValue } from './models/select-value.interface';
     templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit {
-
-    public points: Observable<string[][]> = of([]);
 
     public colorSize!: number;
     public zoom!: number;

@@ -1,0 +1,31 @@
+body {
+  margin: 0;
+}
+.logo {
+  position: absolute;
+  top: 0.25rem;
+  left: 0.65rem;
+  opacity: 0.7;
+}
+.logo img {
+  width: 72px;
+}
+.application-loading-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #efefef;
+}
+.application-loading-box {
+  font-family: sans-serif;
+  width: 250px;
+  margin: 5px;
+}
+.application-loading-box h1 {
+  margin-bottom: 0;
+}
+.application-loading-box h5 {
+  color: #666;
+}

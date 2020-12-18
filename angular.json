@@ -41,7 +41,12 @@
               }
             ],
             "styles": [
-              "styles.scss"
+              "styles.scss",
+              {
+                "input": "src/styles/preloader.scss",
+                "bundleName": "styles/preloader.min",
+                "inject": false
+              }
             ],
             "scripts": [],
             "aot": true
