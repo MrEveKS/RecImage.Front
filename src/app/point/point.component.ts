@@ -305,12 +305,8 @@ export class PointComponent implements OnInit, AfterViewInit, AfterViewChecked {
         const marginTop = parseInt(styleValues.getPropertyValue('margin-top'));
         const marginLeft = parseInt(styleValues.getPropertyValue('margin-left'));
 
-        const left = canvasWidth < canvasContainerWidth
-            ? `${(canvasContainerWidth - canvasWidth) / 2 - marginLeft}px`
-            : 'auto';
-        const top = canvasHeight < canvasContainerHeight
-            ? `${(canvasContainerHeight - canvasHeight) / 2 - marginTop}px`
-            : 'auto';
+        const left = `${(canvasContainerWidth - canvasWidth) / 2 - marginLeft}px`;
+        const top = `${(canvasContainerHeight - canvasHeight) / 2 - marginTop}px`;
 
         this._rendered.setStyle(canvas, 'left', left);
         this._rendered.setStyle(canvas, 'top', top);
