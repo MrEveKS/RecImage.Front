@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from "@angular/core";
 import { of } from "rxjs";
 import { catchError, finalize } from "rxjs/operators";
 
@@ -7,6 +7,7 @@ import { HttpService } from "../../services/http.service";
 import { IColRow } from "../models/col-row.interface";
 import { IPointOptions } from "../models/point-options.interface";
 import { IRecColor } from "../models/rec-color.interface";
+import { IMenuSettings } from "../point-menu/point-menu.component";
 
 @Component({
     selector: 'point',
@@ -17,21 +18,14 @@ export class PointComponent implements OnInit, AfterViewInit {
 
     public loading: boolean;
     public firstLoad = true;
-    public zoom = 100;
-
-    @Input()
-    public files: FileList;
-    @Input()
-    public colorSize: number;
-    @Input()
-    public colored: boolean;
-    @Input()
-    public size: number;
-    @Input()
-    public colorSave;
+    public zoom: number;
 
     public colorPoint: { [key: string]: IColRow[] } = {};
-    public progress = 0;
+
+    @Output()
+    public onProgressUpdate = new EventEmitter<number>();
+    @Output()
+    public onFileSelectEmmit = new EventEmitter<FileList>();
 
     private _totalColors = 0;
     private _currentUpdated: { [key: string]: boolean } = {};
@@ -51,7 +45,8 @@ export class PointComponent implements OnInit, AfterViewInit {
 
     constructor(private _http: HttpService) {
     }
-    ngAfterViewInit(): void {
+
+    public ngAfterViewInit(): void {
         this._context = this._container.nativeElement
             .getContext('2d', { alpha: false });
         this._context.globalCompositeOperation = 'source-over';
@@ -65,45 +60,76 @@ export class PointComponent implements OnInit, AfterViewInit {
         this.zoom = zoom;
     }
 
-    public load(): void {
+    public load(options: IMenuSettings): void {
         this.loading = true;
-        const fileToUpload = this.files.item(0) as File;
+        const fileToUpload = options.files.item(0) as File;
         if (this._currentOptions.fileName !== fileToUpload.name) {
             this._updated = {}
         }
 
         this._currentOptions = {
             fileName: fileToUpload.name,
-            colorSize: this.colorSize,
-            colored: this.colored,
-            size: this.size
+            colorSize: options.colorSize,
+            colored: options.colored,
+            size: options.size
         };
         const fromCash = this._loadFromCash();
 
         (fromCash
             ? of(fromCash)
             : this._http.postFile<IRecColor>(fileToUpload, {
-                colorStep: this.colorSize, colored: this.colored, size: this.size
+                colorStep: options.colorSize, colored: options.colored, size: options.size
             })).pipe(
                 catchError((error: Error) => {
                     this.loading = false;
                     console.log(error);
-                    return of({});
+                    return of(null);
                 }),
                 finalize(() => {
                     this.loading = false;
-                    this.firstLoad = false;
-                    this.colorSave && this._updateProgress();
+                    options.colorSave && this._updateProgress();
                 })
             )
             .subscribe((res: IRecColor) => {
+                if (!res) {
+                    return;
+                }
                 this._totalColors = Object.keys(res.cellsColor).length;
                 this._saveToCash(res);
-                this._emptyData();
+                this._emptyData(options.colorSave);
                 this._generateColorPoint();
                 this._resizeConvas();
                 this._generateConvas();
+                this.firstLoad = false;
             });
+    }
+
+    public onCkick($event: MouseEvent): void {
+        const recColor = this._loadFromCash();
+        const size = this._defaultRecSize;
+        const zoomSize = this._defaultRecSize * this.zoom / 100;
+        const context = this._context;
+        const position = this._getCursorPosition(this._container.nativeElement, $event);
+
+        const row = Math.floor((position.y - position.y % zoomSize) / zoomSize);
+        const col = Math.floor((position.x - position.x % zoomSize) / zoomSize);
+        const num = recColor.cells[row][col];
+        const color = recColor.cellsColor[num];
+        if (this._updated[color]) return;
+        this._updated[color] = true;
+        this._currentUpdated[color] = true;
+
+        context.fillStyle = color;
+        for (let index = 0; index < this.colorPoint[color].length; index++) {
+            const cor = this.colorPoint[color][index];
+            context.fillRect(cor.col * size, cor.row * size, size, size);
+        }
+
+        this._updateProgress();
+    }
+
+    public previewFilesSelect(files: FileList): void {
+        this.onFileSelectEmmit.emit(files);
     }
 
     private _resizeConvas(): void {
@@ -191,35 +217,11 @@ export class PointComponent implements OnInit, AfterViewInit {
         }
     }
 
-    private _emptyData(): void {
-        this.progress = 0;
+    private _emptyData(colorSave: boolean): void {
+        this._progressEmit(0);
         this.colorPoint = {};
         this._currentUpdated = {};
-        !this.colorSave && (this._updated = {});
-    }
-
-    public onCkick($event: MouseEvent): void {
-        const recColor = this._loadFromCash();
-        const size = this._defaultRecSize;
-        const zoomSize = this._defaultRecSize * this.zoom / 100;
-        const context = this._context;
-        const position = this._getCursorPosition(this._container.nativeElement, $event);
-
-        const row = Math.floor((position.y - position.y % zoomSize) / zoomSize);
-        const col = Math.floor((position.x - position.x % zoomSize) / zoomSize);
-        const num = recColor.cells[row][col];
-        const color = recColor.cellsColor[num];
-        if (this._updated[color]) return;
-        this._updated[color] = true;
-        this._currentUpdated[color] = true;
-
-        context.fillStyle = color;
-        for (let index = 0; index < this.colorPoint[color].length; index++) {
-            const cor = this.colorPoint[color][index];
-            context.fillRect(cor.col * size, cor.row * size, size, size);
-        }
-
-        this._updateProgress();
+        !colorSave && (this._updated = {});
     }
 
     private _getCursorPosition(canvas: HTMLCanvasElement, $event: MouseEvent)
@@ -231,7 +233,11 @@ export class PointComponent implements OnInit, AfterViewInit {
     }
 
     private _updateProgress(): void {
-        this.progress = Object.keys(this._currentUpdated).length / this._totalColors * 100;
+        this._progressEmit(Object.keys(this._currentUpdated).length / this._totalColors * 100);
+    }
+
+    private _progressEmit(progress: number): void {
+        this.onProgressUpdate.emit(progress);
     }
 
     private _loadFromCash(): IRecColor {

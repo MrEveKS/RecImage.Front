@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 431 512" xmlns="http://www.w3.org/2000/svg">
+<path d="M-1-1h433v514H-1z" fill="none"/>
+<path d="m296.66 160.67h126.72l-151.88-151.88v126.72c0 13.879 11.293 25.168 25.168 25.168z"/>
+<path d="M296.164 190.668c-30.418 0-55.168-24.75-55.168-55.168V0H55.168C24.746 0 0 24.746 0 55.168v401.664C0 487.254 24.746 512 55.168 512H376.5c30.418 0 55.168-24.746 55.168-55.168V190.668H296.164zM135.5 92.348c30.418 0 55.168 24.746 55.168 55.168 0 30.418-24.75 55.164-55.168 55.164s-55.164-24.746-55.164-55.164c0-30.422 24.746-55.168 55.164-55.168zm266.164 364.484c0 13.879-11.289 25.168-25.168 25.168H55.168C41.289 482 30 470.71 30 456.832V328.273l70.797-70.796a14.996 14.996 0 0121.21 0l69.727 69.726 93.825-93.824a15.003 15.003 0 0121.214 0l94.891 94.894v128.559zm0 0"/>
+<circle cx="362" cy="444.95" r="70" fill="#000" fill-opacity="null" stroke="null" stroke-opacity="null" stroke-width="null"/>
+<circle cx="362" cy="444.95" r="54" fill="#fff" stroke="null" stroke-opacity="null" stroke-width="null"/>
+<path d="m325 451.45 78-8" fill="none" stroke="null" stroke-linecap="null" stroke-linejoin="null" stroke-opacity="null" stroke-width="0"/>
+<path d="m322 438.45h86v19h-86z" stroke="0" stroke-opacity="null" stroke-width="0"/>
+<path d="m374.5 404.95v86h-19v-86z" stroke="null" stroke-opacity="null" stroke-width="0"/>
+</svg>

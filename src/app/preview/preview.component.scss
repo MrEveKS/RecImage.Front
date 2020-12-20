@@ -10,3 +10,14 @@ div {
   -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none;
 }
+
+.card {
+  width: 10rem;
+  float: left;
+  .card-img-top {
+    width: 62px;
+  }
+  .hidden {
+    display: none;
+  }
+}

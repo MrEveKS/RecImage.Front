@@ -4,62 +4,8 @@
     </div>
 </div>
 
-<nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
-    <button class="navbar-toggler hidden-sm-up m-1" type="button" (click)="isNavbarCollapsed = !isNavbarCollapsed"
-        data-target="#menuDefault" aria-controls="menuDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div [ngbCollapse]="isNavbarCollapsed" class="collapse navbar-collapse" id="menuDefault">
-        <div class="input-group m-1">
-            <div class="input-group w-100">
-                <div class="color-select input-group-text w-100">
-                    <label class="form-check-label">
-                        <input type="checkbox" [(ngModel)]="colored">
-                        Цветное</label>
-                    <label class="form-check-label ml-auto">
-                        <input type="checkbox" [(ngModel)]="colorSave">
-                        Сохранять</label>
-                </div>
-            </div>
-        </div>
-        <div class="input-group m-1">
-            <div class="input-group-prepend">
-                <span class="input-group-text">Качество</span>
-            </div>
-            <select name="inputZoom" class="form-control" [(ngModel)]="colorSize">
-                <option *ngFor="let c of colorSizes" [value]="c.value">{{c.title}}</option>
-            </select>
-        </div>
-        <div class="input-group range-input m-1">
-            <div class="input-group-prepend">
-                <span class="input-group-text">Масштаб</span>
-            </div>
-            <input type="range" class="form-control form-control-range" min="5" max="150" [ngModel]="zoom"
-                (ngModelChange)="imagePoint.resize($event)">
-        </div>
-        <div class="input-group m-1">
-            <div class="custom-file">
-                <input type="file" class="custom-file-input" name="customFile"
-                    (change)="filesSelect($event.target.files)" accept="image/*" required>
-                <label class="custom-file-label" for="customFile">{{ files && files.length ? files[0].name : 'Выберите
-                    фаил...'}}</label>
-            </div>
-        </div>
-        <div class="input-group m-1">
-            <div class="input-group-prepend">
-                <span class="input-group-text">Размер</span>
-            </div>
-            <select name="inputSize" class="form-control" [(ngModel)]="size">
-                <option *ngFor="let s of sizes" [value]="s.value">{{s.title}}</option>
-            </select>
-            <div class="input-group-append">
-                <button class="btn btn-outline-success" type="button" (click)="imagePoint.load()"
-                    [disabled]="!files || !files.length">Ok</button>
-            </div>
-        </div>
-    </div>
-</nav>
-
-<point [files]="files" [colorSize]="colorSize" [colored]="colored" [size]="size" [colorSave]="colorSave" #imagePoint>
+<point (onProgressUpdate)="progressBar.progressUpdate($event)"
+    (onFileSelectEmmit)="pointMenu.previewFilesSelect($event)" #imagePoint>
 </point>
+<point-menu (onZoomChange)="imagePoint.resize($event)" (onLoadClick)="imagePoint.load($event)" #pointMenu></point-menu>
+<progress-bar #progressBar></progress-bar>

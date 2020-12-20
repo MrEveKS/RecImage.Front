@@ -1,6 +1,5 @@
 .main-container {
-  margin-top: 4.2rem;
-  height: calc(100% - 4.2rem - 16px);
+  height: calc(100% - 66px);
   overflow: auto;
 }
 
@@ -12,12 +11,4 @@
 
 canvas {
   transform-origin: 0 0;
-}
-
-.progress-container {
-  padding: 0;
-
-  .progress {
-    border-radius: 0;
-  }
 }

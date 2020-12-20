@@ -16,10 +16,6 @@ div {
   user-select: none;
 }
 
-.navbar {
-  min-height: 64px;
-}
-
 .loader {
   position: absolute;
   width: 100%;
@@ -28,41 +24,4 @@ div {
   z-index: 1090;
   align-items: center;
   display: flex;
-}
-
-.color-select,
-.color-select label {
-  position: relative;
-}
-
-.color-select label {
-  left: 4px;
-}
-
-.custom-file .custom-file-label {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.custom-file .custom-file-label:after {
-  content: "Выбрать";
-}
-
-.range-input {
-  background-clip: padding-box;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  border-radius: 0.25rem;
-  background-color: #fff;
-  background-clip: padding-box;
-  padding-right: 3px;
-}
-
-.range-input .input-group-prepend {
-  margin-right: 3px;
-}
-
-.form-control-range {
-  padding: 0;
-  border: none;
 }

@@ -1,0 +1,37 @@
+.main-nav {
+  height: 50px;
+  padding: 6px;
+  .btn-menu {
+    padding: 2px;
+  }
+  .btn-icon {
+    width: 32px;
+  }
+  .form-control-range {
+    padding: 0;
+  }
+  .dropdown-menu {
+    min-width: 300px;
+    padding: 2px;
+  }
+  .dropdown-toggle::after {
+    content: none;
+  }
+  .dropdown-item {
+    padding: 0;
+  }
+  .dropdown-item:hover {
+    cursor: pointer;
+  }
+}
+
+.custom-file .custom-file-label:after {
+  content: "Выбрать";
+}
+
+.custom-file .custom-file-label {
+  padding-right: 95px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

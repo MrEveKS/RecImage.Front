@@ -1,0 +1,62 @@
+<nav class="main-nav">
+    <div class="d-flex justify-content-center">
+        <div ngbDropdown class="dropup">
+            <button ngbDropdownToggle class="btn-menu btn btn-outline-dark" id="settingsMenu" type="button"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img class="btn-icon" src="assets/settings.icon.svg" alt="Menu">
+            </button>
+            <div ngbDropdownMenu aria-labelledby="settingsMenu">
+                <div class="input-group">
+                    <div class="input-group w-100">
+                        <div class="input-group-text w-100">
+                            <label class="form-check-label">
+                                <input type="checkbox" [(ngModel)]="menuSettins.colored">
+                                Цветное</label>
+                            <label class="form-check-label ml-auto">
+                                <input type="checkbox" [(ngModel)]="menuSettins.colorSave">
+                                Сохранять</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <label for="inputZoom" class="input-group-text">Качество</label>
+                    </div>
+                    <select id="inputZoom" class="form-control" [(ngModel)]="menuSettins.colorSize">
+                        <option *ngFor="let c of colorSizes" [value]="c.value">{{c.title}}</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <div class="custom-file">
+                        <label class="custom-file-label" for="customFile">{{ menuSettins.files &&
+                            menuSettins.files.length ? menuSettins.files[0].name :
+                            'Выберите
+                            фаил...'}}</label>
+                        <input type="file" class="custom-file-input" id="customFile"
+                            (change)="filesSelect($event.target.files)" accept="image/*" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <label for="inputSize" class="input-group-text">Размер</label>
+                    </div>
+                    <select id="inputSize" class="form-control" [(ngModel)]="menuSettins.size">
+                        <option *ngFor="let s of sizes" [value]="s.value">{{s.title}}</option>
+                    </select>
+                </div>
+                <div class="dropdown-divider"></div>
+                <div ngbDropdownItem (ngClass)="{ disabled: !menuSettins.files || !menuSettins.files.length }">
+                    <button type="button" [disabled]="!menuSettins.files || !menuSettins.files.length"
+                        class="btn btn-outline-success w-100" (click)="onClick()">Применить</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-11 col-md-4">
+            <div class="input-group range-input">
+                <input type="range" id="inputRange" class="form-control form-control-range" min="5" max="150"
+                    [ngModel]="zoom" (ngModelChange)="resize($event)" name="zoom" aria-label="Zoom"
+                    [disabled]="!menuSettins.files || !menuSettins.files.length">
+            </div>
+        </div>
+    </div>
+</nav>

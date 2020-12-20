@@ -1,14 +1,7 @@
 <div class="container-fluid main-container">
-    <preview *ngIf="firstLoad"></preview>
+    <preview (onFileSelect)="previewFilesSelect($event)" *ngIf="firstLoad"></preview>
     <div class="convas-container">
         <canvas (click)="onCkick($event)" [hidden]="firstLoad"
             [ngStyle]="{ 'transform' : 'scale(' + (zoom / 100) + ')'}" #container></canvas>
-    </div>
-</div>
-
-<div class="container-fluid progress-container">
-    <div class="progress">
-        <div class="progress-bar" [style.width]="progress + '%'">
-        </div>
     </div>
 </div>
