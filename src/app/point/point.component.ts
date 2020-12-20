@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from "@angular/core";
+import { AfterViewChecked, AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, Renderer2, ViewChild } from "@angular/core";
 import { of } from "rxjs";
 import { catchError, finalize } from "rxjs/operators";
 
@@ -14,7 +14,7 @@ import { IMenuSettings } from "../point-menu/point-menu.component";
     styleUrls: ['./point.component.scss'],
     templateUrl: './point.component.html',
 })
-export class PointComponent implements OnInit, AfterViewInit {
+export class PointComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
     public loading: boolean;
     public firstLoad = true;
@@ -31,6 +31,8 @@ export class PointComponent implements OnInit, AfterViewInit {
     private _currentUpdated: { [key: string]: boolean } = {};
     private _updated: { [key: string]: boolean } = {};
 
+    @ViewChild('canvasContainer', { read: ElementRef })
+    private _canvasContainer: ElementRef<HTMLDivElement>;
     @ViewChild('container', { read: ElementRef })
     private _container: ElementRef<HTMLCanvasElement>;
     private _context: CanvasRenderingContext2D;
@@ -38,12 +40,20 @@ export class PointComponent implements OnInit, AfterViewInit {
     private _currentOptions: IPointOptions = {} as IPointOptions;
     private _defaultRecSize = 25;
 
+    private _updatePosition: boolean;
+
     /**
      * fileName colorSize size colored IRecColor
      */
     private _cash: { [key: string]: { [key: number]: { [key: number]: { [key: string]: IRecColor } } } };
 
-    constructor(private _http: HttpService) {
+    constructor(private _http: HttpService, private _rendered: Renderer2) {
+    }
+
+    public ngAfterViewChecked(): void {
+        if (!this._updatePosition || this.firstLoad) return;
+        this._updatePosition = false;
+        this._updateCanvasPosition();
     }
 
     public ngAfterViewInit(): void {
@@ -57,6 +67,7 @@ export class PointComponent implements OnInit, AfterViewInit {
     }
 
     public resize(zoom: number): void {
+        this._updatePosition = true;
         this.zoom = zoom;
     }
 
@@ -98,8 +109,8 @@ export class PointComponent implements OnInit, AfterViewInit {
                 this._saveToCash(res);
                 this._emptyData(options.colorSave);
                 this._generateColorPoint();
-                this._resizeConvas();
-                this._generateConvas();
+                this._resizeCanvas();
+                this._generateCanvas();
                 this.firstLoad = false;
             });
     }
@@ -132,12 +143,12 @@ export class PointComponent implements OnInit, AfterViewInit {
         this.onFileSelectEmmit.emit(files);
     }
 
-    private _resizeConvas(): void {
-        const convas = this._container.nativeElement;
+    private _resizeCanvas(): void {
+        const canvas = this._container.nativeElement;
         const points = this._loadFromCash().cells;
 
-        convas.height = points.length * this._defaultRecSize;
-        convas.width = points[0].length * this._defaultRecSize;
+        canvas.height = points.length * this._defaultRecSize;
+        canvas.width = points[0].length * this._defaultRecSize;
     }
 
     private _generateColorPoint(): void {
@@ -155,7 +166,7 @@ export class PointComponent implements OnInit, AfterViewInit {
         }
     }
 
-    private _generateConvas(): void {
+    private _generateCanvas(): void {
         const size: number = this._defaultRecSize;
         const updated: { [key: string]: boolean } = this._updated;
         const colorPoint: { [key: string]: IColRow[] } = this.colorPoint;
@@ -262,5 +273,25 @@ export class PointComponent implements OnInit, AfterViewInit {
         }
 
         this._cash[this._currentOptions.fileName][this._currentOptions.colorSize][this._currentOptions.size][boolKey] = res;
+    }
+
+    private _updateCanvasPosition(): void {
+        const canvas = this._container.nativeElement;
+        const canvasContainer = this._canvasContainer.nativeElement;
+
+        const canvasWidth = +canvas.width * this.zoom / 100;
+        const canvasContainerWidth = +canvasContainer.clientWidth;
+        const canvasHeight = +canvas.height * this.zoom / 100;
+        const canvasContainerHeight = +canvasContainer.clientHeight;
+
+        const left = canvasWidth < canvasContainerWidth
+            ? `${(canvasContainerWidth - canvasWidth) / 2}px`
+            : 'auto';
+        const top = canvasHeight < canvasContainerHeight
+            ? `${(canvasContainerHeight - canvasHeight) / 2}px`
+            : 'auto';
+
+        this._rendered.setStyle(canvas, 'left', left);
+        this._rendered.setStyle(canvas, 'top', top);
     }
 }

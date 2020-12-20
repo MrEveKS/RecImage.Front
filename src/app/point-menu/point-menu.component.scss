@@ -1,4 +1,8 @@
 .main-nav {
+  z-index: 1;
+  background-color: white;
+  position: relative;
+
   height: 50px;
   padding: 6px;
   .btn-menu {
