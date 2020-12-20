@@ -1,6 +1,6 @@
 import { DOCUMENT } from "@angular/common";
 import { AfterViewChecked, AfterViewInit, Component, ElementRef, EventEmitter, Inject, Input, OnInit, Output, Renderer2, ViewChild } from "@angular/core";
-import { of } from "rxjs";
+import { fromEvent, of } from "rxjs";
 import { catchError, finalize } from "rxjs/operators";
 
 import { HttpService } from "../../services/http.service";
@@ -72,6 +72,8 @@ export class PointComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
     public ngOnInit(): void {
         this._cash = {};
+        fromEvent(this._defaultView, 'resize')
+            .subscribe(this._updateCanvasPosition.bind(this))
     }
 
     public resize(zoom: number): void {
@@ -159,9 +161,7 @@ export class PointComponent implements OnInit, AfterViewInit, AfterViewChecked {
         const width = points[0].length * this._defaultRecSize;
         canvas.height = height;
         canvas.width = width;
-        if (this.zoom !== 100) {
-            this._canvasPositionChange({ canvasWidth: width * this.zoom / 100, canvasHeight: height * this.zoom / 100 });
-        }
+        this._canvasPositionChange({ canvasWidth: width * this.zoom / 100, canvasHeight: height * this.zoom / 100 });
     }
 
     private _generateColorPoint(): void {
