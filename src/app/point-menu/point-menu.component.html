@@ -55,7 +55,7 @@
             <div class="input-group range-input">
                 <input type="range" id="inputRange" class="form-control form-control-range" min="5" max="150"
                     [ngModel]="zoom" (ngModelChange)="resize($event)" name="zoom" aria-label="Zoom"
-                    [disabled]="!menuSettins.files || !menuSettins.files.length">
+                    [disabled]="(!menuSettins.files || !menuSettins.files.length) && firstLoad">
             </div>
         </div>
     </div>

@@ -4,8 +4,9 @@
     </div>
 </div>
 
-<point (onProgressUpdate)="progressBar.progressUpdate($event)"
+<point firstLoad="firstLoad" (onProgressUpdate)="progressBar.progressUpdate($event)"
     (onFileSelectEmmit)="pointMenu.previewFilesSelect($event)" #imagePoint>
 </point>
-<point-menu (onZoomChange)="imagePoint.resize($event)" (onLoadClick)="imagePoint.load($event)" #pointMenu></point-menu>
+<point-menu firstLoad="firstLoad" (onZoomChange)="imagePoint.resize($event)" (onLoadClick)="imagePoint.load($event)"
+    #pointMenu></point-menu>
 <progress-bar #progressBar></progress-bar>

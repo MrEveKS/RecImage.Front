@@ -1,4 +1,5 @@
-import { AfterViewChecked, AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, Renderer2, ViewChild } from "@angular/core";
+import { DOCUMENT } from "@angular/common";
+import { AfterViewChecked, AfterViewInit, Component, ElementRef, EventEmitter, Inject, Input, OnInit, Output, Renderer2, ViewChild } from "@angular/core";
 import { of } from "rxjs";
 import { catchError, finalize } from "rxjs/operators";
 
@@ -16,8 +17,10 @@ import { IMenuSettings } from "../point-menu/point-menu.component";
 })
 export class PointComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
+    @Input()
+    public firstLoad;
+
     public loading: boolean;
-    public firstLoad = true;
     public zoom: number;
 
     public colorPoint: { [key: string]: IColRow[] } = {};
@@ -47,7 +50,12 @@ export class PointComponent implements OnInit, AfterViewInit, AfterViewChecked {
      */
     private _cash: { [key: string]: { [key: number]: { [key: number]: { [key: string]: IRecColor } } } };
 
-    constructor(private _http: HttpService, private _rendered: Renderer2) {
+    private readonly _defaultView: WindowProxy;
+
+    constructor(private _http: HttpService,
+        private _rendered: Renderer2,
+        @Inject(DOCUMENT) document: Document) {
+        this._defaultView = document.defaultView;
     }
 
     public ngAfterViewChecked(): void {
@@ -147,8 +155,13 @@ export class PointComponent implements OnInit, AfterViewInit, AfterViewChecked {
         const canvas = this._container.nativeElement;
         const points = this._loadFromCash().cells;
 
-        canvas.height = points.length * this._defaultRecSize;
-        canvas.width = points[0].length * this._defaultRecSize;
+        const height = points.length * this._defaultRecSize;
+        const width = points[0].length * this._defaultRecSize;
+        canvas.height = height;
+        canvas.width = width;
+        if (this.zoom !== 100) {
+            this._canvasPositionChange({ canvasWidth: width * this.zoom / 100, canvasHeight: height * this.zoom / 100 });
+        }
     }
 
     private _generateColorPoint(): void {
@@ -276,19 +289,27 @@ export class PointComponent implements OnInit, AfterViewInit, AfterViewChecked {
     }
 
     private _updateCanvasPosition(): void {
+        if (this.zoom === 100) return;
+        const canvas = this._container.nativeElement;
+        const canvasWidth = +canvas.width * this.zoom / 100;
+        const canvasHeight = +canvas.height * this.zoom / 100;
+        this._canvasPositionChange({ canvasWidth, canvasHeight })
+    }
+
+    private _canvasPositionChange({ canvasWidth, canvasHeight }): void {
         const canvas = this._container.nativeElement;
         const canvasContainer = this._canvasContainer.nativeElement;
-
-        const canvasWidth = +canvas.width * this.zoom / 100;
         const canvasContainerWidth = +canvasContainer.clientWidth;
-        const canvasHeight = +canvas.height * this.zoom / 100;
         const canvasContainerHeight = +canvasContainer.clientHeight;
+        const styleValues = this._defaultView.getComputedStyle(canvas);
+        const marginTop = parseInt(styleValues.getPropertyValue('margin-top'));
+        const marginLeft = parseInt(styleValues.getPropertyValue('margin-left'));
 
         const left = canvasWidth < canvasContainerWidth
-            ? `${(canvasContainerWidth - canvasWidth) / 2}px`
+            ? `${(canvasContainerWidth - canvasWidth) / 2 - marginLeft}px`
             : 'auto';
         const top = canvasHeight < canvasContainerHeight
-            ? `${(canvasContainerHeight - canvasHeight) / 2}px`
+            ? `${(canvasContainerHeight - canvasHeight) / 2 - marginTop}px`
             : 'auto';
 
         this._rendered.setStyle(canvas, 'left', left);

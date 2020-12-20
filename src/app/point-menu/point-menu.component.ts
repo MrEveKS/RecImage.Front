@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { ISelectValue } from "../models/select-value.interface";
 
 export interface IMenuSettings {
@@ -15,6 +15,9 @@ export interface IMenuSettings {
     templateUrl: './point-menu.component.html',
 })
 export class PointMenuComponent implements OnInit {
+
+    @Input()
+    public firstLoad;
 
     public zoom!: number;
     public menuSettins: IMenuSettings = {} as IMenuSettings;
