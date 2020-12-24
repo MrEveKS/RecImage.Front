@@ -2,7 +2,6 @@
   z-index: 1;
   background-color: white;
   position: relative;
-
   height: 50px;
   padding: 6px;
   .btn-menu {
@@ -29,13 +28,15 @@
   }
 }
 
-.custom-file .custom-file-label:after {
-  content: "Выбрать";
-}
+.custom-file {
+  .custom-file-label:after {
+    content: "Выбрать";
+  }
 
-.custom-file .custom-file-label {
-  padding-right: 95px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  .custom-file-label {
+    padding-right: 95px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }

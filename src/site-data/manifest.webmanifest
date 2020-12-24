@@ -6,13 +6,13 @@
     "background_color": "#fafafa",
     "display": "standalone",
     "scope": "/",
-    "start_url": "/",
+    "start_url": "/?source=pwa",
     "shortcuts": [
         {
             "name": "Rec Image, pixel coloring",
             "short_name": "RecImage",
             "description": "Увлекательное времяпрепровождение - раскраска по пикселям",
-            "url": "/",
+            "url": "/?source=pwa",
             "icons": [
                 {
                     "src": "assets/icons/icon-192x192.png",
