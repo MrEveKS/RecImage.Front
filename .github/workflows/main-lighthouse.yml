@@ -14,3 +14,6 @@ jobs:
       - uses: actions/checkout@master
       - name: Lighthouse Check
         uses: foo-software/lighthouse-check-action@v2.0.5
+        with:
+          urls: |
+                https://recimage.ru/
