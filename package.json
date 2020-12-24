@@ -17,6 +17,10 @@
     "lint": "eslint . --ext .ts",
     "build:prod": "ng build --prod"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MrEveKS/RecImage.Front.git"
+  },
   "dependencies": {
     "@angular/common": "~11.0.0",
     "@angular/compiler": "~11.0.0",
