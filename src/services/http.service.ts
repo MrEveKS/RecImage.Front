@@ -11,7 +11,8 @@ export class HttpService {
 
     private readonly _url = environment.apiUrl;
     private readonly _httpParams = {
-        headers: { 'Access-Control-Allow-Origin': '*' }
+        headers: {
+        }
     };
 
     constructor(private _http: HttpClient) {

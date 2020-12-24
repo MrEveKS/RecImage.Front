@@ -12,15 +12,15 @@
         <div class="btn card" (click)="selectPhoto()">
             <input type="file" class="hidden" (change)="filesSelect($event.target.files)" aria-label="Select File"
                 accept="image/*" #fileInput>
-            <img src="assets/open-photo.svg" class="card-img-top" alt="Open Photo">
+            <img src="assets/open-photo.svg" class="card-img-top" width="62" height="74" alt="Open Photo">
             <div class="card-body">
-                <h5 class="card-title">Загрузить фотографию</h5>
+                <div class="h5 card-title">Загрузить фотографию</div>
             </div>
         </div>
         <div class="btn card">
-            <img src="assets/image-file.svg" class="card-img-top" alt="Open Photo">
+            <img src="assets/image-file.svg" class="card-img-top" width="62" height="74" alt="Open Photo">
             <div class="card-body">
-                <h5 class="card-title">Выбрать фотографию</h5>
+                <div class="h5 card-title">Выбрать фотографию</div>
             </div>
         </div>
     </div>
