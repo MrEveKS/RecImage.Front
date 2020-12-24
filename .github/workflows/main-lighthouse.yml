@@ -12,16 +12,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - uses: amondnet/now-deployment@master
-        id: now
-        with:
-          zeit-token: ${{ secrets.ZEIT_NOW_TOKEN }}
-          now-org-id: ${{ secrets.ZEIT_NOW_ORG_ID }}
-          now-project-id: ${{ secrets.ZEIT_NOW_PROJECT_ID }}
-      - name: Run Lighthouse
-        uses: foo-software/lighthouse-check-action@master
-        with:
-          accessToken: ${{ secrets.LIGHTHOUSE_CHECK_GITHUB_ACCESS_TOKEN }}
-          apiToken: ${{ secrets.LIGHTHOUSE_CHECK_API_TOKEN }}
-          tag: GitHub Action
-          urls: ${{ secrets.LIGHTHOUSE_CHECK_URL_TOKEN }}::${{ steps.now.outputs.preview-url }}
+      - name: Lighthouse Check
+        uses: foo-software/lighthouse-check-action@v2.0.5
