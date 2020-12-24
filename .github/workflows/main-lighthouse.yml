@@ -16,9 +16,5 @@ jobs:
         uses: treosh/lighthouse-ci-action@v3
         with:
           urls: https://recimage.ru/
-          configPath: './lighthouserc.json'
-      - name: Save results
-        uses: actions/upload-artifact@v1
-        with:
-          name: lighthouse-results
-          path: '.lighthouseci'
+          serverBaseUrl: ${{ secrets.LHCI_SERVER_URL }}
+          serverToken: ${{ secrets.LHCI_SERVER_TOKEN }}
