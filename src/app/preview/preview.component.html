@@ -1,28 +1,18 @@
-<div class="container jumbotron">
-    <h1 class="display-4">Rec Image</h1>
-    <p class="lead">Увлекательное времяпрепровождение - раскраска по пикселям. Раскрашивая квадрат за квадратом, мы
-        получим полноценное пиксельное изображение разных картинок.</p>
-    <hr class="d-none d-lg-block my-4">
-    <p class="d-none d-lg-block">Автор рекомендуем автоматические настройки для быстрой работоспособность сайта. Но вы
-        можете изменить по
-        желанию в этой онлайн раскраски. Например увеличить масштаб для более чёткого изображения, выбрать как вы
-        хотите раскрасить "черно белым" или "цветным" и многое другое . Все, что вам нужно сделать, это просто
-        выбрать любое свое изображение или выбрать из предложенных.</p>
-    <div class="container text-center d-flex justify-content-center">
-        <div class="btn card" (click)="selectPhoto()">
-            <input type="file" class="hidden" (change)="filesSelect($event.target.files)" aria-label="Select File"
-                accept="image/*" #fileInput>
-            <img src="assets/open-photo.svg" class="card-img-top" width="62" height="74" alt="Open Photo">
-            <div class="card-body">
-                <div class="h5 card-title">Загрузить фотографию</div>
-            </div>
-        </div>
-        <div class="btn card">
-            <img src="assets/image-file.svg" class="card-img-top" width="62" height="74" alt="Open Photo">
-            <div class="card-body">
-                <div class="h5 card-title">Выбрать фотографию</div>
-            </div>
+<information></information>
+
+<div class="container text-center d-flex justify-content-center">
+    <div class="btn card" (click)="selectPhoto()">
+        <input type="file" class="hidden" (change)="filesSelect($event.target.files)" aria-label="Select File"
+            accept="image/*" #fileInput>
+        <img src="assets/open-photo.svg" class="card-img-top" width="62" height="74" alt="Open Photo">
+        <div class="card-body">
+            <div class="h5 card-title">Загрузить фотографию</div>
         </div>
     </div>
-
+    <div class="btn card">
+        <img src="assets/image-file.svg" class="card-img-top" width="62" height="74" alt="Open Photo">
+        <div class="card-body">
+            <div class="h5 card-title">Выбрать фотографию</div>
+        </div>
+    </div>
 </div>

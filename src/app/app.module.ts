@@ -16,6 +16,9 @@ import { AppComponent } from './app.component';
 import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import { PointComponent } from './point/point.component';
 import { PointMenuComponent } from './point-menu/point-menu.component';
+import { DevelopPreviewComponent } from './develop-preview/develop-preview.component';
+import { SpinnerComponent } from './spinner/spinner.component';
+import { InformationComponent } from './preview/information/information.component';
 
 const appRoutes: Routes = [
     { path: '', component: AppComponent },
@@ -31,7 +34,16 @@ const appRoutes: Routes = [
         RouterModule.forRoot(appRoutes),
         ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
     ],
-    declarations: [AppComponent, PreviewComponent, PointComponent, ProgressBarComponent, PointMenuComponent],
+    declarations: [
+        AppComponent,
+        PreviewComponent,
+        PointComponent,
+        ProgressBarComponent,
+        PointMenuComponent,
+        DevelopPreviewComponent,
+        SpinnerComponent,
+        InformationComponent,
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

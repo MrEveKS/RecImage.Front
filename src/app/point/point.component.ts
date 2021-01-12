@@ -3,7 +3,7 @@ import { AfterViewChecked, AfterViewInit, Component, ElementRef, EventEmitter, I
 import { fromEvent, of } from "rxjs";
 import { catchError, finalize } from "rxjs/operators";
 
-import { HttpService } from "../../services/http.service";
+import { ImageConverterService } from "../../services/image-converter.service";
 
 import { IColRow } from "../models/col-row.interface";
 import { IPointOptions } from "../models/point-options.interface";
@@ -52,7 +52,7 @@ export class PointComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
     private readonly _defaultView: WindowProxy;
 
-    constructor(private _http: HttpService,
+    constructor(private _http: ImageConverterService,
         private _rendered: Renderer2,
         @Inject(DOCUMENT) document: Document) {
         this._defaultView = document.defaultView;
@@ -98,7 +98,7 @@ export class PointComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
         (fromCash
             ? of(fromCash)
-            : this._http.postFile<IRecColor>(fileToUpload, {
+            : this._http.convertToPoint<IRecColor>(fileToUpload, {
                 colorStep: options.colorSize, colored: options.colored, size: options.size
             })).pipe(
                 catchError((error: Error) => {
