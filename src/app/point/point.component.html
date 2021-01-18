@@ -1,7 +1,8 @@
 <div class="container-fluid main-container">
-    <preview (onFileSelect)="previewFilesSelect($event)" *ngIf="firstLoad"></preview>
+    <preview (onFileSelect)="previewFilesSelect($event)" (onImageSelect)="imageSelect($event)" *ngIf="firstLoad">
+    </preview>
     <div class="convas-container" [hidden]="firstLoad" #canvasContainer>
-        <canvas class="m-auto" (click)="onCkick($event)"
-            [ngStyle]="{ 'transform' : 'scale(' + (zoom / 100) + ')'}" #container></canvas>
+        <canvas class="m-auto" (click)="onCkick($event)" [ngStyle]="{ 'transform' : 'scale(' + (zoom / 100) + ')'}"
+            #container></canvas>
     </div>
 </div>

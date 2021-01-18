@@ -1,0 +1,8 @@
+<div class="container">
+    <div class="image-block">
+        <div class="image-container" *ngFor="let image of imageList | async">
+            <img src="{{ url + 'image-list/min/' + image.name }}" (click)="imageSelect(image.id)" width="256px"
+                height="256px" alt="{{ image.name }}">
+        </div>
+    </div>
+</div>

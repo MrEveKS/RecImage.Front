@@ -2,9 +2,9 @@
 
 <develop-preview></develop-preview>
 
-<point firstLoad="firstLoad" (onProgressUpdate)="progressBar.progressUpdate($event)"
+<point firstLoad="firstLoad" (onProgressUpdate)="progressBar.progressUpdate($event)" [options]="pointMenu.menuSettins"
     (onFileSelectEmmit)="pointMenu.previewFilesSelect($event)" #imagePoint>
 </point>
 <point-menu firstLoad="firstLoad" (onZoomChange)="imagePoint.resize($event)" (onLoadClick)="imagePoint.load($event)"
-    #pointMenu></point-menu>
+    [zoomEnabled]="imagePoint.canZoom" #pointMenu></point-menu>
 <progress-bar #progressBar></progress-bar>

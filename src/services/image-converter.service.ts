@@ -14,8 +14,12 @@ export class ImageConverterService extends BaseHttpService {
         super('generate', http);
     }
 
-    public convertToPoint<T>(fileToUpload: File, options: IConvertOptions): Observable<T> {
-        return this.postFile(fileToUpload, options, 'convertToChar');
+    public convertToPoints<T>(fileToUpload: File, options: IConvertOptions): Observable<T> {
+        return this.postFile(fileToUpload, options, 'convertToPoints');
+    }
+
+    public convertToPointsById<T>(options: IConvertOptions): Observable<T> {
+        return this.post<T, IConvertOptions>('convertToPointsById', options);
     }
 
 }

@@ -11,7 +11,6 @@ export class SpinnerComponent {
 
     public hideDev(): void {
         this.hideDevelopment = true;
-        console.log(this.hideDevelopment);
     }
 
 }

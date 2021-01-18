@@ -12,5 +12,5 @@ export class DevelopPreviewComponent {
     public hideDev(): void {
         this.hideDevelopment = true;
     }
-    
+
 }

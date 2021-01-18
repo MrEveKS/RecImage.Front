@@ -19,6 +19,8 @@ import { PointMenuComponent } from './point-menu/point-menu.component';
 import { DevelopPreviewComponent } from './develop-preview/develop-preview.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { InformationComponent } from './preview/information/information.component';
+import { ImageCollectionComponent } from './preview/image-collection/image-collection.component';
+import { ImageSelectComponent } from './preview/image-select/image-select.component';
 
 const appRoutes: Routes = [
     { path: '', component: AppComponent },
@@ -43,6 +45,8 @@ const appRoutes: Routes = [
         DevelopPreviewComponent,
         SpinnerComponent,
         InformationComponent,
+        ImageCollectionComponent,
+        ImageSelectComponent,
     ],
     bootstrap: [AppComponent]
 })

@@ -19,6 +19,9 @@ export class PointMenuComponent implements OnInit {
     @Input()
     public firstLoad;
 
+    @Input()
+    public zoomEnabled: boolean;
+
     public zoom!: number;
     public menuSettins: IMenuSettings = {} as IMenuSettings;
 

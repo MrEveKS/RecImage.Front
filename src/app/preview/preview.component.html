@@ -1,18 +1,6 @@
 <information></information>
 
-<div class="container text-center d-flex justify-content-center">
-    <div class="btn card" (click)="selectPhoto()">
-        <input type="file" class="hidden" (change)="filesSelect($event.target.files)" aria-label="Select File"
-            accept="image/*" #fileInput>
-        <img src="assets/open-photo.svg" class="card-img-top" width="62" height="74" alt="Open Photo">
-        <div class="card-body">
-            <div class="h5 card-title">Загрузить фотографию</div>
-        </div>
-    </div>
-    <div class="btn card">
-        <img src="assets/image-file.svg" class="card-img-top" width="62" height="74" alt="Open Photo">
-        <div class="card-body">
-            <div class="h5 card-title">Выбрать фотографию</div>
-        </div>
-    </div>
-</div>
+<image-select imageCount="{{ imageCollection.count }}" (onImageSelect)="imageSelect($event)"
+    (onFileSelectEmmit)="filesSelect($event)"></image-select>
+
+<image-collection (onImageSelect)="imageSelect($event)" #imageCollection></image-collection>

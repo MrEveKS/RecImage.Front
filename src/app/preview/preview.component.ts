@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Output, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Output } from "@angular/core";
 
 @Component({
     selector: 'preview',
@@ -6,17 +6,18 @@ import { Component, ElementRef, EventEmitter, Output, ViewChild } from "@angular
     templateUrl: './preview.component.html',
 })
 export class PreviewComponent {
-    @ViewChild('fileInput', { read: ElementRef })
-    private _fileInput: ElementRef<HTMLInputElement>;
 
     @Output()
     public onFileSelect = new EventEmitter<FileList>();
 
-    public selectPhoto(): void {
-        this._fileInput.nativeElement.click();
-    }
+    @Output()
+    public onImageSelect = new EventEmitter<number>();
 
     public filesSelect(files: FileList): void {
         this.onFileSelect.emit(files);
+    }
+
+    public imageSelect(id: number): void {
+        this.onImageSelect.emit(id);
     }
 }

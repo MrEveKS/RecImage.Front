@@ -18,10 +18,14 @@ import { IMenuSettings } from "../point-menu/point-menu.component";
 export class PointComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
     @Input()
+    public options: IMenuSettings;
+
+    @Input()
     public firstLoad;
 
     public loading: boolean;
     public zoom: number;
+    public canZoom: boolean;
 
     public colorPoint: { [key: string]: IColRow[] } = {};
 
@@ -46,7 +50,7 @@ export class PointComponent implements OnInit, AfterViewInit, AfterViewChecked {
     private _updatePosition: boolean;
 
     /**
-     * fileName colorSize size colored IRecColor
+     * fileName | id colorSize size colored IRecColor
      */
     private _cash: { [key: string]: { [key: number]: { [key: number]: { [key: string]: IRecColor } } } };
 
@@ -82,47 +86,7 @@ export class PointComponent implements OnInit, AfterViewInit, AfterViewChecked {
     }
 
     public load(options: IMenuSettings): void {
-        this.loading = true;
-        const fileToUpload = options.files.item(0) as File;
-        if (this._currentOptions.fileName !== fileToUpload.name) {
-            this._updated = {}
-        }
-
-        this._currentOptions = {
-            fileName: fileToUpload.name,
-            colorSize: options.colorSize,
-            colored: options.colored,
-            size: options.size
-        };
-        const fromCash = this._loadFromCash();
-
-        (fromCash
-            ? of(fromCash)
-            : this._http.convertToPoint<IRecColor>(fileToUpload, {
-                colorStep: options.colorSize, colored: options.colored, size: options.size
-            })).pipe(
-                catchError((error: Error) => {
-                    this.loading = false;
-                    console.log(error);
-                    return of(null);
-                }),
-                finalize(() => {
-                    this.loading = false;
-                    options.colorSave && this._updateProgress();
-                })
-            )
-            .subscribe((res: IRecColor) => {
-                if (!res) {
-                    return;
-                }
-                this._totalColors = Object.keys(res.cellsColor).length;
-                this._saveToCash(res);
-                this._emptyData(options.colorSave);
-                this._generateColorPoint();
-                this._resizeCanvas();
-                this._generateCanvas();
-                this.firstLoad = false;
-            });
+        this._fileLoad(options);
     }
 
     public onCkick($event: MouseEvent): void {
@@ -151,6 +115,10 @@ export class PointComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
     public previewFilesSelect(files: FileList): void {
         this.onFileSelectEmmit.emit(files);
+    }
+
+    public imageSelect(id: number): void {
+        this._loadById(id);
     }
 
     private _resizeCanvas(): void {
@@ -265,27 +233,29 @@ export class PointComponent implements OnInit, AfterViewInit, AfterViewChecked {
     }
 
     private _loadFromCash(): IRecColor {
-        if (!this._cash[this._currentOptions.fileName]
-            || !this._cash[this._currentOptions.fileName][this._currentOptions.colorSize]
-            || !this._cash[this._currentOptions.fileName][this._currentOptions.colorSize][this._currentOptions.size]
-            || !this._cash[this._currentOptions.fileName][this._currentOptions.colorSize][this._currentOptions.size][this._currentOptions.colored.toString()]) return null;
-        return this._cash[this._currentOptions.fileName][this._currentOptions.colorSize][this._currentOptions.size][this._currentOptions.colored.toString()] || null;
+        const nameKey = this._currentOptions.fileName || this._currentOptions.fileId.toString();
+        if (!this._cash[nameKey]
+            || !this._cash[nameKey][this._currentOptions.colorSize]
+            || !this._cash[nameKey][this._currentOptions.colorSize][this._currentOptions.size]
+            || !this._cash[nameKey][this._currentOptions.colorSize][this._currentOptions.size][this._currentOptions.colored.toString()]) return null;
+        return this._cash[nameKey][this._currentOptions.colorSize][this._currentOptions.size][this._currentOptions.colored.toString()] || null;
     }
 
     private _saveToCash(res: IRecColor): void {
+        const nameKey = this._currentOptions.fileName || this._currentOptions.fileId.toString();
         const boolKey = this._currentOptions.colored.toString();
-        if (!this._cash[this._currentOptions.fileName]) {
-            this._cash[this._currentOptions.fileName] = {};
-            this._cash[this._currentOptions.fileName][this._currentOptions.colorSize] = {};
-            this._cash[this._currentOptions.fileName][this._currentOptions.colorSize][this._currentOptions.size] = {};
-        } else if (!this._cash[this._currentOptions.fileName][this._currentOptions.colorSize]) {
-            this._cash[this._currentOptions.fileName][this._currentOptions.colorSize] = {};
-            this._cash[this._currentOptions.fileName][this._currentOptions.colorSize][this._currentOptions.size] = {};
-        } else if (!this._cash[this._currentOptions.fileName][this._currentOptions.colorSize][this._currentOptions.size]) {
-            this._cash[this._currentOptions.fileName][this._currentOptions.colorSize][this._currentOptions.size] = {};
+        if (!this._cash[nameKey]) {
+            this._cash[nameKey] = {};
+            this._cash[nameKey][this._currentOptions.colorSize] = {};
+            this._cash[nameKey][this._currentOptions.colorSize][this._currentOptions.size] = {};
+        } else if (!this._cash[nameKey][this._currentOptions.colorSize]) {
+            this._cash[nameKey][this._currentOptions.colorSize] = {};
+            this._cash[nameKey][this._currentOptions.colorSize][this._currentOptions.size] = {};
+        } else if (!this._cash[nameKey][this._currentOptions.colorSize][this._currentOptions.size]) {
+            this._cash[nameKey][this._currentOptions.colorSize][this._currentOptions.size] = {};
         }
 
-        this._cash[this._currentOptions.fileName][this._currentOptions.colorSize][this._currentOptions.size][boolKey] = res;
+        this._cash[nameKey][this._currentOptions.colorSize][this._currentOptions.size][boolKey] = res;
     }
 
     private _updateCanvasPosition(): void {
@@ -314,5 +284,75 @@ export class PointComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
         this._rendered.setStyle(canvas, 'left', left);
         this._rendered.setStyle(canvas, 'top', top);
+    }
+
+    private _loadById(id: number) {
+        if (this._currentOptions.fileId !== id) {
+            this._updated = {}
+        }
+
+        this._currentOptions = {
+            fileId: id,
+            colorSize: this.options.colorSize,
+            colored: this.options.colored,
+            size: this.options.size
+        } as IPointOptions;
+
+        this._load(this.options);
+    }
+
+    private _fileLoad(options: IMenuSettings): void {
+        this.loading = true;
+        const fileToUpload = options.files.item(0) as File;
+        if (this._currentOptions.fileName !== fileToUpload.name) {
+            this._updated = {}
+        }
+
+        this._currentOptions = {
+            fileName: fileToUpload.name,
+            colorSize: options.colorSize,
+            colored: options.colored,
+            size: options.size
+        } as IPointOptions;
+
+        this._load(options, fileToUpload);
+    }
+
+    private _load(options: IMenuSettings, fileToUpload?: File): void {
+        const fromCash = this._loadFromCash();
+
+        (fromCash
+            ? of(fromCash)
+            : fileToUpload
+                ? this._http.convertToPoints<IRecColor>(fileToUpload, {
+                    colorStep: options.colorSize, colored: options.colored, size: options.size
+                })
+                : this._http.convertToPointsById<IRecColor>({
+                    colorStep: options.colorSize, colored: options.colored, size: options.size, imageId: this._currentOptions.fileId
+                })
+        ).pipe(
+            catchError((error: Error) => {
+                this.loading = false;
+                console.log(error);
+                return of(null);
+            }),
+            finalize(() => {
+                this.loading = false;
+                options.colorSave && this._updateProgress();
+            })
+        )
+            .subscribe((res: IRecColor) => {
+                if (!res) {
+                    return;
+                }
+                this.canZoom = true;
+                this._totalColors = Object.keys(res.cellsColor).length;
+                this._saveToCash(res);
+                this._emptyData(options.colorSave);
+                this._generateColorPoint();
+                this._resizeCanvas();
+                this._generateCanvas();
+                this.firstLoad = false;
+            });
     }
 }

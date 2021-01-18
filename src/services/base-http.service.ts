@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment';
 
 export class BaseHttpService {
 
-    private readonly _url = environment.apiUrl;
+    private readonly _apiUrl = environment.apiUrl;
     private readonly _controller;
     private readonly _httpParams = {
         headers: {
@@ -22,11 +22,11 @@ export class BaseHttpService {
             formData.append(key, data[key].toString());
         });
 
-        return this._post(method, formData);
+        return this.post(method, formData);
     }
 
-    private _post<TEntity, UData>(method: string, data: UData): Observable<TEntity> {
-        const endpoint = `${this._url}${this._controller}/${method}/`;
+    protected post<TEntity, UData>(method: string, data: UData): Observable<TEntity> {
+        const endpoint = `${this._apiUrl}${this._controller}/${method}/`;
         return this._http
             .post<TEntity>(endpoint, data, this._httpParams);
     }

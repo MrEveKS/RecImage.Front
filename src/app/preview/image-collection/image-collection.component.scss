@@ -1,0 +1,15 @@
+.container {
+  text-align: center;
+  .image-block {
+    display: inline-block;
+  }
+  .image-container {
+    display: inline-block;
+    padding: 2px;
+  }
+  img {
+    cursor: pointer;
+    object-fit: cover;
+    object-position: 50% 50%;
+  }
+}

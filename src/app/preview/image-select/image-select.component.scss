@@ -1,0 +1,13 @@
+.container {
+  margin-bottom: 2rem;
+}
+.card {
+  width: 10rem;
+  float: left;
+  .card-img-top {
+    width: 62px;
+  }
+  .hidden {
+    display: none;
+  }
+}
