@@ -8,8 +8,7 @@ import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from "@
 export class ImageSelectComponent {
 
     @Output()
-    public onFileSelect = new EventEmitter<FileList>();
-
+    public onFilesSelect = new EventEmitter<FileList>();
     @Output()
     public onImageSelect = new EventEmitter<number>();
 
@@ -24,7 +23,7 @@ export class ImageSelectComponent {
     }
 
     public filesSelect(files: FileList): void {
-        this.onFileSelect.emit(files);
+        this.onFilesSelect.emit(files);
     }
 
     public randemSelect(): void {

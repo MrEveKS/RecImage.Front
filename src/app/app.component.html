@@ -1,10 +1,6 @@
-<spinner [hidden]="!imagePoint.loading"></spinner>
-
+<spinner [hidden]="!loading"></spinner>
 <develop-preview></develop-preview>
-
-<point firstLoad="firstLoad" (onProgressUpdate)="progressBar.progressUpdate($event)" [options]="pointMenu.menuSettins"
-    (onFileSelectEmmit)="pointMenu.previewFilesSelect($event)" #imagePoint>
-</point>
-<point-menu firstLoad="firstLoad" (onZoomChange)="imagePoint.resize($event)" (onLoadClick)="imagePoint.load($event)"
-    [zoomEnabled]="imagePoint.canZoom" #pointMenu></point-menu>
-<progress-bar #progressBar></progress-bar>
+<preview *ngIf="firstLoad" (onFilesSelect)="gameTemplate.filesSelect($event)"
+    (onImageSelect)="gameTemplate.imageSelect($event)">
+</preview>
+<game (onGameLoad)="onGameLoad($event)" (onLoading)="gameLoading($event)" [hidden]="firstLoad" #gameTemplate></game>

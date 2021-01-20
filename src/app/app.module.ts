@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { RouterModule, Routes } from '@angular/router';
 
@@ -12,10 +11,9 @@ import { APP_BASE_HREF } from '@angular/common';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
+import { GameModule } from './game/game.module';
+
 import { AppComponent } from './app.component';
-import { ProgressBarComponent } from './progress-bar/progress-bar.component';
-import { PointComponent } from './point/point.component';
-import { PointMenuComponent } from './point-menu/point-menu.component';
 import { DevelopPreviewComponent } from './develop-preview/develop-preview.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { InformationComponent } from './preview/information/information.component';
@@ -29,7 +27,7 @@ const appRoutes: Routes = [
 @NgModule({
     providers: [{ provide: APP_BASE_HREF, useValue: '' }],
     imports: [
-        NgbDropdownModule,
+        GameModule,
         BrowserModule,
         FormsModule,
         HttpClientModule,
@@ -39,9 +37,6 @@ const appRoutes: Routes = [
     declarations: [
         AppComponent,
         PreviewComponent,
-        PointComponent,
-        ProgressBarComponent,
-        PointMenuComponent,
         DevelopPreviewComponent,
         SpinnerComponent,
         InformationComponent,

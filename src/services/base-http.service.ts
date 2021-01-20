@@ -19,7 +19,7 @@ export class BaseHttpService {
         const formData: FormData = new FormData();
         formData.append('image', fileToUpload, fileToUpload.name);
         Object.keys(data).forEach((key) => {
-            formData.append(key, data[key].toString());
+            formData.append(key, String(data[key]));
         });
 
         return this.post(method, formData);

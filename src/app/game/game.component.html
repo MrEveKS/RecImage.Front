@@ -1,0 +1,8 @@
+<div class="container-fluid main-container">
+    <game-board [updatePoints]="updatePoints" (onProgressUpdate)="progressBar.progressUpdate($event)" #gameBoard>
+    </game-board>
+</div>
+<game-menu [imageFiles]="imageFiles" (onZoomChange)="gameBoard.resize($event)"
+    (onSettingsChange)="settingsChange($event)" (onFilesSelect)="filesSelect($event)">
+</game-menu>
+<progress-bar #progressBar></progress-bar>

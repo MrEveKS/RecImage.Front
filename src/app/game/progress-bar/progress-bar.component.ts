@@ -12,4 +12,5 @@ export class ProgressBarComponent {
     public progressUpdate(progress: number): void {
         this.progress = progress;
     }
+
 }
