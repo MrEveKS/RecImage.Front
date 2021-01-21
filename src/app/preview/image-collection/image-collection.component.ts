@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { Observable } from "rxjs";
 
-import { ImageListService } from "src/services/image-list.service";
+import { ImageListService } from "src/app/preview/services/image-list.service";
 
 import { IImageListItem } from "src/app/preview/models/image-list-item.interface";
 import { environment } from "src/environments/environment";
