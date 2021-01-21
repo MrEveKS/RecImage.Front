@@ -9,12 +9,26 @@
                 <img src="assets/menu-icons/save.svg" [hidden]="!settings.colorSave" width="48" height="48" alt="save">
                 <img src="assets/menu-icons/not-save.svg" [hidden]="settings.colorSave" width="48" height="48"
                     alt="save">
+                <div class="settings-info" #saveInfo>
+                    <div class="settings-info__text">
+                        <div class="settings-info__text-center">
+                            {{ settings.colorSave ? "Сохранять цвета" : "Не сохранять цвета" }}
+                        </div>
+                    </div>
+                </div>
             </button>
             <button class="btn" type="button" (click)="handleColored()">
                 <img src="assets/menu-icons/coloring.svg" [hidden]="!settings.colored" width="48" height="48"
                     alt="coloring">
                 <img src="assets/menu-icons/no-coloring.svg" [hidden]="settings.colored" width="48" height="48"
                     alt="coloring">
+                <div class="settings-info" #coloredInfo>
+                    <div class="settings-info__text">
+                        <div class="settings-info__text-center">
+                            {{ settings.colored ? "Цветное" : "Черно-белое" }}
+                        </div>
+                    </div>
+                </div>
             </button>
             <button class="btn" type="button" (click)="handleQuality()">
                 <img src="assets/menu-icons/quality.svg" width="48" height="48" alt="quality">

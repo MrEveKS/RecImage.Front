@@ -37,6 +37,12 @@ export class GameMenuComponent implements OnInit {
     @ViewChild('fileInput', { read: ElementRef })
     private _fileInput: ElementRef<HTMLInputElement>;
 
+    @ViewChild('saveInfo', { read: ElementRef })
+    private _saveInfo: ElementRef<HTMLDivElement>;
+
+    @ViewChild('coloredInfo', { read: ElementRef })
+    private _coloredInfo: ElementRef<HTMLDivElement>;
+
     @ViewChild('qualityInfo', { read: ElementRef })
     private _qualityInfo: ElementRef<HTMLDivElement>;
 
@@ -74,11 +80,15 @@ export class GameMenuComponent implements OnInit {
 
     public handleColorSave(): void {
         this.settings.colorSave = !this.settings.colorSave;
+        this._hideElements('saveInfo');
+        this._showElement(this._saveInfo.nativeElement);
         this._settingsChange();
     }
 
     public handleColored(): void {
         this.settings.colored = !this.settings.colored;
+        this._hideElements('coloredInfo');
+        this._showElement(this._coloredInfo.nativeElement);
         this._settingsChange();
     }
 
@@ -88,7 +98,7 @@ export class GameMenuComponent implements OnInit {
             this.colorStepsIndex = 0;
         }
         this.settings.colorStep = this.colorSteps[this.colorStepsIndex].value;
-        this._sizeInfo.nativeElement.style.display = 'none';
+        this._hideElements('qualityInfo');
         this._showElement(this._qualityInfo.nativeElement);
         this._settingsChange();
     }
@@ -99,7 +109,7 @@ export class GameMenuComponent implements OnInit {
             this.sizesIndex = 0;
         }
         this.settings.size = this.sizes[this.sizesIndex].value;
-        this._qualityInfo.nativeElement.style.display = 'none';
+        this._hideElements('sizeInfo');
         this._showElement(this._sizeInfo.nativeElement);
         this._settingsChange();
     }
@@ -139,7 +149,18 @@ export class GameMenuComponent implements OnInit {
         this._timeId && clearTimeout(this._timeId);
         html.style.display = 'block';
         this._timeId = setTimeout(() => {
-            html.style.display = 'none';
+            this._hideElement(html);
         }, 2000);
+    }
+
+    private _hideElements(skip: string): void {
+        skip !== 'saveInfo' && this._hideElement(this._saveInfo.nativeElement);
+        skip !== 'coloredInfo' && this._hideElement(this._coloredInfo.nativeElement);
+        skip !== 'qualityInfo' && this._hideElement(this._qualityInfo.nativeElement);
+        skip !== 'sizeInfo' && this._hideElement(this._sizeInfo.nativeElement);
+    }
+
+    private _hideElement(html: HTMLElement): void {
+        html.style.display = 'none';
     }
 }
