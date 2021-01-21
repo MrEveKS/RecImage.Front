@@ -13,7 +13,6 @@ import { GameModule } from './game/game.module';
 import { PreviewModule } from './preview/preview.module';
 
 import { AppComponent } from './app.component';
-import { DevelopPreviewComponent } from './develop-preview/develop-preview.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 
 const appRoutes: Routes = [
@@ -33,7 +32,6 @@ const appRoutes: Routes = [
     ],
     declarations: [
         AppComponent,
-        DevelopPreviewComponent,
         SpinnerComponent,
     ],
     bootstrap: [AppComponent]
