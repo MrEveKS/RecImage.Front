@@ -8,10 +8,14 @@ import { Component } from '@angular/core';
 export class AppComponent {
 
     public loading: boolean;
-    public firstLoad = true;
+    public showPreview = true;
+
+    public handleBack(): void {
+        this.showPreview = true;
+    }
 
     public onGameLoad(load: boolean): void {
-        this.firstLoad = !load;
+        this.showPreview = !load;
     }
 
     public gameLoading(loading: boolean): void {

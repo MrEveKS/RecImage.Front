@@ -1,56 +1,60 @@
-<nav class="main-nav">
-    <div class="d-flex justify-content-center">
-        <div ngbDropdown class="dropup">
-            <button ngbDropdownToggle class="btn-menu btn btn-outline-dark" id="settingsMenu" type="button"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img class="btn-icon" src="assets/settings.icon.svg" width="32" height="32" alt="Menu">
+<nav class="game-menu">
+    <div ngbDropdown class="dropup">
+        <button ngbDropdownToggle class="btn-menu btn btn-outline-dark" id="settingsMenu" type="button"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <img class="btn-icon" src="assets/menu-icons/settings.icon.svg" width="32" height="32" alt="Menu">
+        </button>
+        <div ngbDropdownMenu class="menu-btns" aria-labelledby="settingsMenu">
+            <button class="btn" type="button" (click)="handleColorSave()">
+                <img src="assets/menu-icons/save.svg" [hidden]="!settings.colorSave" width="48" height="48" alt="save">
+                <img src="assets/menu-icons/not-save.svg" [hidden]="settings.colorSave" width="48" height="48"
+                    alt="save">
             </button>
-            <div ngbDropdownMenu aria-labelledby="settingsMenu">
-                <div class="input-group">
-                    <div class="input-group w-100">
-                        <div class="input-group-text w-100">
-                            <label class="form-check-label">
-                                <input type="checkbox" [(ngModel)]="settings.colored">
-                                Цветное</label>
-                            <label class="form-check-label ml-auto">
-                                <input type="checkbox" [(ngModel)]="settings.colorSave">
-                                Сохранять</label>
+            <button class="btn" type="button" (click)="handleColored()">
+                <img src="assets/menu-icons/coloring.svg" [hidden]="!settings.colored" width="48" height="48"
+                    alt="coloring">
+                <img src="assets/menu-icons/no-coloring.svg" [hidden]="settings.colored" width="48" height="48"
+                    alt="coloring">
+            </button>
+            <button class="btn" type="button" (click)="handleQuality()">
+                <img src="assets/menu-icons/quality.svg" width="48" height="48" alt="quality">
+                <div class="settings-info" #qualityInfo>
+                    <div class="settings-info__text">
+                        <div class="settings-info__text-center">
+                            {{ colorSteps[colorStepsIndex].title }}
                         </div>
                     </div>
                 </div>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <label for="inputZoom" class="input-group-text">Качество</label>
-                    </div>
-                    <select id="inputZoom" class="form-control" [(ngModel)]="settings.colorStep">
-                        <option *ngFor="let c of colorSteps" [value]="c.value">{{c.title}}</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <div class="custom-file">
-                        <label class="custom-file-label" for="customFile">{{ imageFiles &&
-                            imageFiles.length ? imageFiles[0].name :
-                            'Выберите
-                            фаил...'}}</label>
-                        <input type="file" class="custom-file-input" (change)="filesSelect($event.target.files)"
-                            accept="image/*">
+            </button>
+            <button class="btn" type="button" (click)="handleSize()">
+                <img src="assets/menu-icons/size.svg" width="48" height="48" alt="size">
+                <div class="settings-info" #sizeInfo>
+                    <div class="settings-info__text">
+                        <div class="settings-info__text-center">
+                            {{ sizes[sizesIndex].title }}
+                        </div>
                     </div>
                 </div>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <label for="inputSize" class="input-group-text">Размер</label>
-                    </div>
-                    <select id="inputSize" class="form-control" [(ngModel)]="settings.size">
-                        <option *ngFor="let s of sizes" [value]="s.value">{{s.title}}</option>
-                    </select>
-                </div>
-            </div>
+            </button>
+            <button class="btn" type="button" (click)="handleSelectPhoto()">
+                <img src="assets/menu-icons/select-file.svg" width="48" height="48" alt="select-file">
+            </button>
+            <input type="file" class="custom-file-input" (change)="filesSelect($event.target.files)" accept="image/*"
+                #fileInput />
         </div>
-        <div class="col-sm-11 col-md-4">
+    </div>
+</nav>
+
+<nav class="main-nav">
+    <div class="d-flex justify-content-center">
+        <div class="col-sm-9 col-md-4 range-menu">
             <div class="input-group range-input">
                 <input type="range" class="form-control form-control-range" min="5" max="150" name="zoom"
                     aria-label="Zoom" [ngModel]="zoom" (ngModelChange)="resize($event)">
             </div>
         </div>
     </div>
+    <button class="btn btn-back" type="button" (click)="handleBack()">
+        <img class="btn-icon" src="assets/btn-back.svg" width="32" height="32" alt="Menu" />
+    </button>
 </nav>

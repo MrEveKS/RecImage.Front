@@ -2,7 +2,8 @@
     <game-board [updatePoints]="updatePoints" (onProgressUpdate)="progressBar.progressUpdate($event)" #gameBoard>
     </game-board>
 </div>
-<game-menu [imageFiles]="imageFiles" (onZoomChange)="gameBoard.resize($event)"
-    (onSettingsChange)="settingsChange($event)" (onFilesSelect)="filesSelect($event)">
+<game-menu [imageFiles]="imageFiles" (onBackClick)="handleBack()" (onZoomChange)="gameBoard.resize($event)"
+    (onSettingsChange)="settingsChange($event)" (onSettingsSet)="settingsSet($event)"
+    (onFilesSelect)="filesSelect($event)">
 </game-menu>
 <progress-bar #progressBar></progress-bar>

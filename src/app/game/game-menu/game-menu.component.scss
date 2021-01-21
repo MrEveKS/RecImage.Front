@@ -1,42 +1,90 @@
+.game-menu {
+  position: absolute;
+  right: 4px;
+  bottom: 22px;
+  z-index: 2;
+  ::after {
+    display: none;
+  }
+  .dropdown-toggle {
+    background-color: transparent;
+    padding: 0.1rem;
+  }
+  .menu-btns {
+    min-width: 3.8rem;
+    background-color: #000000a0;
+    border-radius: 3px;
+    padding: 0.175rem;
+    top: -14px !important;
+    button {
+      position: relative;
+      background-color: #ffffffd0;
+      padding: 0.1rem;
+      display: block;
+    }
+    button:not(:last-of-type) {
+      margin-bottom: 0.175rem;
+    }
+  }
+  .show {
+    .dropdown-toggle {
+      opacity: 0.6;
+    }
+  }
+  .custom-file-input {
+    display: none;
+  }
+  .settings-info {
+    display: none;
+    position: absolute;
+    height: 100%;
+    top: 0;
+    right: calc(100% + 0.5rem);
+    background-color: #000000a0;
+    border-radius: 3px;
+    padding: 0.175rem;
+    .settings-info__text {
+      position: relative;
+      background-color: #ffffffd0;
+      padding: 0.1rem 0.275rem;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .settings-info__text-center {
+        margin: 0;
+        text-align: center;
+        min-width: 4rem;
+      }
+    }
+  }
+}
+
 .main-nav {
   z-index: 1;
   background-color: white;
   position: relative;
   height: 50px;
   padding: 6px;
-  .btn-menu {
-    padding: 2px;
-  }
-  .btn-icon {
-    width: 32px;
+  .range-menu {
+    max-width: 80%;
   }
   .form-control-range {
     padding: 0;
   }
-  .dropdown-menu {
-    min-width: 300px;
-    padding: 2px;
+  .btn-back {
+    position: absolute;
+    bottom: 6px;
+    z-index: 2;
+    left: 4px;
+    background-color: transparent;
+    padding: 0.1rem;
+    border-color: #343a40;
+    opacity: 0.6;
   }
-  .dropdown-toggle::after {
-    content: none;
-  }
-  .dropdown-item {
-    padding: 0;
-  }
-  .dropdown-item:hover {
-    cursor: pointer;
-  }
-}
-
-.custom-file {
-  .custom-file-label:after {
-    content: "Выбрать";
-  }
-
-  .custom-file-label {
-    padding-right: 95px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  .btn-back:hover,
+  .btn-back:active,
+  .btn-back:focus {
+    opacity: 1;
   }
 }

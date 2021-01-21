@@ -27,6 +27,8 @@ export class GameComponent implements OnDestroy {
     public onGameLoad = new EventEmitter<boolean>();
     @Output()
     public onGameLoading = new EventEmitter<boolean>();
+    @Output()
+    public onBackClick = new EventEmitter();
 
     public settings!: ICashSettings;
     public imageFiles!: FileList;
@@ -41,6 +43,10 @@ export class GameComponent implements OnDestroy {
         this.updatePoints.complete();
     }
 
+    public handleBack(): void {
+        this.onBackClick.emit();
+    }
+
     public filesSelect(files: FileList): void {
         this.imageFiles = files;
         this._fileLoad(files);
@@ -51,7 +57,17 @@ export class GameComponent implements OnDestroy {
     }
 
     public settingsChange(settings: IGameSettings): void {
-        this.settings = settings;
+        this.settingsSet(settings);
+
+        if (this.settings.fileName) {
+            this.filesSelect(this.imageFiles);
+        } else {
+            this._loadById(this.settings.imageId);
+        }
+    }
+
+    public settingsSet(settings: IGameSettings): void {
+        this.settings = { ...this.settings, ...settings };
     }
 
     private _loadById(id: number) {
