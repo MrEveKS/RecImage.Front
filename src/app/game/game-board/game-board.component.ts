@@ -201,6 +201,8 @@ export class GameBoardComponent implements OnInit, AfterViewInit, AfterViewCheck
 
             this._fillContext(small, size);
         }
+
+        setTimeout(() => this._updateCanvasPosition());
     }
 
     private _fillContext(points: IColRow[], size: number) {
