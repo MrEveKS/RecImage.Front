@@ -3,5 +3,5 @@
 <preview [hidden]="!showPreview" (onFilesSelect)="gameTemplate.filesSelect($event)"
     (onImageSelect)="gameTemplate.imageSelect($event)">
 </preview>
-<game (onBackClick)="handleBack()" (onGameLoad)="onGameLoad($event)" (onLoading)="gameLoading($event)"
+<game (onBackClick)="handleBack()" (onGameLoad)="onGameLoad($event)" (onGameLoading)="gameLoading($event)"
     [hidden]="showPreview" #gameTemplate></game>
