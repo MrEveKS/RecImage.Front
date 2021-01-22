@@ -1,0 +1,26 @@
+<div class="game-end col-sm col-md-6" *ngIf="gameFinished">
+    <button type="button" class="close" aria-label="Close" (click)="handleContinue()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+
+    <div class="btns-line">
+        <a [attr.href]="downloadUrl | async | safeUrl" download>
+            <img src="assets/photo-download.svg" alt="Download" width="32" height="32">
+        </a>
+    </div>
+    <div class="btns-line">
+        <a class="btn btn-outline-primary btn-social rounded-circle" [attr.href]="vkLink" aria-label="Download"
+            target="_blank">
+            <img src="assets/social/vk-logo.svg" height="32" width="32" alt="Vk Group">
+        </a>
+    </div>
+
+    <p>
+        Скачать результат
+    </p>
+
+    <p>
+        Рассказать о нас
+    </p>
+
+</div>

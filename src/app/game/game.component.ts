@@ -30,6 +30,8 @@ export class GameComponent implements OnDestroy {
     @Output()
     public onBackClick = new EventEmitter();
 
+    public progress: number;
+
     public settings!: ICashSettings;
     public imageFiles!: FileList;
 
@@ -41,6 +43,10 @@ export class GameComponent implements OnDestroy {
 
     public ngOnDestroy(): void {
         this.updatePoints.complete();
+    }
+
+    public progressUpdate(progress: number): void {
+        this.progress = progress;
     }
 
     public handleBack(): void {

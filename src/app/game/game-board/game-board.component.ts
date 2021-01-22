@@ -6,6 +6,7 @@ import { fromEvent, Subject, Subscription } from "rxjs";
 import { IColRow } from "src/app/game/models/col-row.interface";
 import { IRecColor } from "src/app/game/models/rec-color.interface";
 import { IRecUpdate } from "../game.component";
+import { IGameFinish } from "../models/game-finish.interface";
 
 @Component({
     selector: 'game-board',
@@ -19,6 +20,8 @@ export class GameBoardComponent implements OnInit, AfterViewInit, AfterViewCheck
 
     @Output()
     public onProgressUpdate = new EventEmitter<number>();
+    @Output()
+    public onFinished = new EventEmitter<IGameFinish>();
 
     public zoom!: number;
     public recColor!: IRecColor;
@@ -38,9 +41,9 @@ export class GameBoardComponent implements OnInit, AfterViewInit, AfterViewCheck
     private _updated: { [key: string]: boolean } = {};
     private _updatePosition: boolean;
 
-    private readonly _defaultRecSize = 25;
-
     private readonly _defaultView: WindowProxy;
+    private readonly _defaultRecSize = 25;
+    private readonly _finishedProgress = 100;
 
     constructor(private _rendered: Renderer2,
         @Inject(DOCUMENT) document: Document) {
@@ -264,7 +267,14 @@ export class GameBoardComponent implements OnInit, AfterViewInit, AfterViewCheck
     }
 
     private _progress(progress: number): void {
+        this._isFinished(progress);
         this.onProgressUpdate.emit(progress);
+    }
+
+    private _isFinished(progress: number): void {
+        progress === this._finishedProgress && this.onFinished.emit({
+            canvas: this._container.nativeElement
+        });
     }
 
 }
