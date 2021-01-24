@@ -1,12 +1,15 @@
 import { DOCUMENT } from "@angular/common";
 import { AfterViewChecked, AfterViewInit, Component, ElementRef, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, Renderer2, ViewChild } from "@angular/core";
-import { fromEvent, Subject, Subscription } from "rxjs";
+import { combineLatest, fromEvent, Observable, of, Subject, Subscription } from "rxjs";
+import { catchError, map } from "rxjs/operators";
 
 // interfaces
 import { IColRow } from "src/app/game/models/col-row.interface";
 import { IRecColor } from "src/app/game/models/rec-color.interface";
 import { IRecUpdate } from "../game.component";
 import { IGameFinish } from "../models/game-finish.interface";
+
+import { CanvasPrerenderService } from "../services/canvas-prerender.service";
 
 @Component({
     selector: 'game-board',
@@ -16,7 +19,7 @@ import { IGameFinish } from "../models/game-finish.interface";
 export class GameBoardComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
 
     @Input()
-    public updatePoints!: Subject<IRecUpdate>;
+    public updatePoints!: Subject<Observable<IRecUpdate>>;
 
     @Output()
     public onProgressUpdate = new EventEmitter<number>();
@@ -45,7 +48,11 @@ export class GameBoardComponent implements OnInit, AfterViewInit, AfterViewCheck
     private readonly _defaultRecSize = 25;
     private readonly _finishedProgress = 100;
 
-    constructor(private _rendered: Renderer2,
+    private _worker: Worker;
+    private _workerIsInit: boolean;
+
+    constructor(private _renderer: Renderer2,
+        private _prerenderService: CanvasPrerenderService,
         @Inject(DOCUMENT) document: Document) {
         this._defaultView = document.defaultView;
     }
@@ -63,14 +70,27 @@ export class GameBoardComponent implements OnInit, AfterViewInit, AfterViewCheck
     public ngAfterViewInit(): void {
         this._context = this._container.nativeElement
             .getContext('2d', { alpha: false });
+        this._context.imageSmoothingEnabled = false;
         this._context.globalCompositeOperation = 'source-over';
     }
 
     public ngOnInit(): void {
         this._updateSubscription = this.updatePoints.asObservable()
-            .subscribe((recUpdate: IRecUpdate) => this._updateCanvas(recUpdate));
+            .subscribe((recUpdate: Observable<IRecUpdate>) => this._updateCanvasAsync(recUpdate));
         fromEvent(this._defaultView, 'resize')
-            .subscribe(this._updateCanvasPosition.bind(this))
+            .subscribe(this._updateCanvasPosition.bind(this));
+
+        if (typeof Worker !== 'undefined') {
+            this._workerIsInit = true;
+            this._worker = new Worker('./game-board.worker', {
+                type: 'module',
+            });
+
+            fromEvent(this._worker, 'message')
+                .subscribe((message: MessageEvent) => this._workerGenerateCanvasCallback(message.data));
+        } else {
+            this._workerIsInit = false;
+        }
     }
 
     /**
@@ -110,20 +130,43 @@ export class GameBoardComponent implements OnInit, AfterViewInit, AfterViewCheck
         this._updateProgress();
     }
 
+    private _updateCanvasAsync(recUpdate$: Observable<IRecUpdate>): void {
+        combineLatest([this._prerenderService.prerender(this._defaultRecSize), recUpdate$])
+            .pipe(
+                catchError((error: Error) => {
+                    console.error(error);
+                    return of([null, null]);
+                }),
+                map((res) => res[1])
+            )
+            .subscribe((recUpdate) => this._updateCanvas(recUpdate));
+    }
+
     /**
      * Update canvas
-     * @param recUpdate clear updated colors
+     * @param recUpdate clear: clear updated colors
      */
     private _updateCanvas(recUpdate: IRecUpdate): void {
+        if (!recUpdate) {
+            return;
+        }
         if (recUpdate.clear) {
             this._updated = {};
         }
         this.recColor = recUpdate.recColor;
         this._totalColors = Object.keys(this.recColor.cellsColor).length;
         this._emptyData(recUpdate.colorSave);
-        this._generateColorPoint();
+
         this._resizeCanvas();
-        this._generateCanvas();
+        this._fillWhite();
+
+        if (this._workerIsInit) {
+            this._worker.postMessage(this.recColor);
+        } else {
+            this._generateColorPoint();
+            setTimeout(() => this._generateCanvas());
+        }
+
         if (!recUpdate.clear && recUpdate.colorSave) {
             this._updateProgress();
         }
@@ -134,6 +177,11 @@ export class GameBoardComponent implements OnInit, AfterViewInit, AfterViewCheck
         this.colorPoint = {};
         this._currentUpdated = {};
         !colorSave && (this._updated = {});
+    }
+
+    private _workerGenerateCanvasCallback(colorPoint: { [key: string]: IColRow[] }): void {
+        this.colorPoint = colorPoint;
+        this._generateCanvas();
     }
 
     private _generateColorPoint(): void {
@@ -164,7 +212,8 @@ export class GameBoardComponent implements OnInit, AfterViewInit, AfterViewCheck
         const updated: { [key: string]: boolean } = this._updated;
         const colorPoint: { [key: string]: IColRow[] } = this.colorPoint;
         const updatedColors = Object.keys(updated).filter((key) => updated[key]);
-        const colors = Object.keys(colorPoint).filter((key) => updatedColors.indexOf(key) === -1);
+        const colors = Object.keys(colorPoint)
+            .filter((key) => updatedColors.indexOf(key) === -1);
 
         const context = this._context;
 
@@ -183,44 +232,42 @@ export class GameBoardComponent implements OnInit, AfterViewInit, AfterViewCheck
             }
         }
 
-        const bigNumber = 1000;
         for (let index = 0; index < colors.length; index++) {
             const color = colors[index];
             const points = colorPoint[color];
-            const big = points.filter((p) => p.num >= bigNumber);
-            const small = points.filter((p) => p.num < bigNumber);
 
-            context.strokeStyle = '#ccc';
-
-            context.font = "9px Arial";
-            context.textAlign = "center";
-            context.textBaseline = "middle";
-
-            this._fillContext(big, size);
-
-            context.font = "11px Arial";
-            context.textAlign = "center";
-            context.textBaseline = "middle";
-
-            this._fillContext(small, size);
+            for (let pointIndex = 0, length = points.length; pointIndex < length; pointIndex += 1) {
+                const point = points[pointIndex];
+                const x = point.col * size;
+                const y = point.row * size;
+                const cell = this._prerenderService.cells[point.num];
+                if (cell) {
+                    this._context.drawImage(cell, x, y);
+                } else {
+                    this._fillContext(x, y, point.num, size);
+                }
+            }
         }
 
         setTimeout(() => this._updateCanvasPosition());
     }
 
-    private _fillContext(points: IColRow[], size: number) {
-        for (let pointIndex = 0; pointIndex < points.length; pointIndex++) {
-            const point = points[pointIndex];
-            const x = point.col * size;
-            const y = point.row * size;
+    private _fillContext(x: number, y: number, num: number, size: number): void {
+        const smallSize = size - 4;
+        const halfSize = size / 2;
+        const textResizeWidth = size - 8;
+        this._context.fillStyle = '#fff';
+        this._context.fillRect(x, y, size, size);
 
-            this._context.fillStyle = '#fff';
-            this._context.fillRect(x, y, size, size);
-            this._context.fillStyle = '#666';
+        this._context.strokeStyle = '#e6e6e6';
+        this._context.fillStyle = '#e6e6e6';
+        this._context.strokeRect(x + 2, y + 2, smallSize, smallSize);
 
-            this._context.strokeRect(x + 2, y + 2, size - 4, size - 4);
-            this._context.fillText(point.num.toString(), (x - size / 2) + size, (y - size / 2) + size);
-        }
+        this._context.font = "11px Arial";
+        this._context.textAlign = "center";
+        this._context.textBaseline = "middle";
+        this._context.fillStyle = '#666';
+        this._context.fillText(String(num), x + halfSize, y + halfSize, textResizeWidth);
     }
 
     private _resizeCanvas(): void {
@@ -232,6 +279,17 @@ export class GameBoardComponent implements OnInit, AfterViewInit, AfterViewCheck
         canvas.height = height;
         canvas.width = width;
         this._canvasPositionChange({ canvasWidth: width * this.zoom / 100, canvasHeight: height * this.zoom / 100 });
+    }
+
+    private _fillWhite(): void {
+        const context = this._context;
+        this._context.fillStyle = '#fff';
+        const points = this.recColor.cells;
+
+        const width = points[0].length * this._defaultRecSize;
+        const height = points.length * this._defaultRecSize;
+
+        context.fillRect(0, 0, width, height);
     }
 
     private _updateCanvasPosition(): void {
@@ -258,8 +316,8 @@ export class GameBoardComponent implements OnInit, AfterViewInit, AfterViewCheck
             ? `${(canvasContainerHeight - canvasHeight) / 2 - marginTop}px`
             : 'unset';
 
-        this._rendered.setStyle(canvas, 'left', left);
-        this._rendered.setStyle(canvas, 'top', top);
+        this._renderer.setStyle(canvas, 'left', left);
+        this._renderer.setStyle(canvas, 'top', top);
     }
 
     private _updateProgress(): void {

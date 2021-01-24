@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnDestroy, Output } from "@angular/core";
-import { of, Subject } from "rxjs";
-import { catchError, finalize } from "rxjs/operators";
+import { Observable, of, Subject } from "rxjs";
+import { catchError, finalize, switchMap } from "rxjs/operators";
 
 import { ImageConverterService } from "./services/image-converter.service";
 
@@ -35,7 +35,7 @@ export class GameComponent implements OnDestroy {
     public settings!: ICashSettings;
     public imageFiles!: FileList;
 
-    public updatePoints: Subject<IRecUpdate> = new Subject<IRecUpdate>();
+    public updatePoints: Subject<Observable<IRecUpdate>> = new Subject<Observable<IRecUpdate>>();
 
     public constructor(private _http: ImageConverterService,
         private _cash: InMemoryCashService) {
@@ -93,7 +93,7 @@ export class GameComponent implements OnDestroy {
         this._loading(true);
         const fromCash = this._cash.loadFromCash(this.settings);
 
-        (fromCash
+        const contentTask = (fromCash
             ? of(fromCash)
             : fileToUpload
                 ? this._http.convertToPoints<IRecColor>(fileToUpload, this.settings)
@@ -101,25 +101,43 @@ export class GameComponent implements OnDestroy {
         ).pipe(
             catchError((error: Error) => {
                 this._loading(false);
-                console.log(error);
+                console.error(error);
                 return of(null);
             }),
-            finalize(() => {
-                this._loading(false);
-            })
-        )
-            .subscribe((res: IRecColor) => {
+            switchMap((res: IRecColor) => {
                 if (!res) {
-                    return;
+                    return of(null as IRecUpdate);
                 }
                 this._cash.saveToCash(res, this.settings);
-                this.onGameLoad.emit(true);
-                this.updatePoints.next({
+                return of({
                     recColor: res,
                     clear: clear,
                     colorSave: this.settings.colorSave,
-                });
-            });
+                } as IRecUpdate);
+            }),
+            catchError((error: Error) => {
+                this._loading(false);
+                console.error(error);
+                return of(null as IRecUpdate);
+            }),
+            finalize(() => {
+                this.onGameLoad.emit(true);
+                this._loading(false);
+            })
+        );
+
+        this.updatePoints.next(contentTask);
+        /*.subscribe((res: IRecColor) => {
+             if (!res) {
+                 return;
+             }
+             this._cash.saveToCash(res, this.settings);
+             this.updatePoints.next({
+                 recColor: res,
+                 clear: clear,
+                 colorSave: this.settings.colorSave,
+             });
+         });*/
     }
 
     private _loading(loading: boolean): void {
