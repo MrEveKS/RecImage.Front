@@ -13,6 +13,7 @@ import { AboutComponent } from '../about/about.component';
 import { ContactComponent } from '../contact/contact.component';
 import { ImageCollectionComponent } from '../image-collection/image-collection.component';
 import { FooterComponent } from '../footer/footer.component';
+import { FooterSelectComponent } from '../footer/footer-select/footer-select.component';
 
 const appRoutes: Routes = [
     { path: '', component: HomeComponent },
@@ -31,6 +32,7 @@ const appRoutes: Routes = [
         ContactComponent,
         ImageCollectionComponent,
         FooterComponent,
+        FooterSelectComponent,
     ],
     exports: [MainComponent,],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]

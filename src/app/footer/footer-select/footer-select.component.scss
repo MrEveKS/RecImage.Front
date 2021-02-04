@@ -1,0 +1,29 @@
+.text {
+  padding: 0 1rem;
+}
+
+.footer-container {
+  background-color: rgb(26, 26, 26);
+  min-height: 700px;
+  position: relative;
+}
+
+.select-buttons .btn {
+  margin: 0.25rem;
+  border-radius: 0;
+  text-transform: uppercase;
+}
+
+.btn-info.light:not(:hover) {
+  background-color: #22bdd6;
+}
+
+.center-block {
+  width: 100%;
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}

@@ -11,12 +11,13 @@ body {
   width: 72px;
 }
 .application-loading-container {
+  background-color: #efefef;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #efefef;
+  color: #666;
 }
 .application-loading-box {
   font-family: sans-serif;
@@ -25,7 +26,4 @@ body {
 }
 .application-loading-box h1 {
   margin-bottom: 0;
-}
-.application-loading-box h5 {
-  color: #666;
 }
