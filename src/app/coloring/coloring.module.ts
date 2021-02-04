@@ -1,17 +1,12 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { CommonModule } from '@angular/common';
+
+import { ColoringRoutingModule } from './coloring-routing.module';
 
 import { ColoringComponent } from './coloring.component';
 
-const routes: Routes = [
-    {
-        path: ':id',
-        component: ColoringComponent
-    }
-];
-
 @NgModule({
-    imports: [RouterModule.forChild(routes)],
-    exports: [RouterModule]
+    imports: [ColoringRoutingModule, CommonModule, ColoringRoutingModule],
+    declarations: [ColoringComponent,]
 })
 export class ColoringModule { }

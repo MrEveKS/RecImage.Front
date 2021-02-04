@@ -3,28 +3,37 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCollapseModule, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { APP_BASE_HREF } from '@angular/common';
+import { APP_BASE_HREF, CommonModule } from '@angular/common';
 import { environment } from '../environments/environment';
 
-import { MainModule } from './main/main.module';
+import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { SpinnerComponent } from './spinner/spinner.component';
+import { NavComponent } from './nav/nav.component';
+import { FooterSelectComponent } from './footer/footer-select/footer-select.component';
+import { FooterComponent } from './footer/footer.component';
+
 @NgModule({
     providers: [{ provide: APP_BASE_HREF, useValue: '' }],
     imports: [
+        CommonModule,
+        AppRoutingModule,
         NgbDropdownModule,
-        MainModule,
+        NgbCollapseModule,
         BrowserModule,
         FormsModule,
         HttpClientModule,
         ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
     ],
-    declarations: [
+     declarations: [
         AppComponent,
         SpinnerComponent,
+        NavComponent,
+        FooterComponent,
+        FooterSelectComponent,
     ],
     bootstrap: [AppComponent]
 })

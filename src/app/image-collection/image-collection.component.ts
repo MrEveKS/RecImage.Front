@@ -9,8 +9,8 @@ import { map } from "rxjs/operators";
 
 @Component({
     selector: 'image-collection',
-    styleUrls: ['image-collection.component.scss'],
-    templateUrl: 'image-collection.component.html',
+    styleUrls: ['./image-collection.component.scss'],
+    templateUrl: './image-collection.component.html',
 })
 export class ImageCollectionComponent implements OnInit {
 
