@@ -1,6 +1,6 @@
 <div class="container">
     <div class="image-block">
-        <a class="image-container" *ngFor="let image of imageList | async" routerLink="/coloring">
+        <a class="image-container" *ngFor="let image of imageList | async" routerLink="/coloring/{{image.id}}">
             <img loading="lazy" src="{{ url + 'image-list/min/' + image.name }}" alt="{{ image.name }}"
                 srcset="{{ url }}image-list/min/{{ image.name }} 256w, {{ url }}image-list/min/{{image.name }} 150w"
                 sizes="(max-width: 256px) 100vw, 256px" width="256" height="256">
