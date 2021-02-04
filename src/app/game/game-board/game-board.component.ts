@@ -10,6 +10,8 @@ import { IRecUpdate } from "../game.component";
 
 import { CanvasPrerenderService } from "../services/canvas-prerender.service";
 
+const { setTimeout } = window;
+
 @Component({
     selector: 'game-board',
     styleUrls: ['./game-board.component.scss'],
@@ -161,7 +163,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, AfterViewCheck
             this._worker.postMessage(this.recColor);
         } else {
             this._generateColorPoint();
-            setTimeout(() => this._generateCanvas());
+            setTimeout(() => this._generateCanvas(), 0);
         }
 
         if (!recUpdate.clear && recUpdate.colorSave) {
@@ -246,7 +248,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, AfterViewCheck
             }
         }
 
-        setTimeout(() => this._updateCanvasPosition());
+        this._updateCanvasPosition();
     }
 
     private _fillContext(x: number, y: number, num: number, size: number): void {

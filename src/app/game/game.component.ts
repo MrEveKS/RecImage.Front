@@ -53,6 +53,7 @@ export class GameComponent implements OnDestroy {
     }
 
     public imageSelect(id: number): void {
+        console.log('imageSelect %O', id);
         this._loadById(id);
     }
 
@@ -84,6 +85,7 @@ export class GameComponent implements OnDestroy {
     }
 
     private _load(clear: boolean, fileToUpload?: File): void {
+        console.log('load');
         this._loading(true);
         const fromCash = this._cash.loadFromCash(this.settings);
 

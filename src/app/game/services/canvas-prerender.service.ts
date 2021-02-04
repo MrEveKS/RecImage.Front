@@ -2,8 +2,6 @@ import { DOCUMENT } from "@angular/common";
 import { Inject, Injectable } from "@angular/core";
 import { from, Observable, of } from "rxjs";
 
-const { setTimeout } = window;
-
 @Injectable({
     providedIn: 'root'
 })
@@ -32,7 +30,7 @@ export class CanvasPrerenderService {
                 }
                 resolve();
             };
-            this._doAsync(fillPrerenderCells);
+            fillPrerenderCells();
         }));
     }
 
@@ -68,10 +66,6 @@ export class CanvasPrerenderService {
         context.lineWidth = 1;
         context.strokeRect(2, 2, smallSize, smallSize);
         return cellCanvas;
-    }
-
-    private _doAsync(action: () => void): void {
-        setTimeout(() => action());
     }
 
 }
