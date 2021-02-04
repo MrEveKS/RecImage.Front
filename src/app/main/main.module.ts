@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 import { MainComponent } from './main.component';
 import { NavComponent } from '../nav/nav.component';
@@ -14,13 +14,9 @@ import { ContactComponent } from '../contact/contact.component';
 import { ImageCollectionComponent } from '../image-collection/image-collection.component';
 import { FooterComponent } from '../footer/footer.component';
 import { FooterSelectComponent } from '../footer/footer-select/footer-select.component';
+import { ColoringComponent } from '../coloring/coloring.component';
 
-const appRoutes: Routes = [
-    { path: '', component: HomeComponent },
-    { path: 'about', component: AboutComponent },
-    { path: 'contact', component: ContactComponent },
-    { path: '**', redirectTo: '/' }
-];
+import { appRoutes } from './main.routes';
 
 @NgModule({
     imports: [NgbCollapseModule, BrowserModule, FormsModule, RouterModule.forRoot(appRoutes),],
@@ -33,6 +29,7 @@ const appRoutes: Routes = [
         ImageCollectionComponent,
         FooterComponent,
         FooterSelectComponent,
+        ColoringComponent,
     ],
     exports: [MainComponent,],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
