@@ -1,6 +1,6 @@
 {
   "name": "recimage",
-  "version": "1.3.68",
+  "version": "1.3.69",
   "description": "Rec Image",
   "author": {
     "name": "Evgenii",
@@ -22,29 +22,29 @@
     "url": "https://github.com/MrEveKS/RecImage.Front.git"
   },
   "dependencies": {
-    "@angular/common": "~11.0.0",
-    "@angular/compiler": "~11.0.0",
-    "@angular/core": "~11.0.0",
-    "@angular/forms": "~11.0.0",
-    "@angular/localize": "^11.0.3",
-    "@angular/platform-browser": "~11.0.0",
-    "@angular/platform-browser-dynamic": "~11.0.0",
-    "@angular/router": "~11.0.0",
-    "@angular/service-worker": "~11.0.0",
-    "@ng-bootstrap/ng-bootstrap": "^8.0.0",
-    "bootstrap": "^4.5.3",
+    "@angular/common": "~11.1.2",
+    "@angular/compiler": "~11.1.2",
+    "@angular/core": "~11.1.2",
+    "@angular/forms": "~11.1.2",
+    "@angular/localize": "~11.1.2",
+    "@angular/platform-browser": "~11.1.2",
+    "@angular/platform-browser-dynamic": "~11.1.2",
+    "@angular/router": "~11.1.2",
+    "@angular/service-worker": "~11.1.2",
+    "@ng-bootstrap/ng-bootstrap": "^9.0.2",
+    "bootstrap": "^4.6.0",
     "rxjs": "^6.6.3",
     "zone.js": "~0.11.3"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.1100.0",
-    "@angular/cli": "~11.0.0",
-    "@angular/compiler-cli": "~11.0.0",
-    "@types/node": "~14.14.7",
-    "@typescript-eslint/eslint-plugin": "^4.9.1",
-    "@typescript-eslint/parser": "^4.9.1",
-    "@types/lunr": "^2.3.3",
-    "eslint": "^7.15.0",
-    "typescript": "~4.0.5"
+    "@angular-devkit/build-angular": "~0.1101.2",
+    "@angular/cli": "~11.1.2",
+    "@angular/compiler-cli": "~11.1.2",
+    "@types/node": "~14.14.25",
+    "@typescript-eslint/eslint-plugin": "~4.14.2",
+    "@typescript-eslint/parser": "~4.14.2",
+    "@types/lunr": "~2.3.3",
+    "eslint": "~7.19.0",
+    "typescript": "~4.1.3"
   }
 }
