@@ -1,0 +1,60 @@
+.head-container {
+  position: relative;
+  background-image: url("/assets/main_head_back.jpg");
+  min-height: 700px;
+  background-attachment: fixed;
+  background-color: rgb(255, 255, 255);
+  background-position: 50% 50%;
+  background-size: cover;
+  color: #1a1a1a;
+}
+
+.text {
+    padding: 0 1rem;
+}
+
+.head-container:before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 1;
+  opacity: 0.5;
+  content: "";
+  background-color: inherit;
+}
+
+.footer-container {
+  background-color: rgb(26, 26, 26);
+  min-height: 700px;
+  position: relative;
+}
+
+.select-buttons .btn {
+  margin: 0.25rem;
+  border-radius: 0;
+  text-transform: uppercase;
+}
+
+.btn-info.light:not(:hover) {
+  background-color: #22bdd6;
+}
+
+.center-block {
+  width: 100%;
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+@media (min-width: 960px) {
+  h1 {
+    font-size: 70px;
+    line-height: 1em;
+    letter-spacing: 0px;
+  }
+}

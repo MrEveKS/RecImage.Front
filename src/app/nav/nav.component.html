@@ -1,0 +1,26 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark-b">
+    <a class="navbar-brand" routerLink="">
+        <img src="/assets/icons/icon-32x32.png" width="30" height="30" class="d-inline-block align-top" alt="Logo"
+            loading="lazy">
+        Rec Image
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+        (click)="isNavbarCollapsed = !isNavbarCollapsed">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div [ngbCollapse]="isNavbarCollapsed" class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+                <a class="nav-link" routerLink="">Главная Страница</a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" routerLink="/about">О нас</a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" routerLink="/contact">Контакты</a>
+            </li>
+        </ul>
+    </div>
+</nav>

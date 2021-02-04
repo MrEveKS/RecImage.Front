@@ -1,0 +1,10 @@
+
+li a {
+    color: rgba(255, 255, 255, 0.5);
+}
+li:hover a {
+  color: rgba(255, 255, 255, 0.75);
+}
+.active a {
+    color: #fff;
+}
