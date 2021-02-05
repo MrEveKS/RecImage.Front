@@ -1,7 +1,7 @@
 /// <reference lib="webworker" />
 
-import { IColRow } from "../models/col-row.interface";
-import { IRecColor } from "../models/rec-color.interface";
+import { IColRow } from "../../coloring/models/col-row.interface";
+import { IRecColor } from "../../coloring/models/rec-color.interface";
 
 addEventListener('message', (message: MessageEvent) => {
     const recColor: IRecColor = message.data;

@@ -3,7 +3,7 @@ import { ColorStep } from "./color-step.enum";
 /**
  * Settins of image converting
  */
-export interface IGameBaseSettings {
+export interface IColoringObjectSettings {
     size: number; // picture size
     colorStep: ColorStep;
     colored: boolean;

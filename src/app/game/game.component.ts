@@ -5,7 +5,7 @@ import { catchError, finalize, switchMap } from "rxjs/operators";
 import { ImageConverterService } from "../coloring/services/image-converter.service";
 
 // interfaces
-import { IGameSettings } from "../coloring/models/game-settings.interface";
+import { IColoringImageSettings } from "../coloring/models/coloring-image-settings.interface";
 import { IRecColor } from "../coloring/models/rec-color.interface";
 import { InMemoryCashService } from "../coloring/services/in-memory-cash.service";
 import { ICashSettings } from "../coloring/models/cash-settings.interface";
@@ -56,7 +56,7 @@ export class GameComponent implements OnDestroy {
         this._loadById(id);
     }
 
-    public settingsChange(settings: IGameSettings): void {
+    public settingsChange(settings: IColoringImageSettings): void {
         this.settingsSet(settings);
 
         if (this.settings.fileName) {
@@ -66,7 +66,7 @@ export class GameComponent implements OnDestroy {
         }
     }
 
-    public settingsSet(settings: IGameSettings): void {
+    public settingsSet(settings: IColoringImageSettings): void {
         this.settings = { ...this.settings, ...settings };
     }
 

@@ -1,0 +1,9 @@
+.convas-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  canvas {
+    transform-origin: 0 0;
+    position: relative;
+  }
+}

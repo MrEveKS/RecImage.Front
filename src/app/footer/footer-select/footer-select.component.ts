@@ -21,5 +21,5 @@ export class FooterSelectComponent {
             this._router.navigate(['coloring', id], { relativeTo: this._route });
         });
     }
-    
+
 }

@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
 // interfaces
 import { ISelectValue } from "src/app/models/select-value.interface";
-import { IGameBaseSettings } from "../models/game-base-settings.interface";
+import { IColoringObjectSettings } from "../../coloring/models/coloring-object-settings.interface";
 
 const { clearTimeout, setTimeout } = window;
 @Component({
@@ -17,9 +17,9 @@ export class GameMenuComponent implements OnInit {
     public imageFiles: FileList;
 
     @Output()
-    public onSettingsChange = new EventEmitter<IGameBaseSettings>();
+    public onSettingsChange = new EventEmitter<IColoringObjectSettings>();
     @Output()
-    public onSettingsSet = new EventEmitter<IGameBaseSettings>();
+    public onSettingsSet = new EventEmitter<IColoringObjectSettings>();
     @Output()
     public onZoomChange = new EventEmitter<number>();
     @Output()
@@ -27,7 +27,7 @@ export class GameMenuComponent implements OnInit {
     @Output()
     public onBackClick = new EventEmitter();
 
-    public settings: IGameBaseSettings;
+    public settings: IColoringObjectSettings;
 
     public colorSteps!: ISelectValue<number>[];
     public sizes!: ISelectValue<number>[];

@@ -1,39 +1,40 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
-import { Observable, of, Subject } from 'rxjs';
-import { catchError, finalize, map, switchMap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, finalize, map } from 'rxjs/operators';
 // interfaces
 import { IRecUpdate } from '../game/game.component';
 import { ICashSettings } from './models/cash-settings.interface';
-import { IGameSettings } from './models/game-settings.interface';
 import { IRecColor } from './models/rec-color.interface';
+import { IColoringSettings } from './models/coloring-settings.interface';
 // services
 import { ImageConverterService } from './services/image-converter.service';
 import { InMemoryCashService } from './services/in-memory-cash.service';
+
+import { ColoringBoardComponent } from './coloring-board/coloring-board.component';
+import { ColoringHelperService } from './services/coloring-helper.service';
 
 @Component({
     selector: 'coloring',
     styleUrls: ['./coloring.component.scss'],
     templateUrl: './coloring.component.html',
 })
-export class ColoringComponent implements OnInit, OnDestroy {
+export class ColoringComponent implements OnInit {
 
     @Output()
     public onGameLoad = new EventEmitter<boolean>();
     @Output()
     public onGameLoading = new EventEmitter<boolean>();
-    @Output()
-    public onBackClick = new EventEmitter();
 
-    public settings!: ICashSettings;
-    public imageFiles!: FileList;
-
-    public updatePoints: Subject<Observable<IRecUpdate>> = new Subject<Observable<IRecUpdate>>();
-
+    private _coloringSettings!: IColoringSettings;
     private readonly _queryObservable: Observable<number | null>;
 
+    @ViewChild(ColoringBoardComponent)
+    private _board: ColoringBoardComponent;
+
     public constructor(route: ActivatedRoute,
+        public coloringHelper: ColoringHelperService,
         private _http: ImageConverterService,
         private _cash: InMemoryCashService) {
         this._queryObservable = route.params.pipe(
@@ -47,21 +48,14 @@ export class ColoringComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+        this._coloringSettings = this.coloringHelper.coloringSettings;
         this._queryObservable.subscribe((id: number | null) => {
             this._eventInit(id);
         });
     }
 
-    public ngOnDestroy(): void {
-        this.updatePoints.complete();
-    }
-
-    public handleBack(): void {
-        this.onBackClick.emit();
-    }
-
     public filesSelect(files: FileList): void {
-        this.imageFiles = files;
+        this._coloringSettings.imageFiles = files;
         this._fileLoad(files);
     }
 
@@ -69,66 +63,59 @@ export class ColoringComponent implements OnInit, OnDestroy {
         this._loadById(id);
     }
 
-    public settingsChange(settings: IGameSettings): void {
+    public settingsChange(settings: ICashSettings): void {
         this.settingsSet(settings);
 
-        if (this.settings.fileName) {
-            this.filesSelect(this.imageFiles);
+        if (this._coloringSettings.settings.fileName) {
+            this.filesSelect(this._coloringSettings.imageFiles);
         } else {
-            this._loadById(this.settings.imageId);
+            this._loadById(this._coloringSettings.settings.imageId);
         }
     }
 
-    public settingsSet(settings: IGameSettings): void {
-        this.settings = { ...this.settings, ...settings };
+    public settingsSet(settings: ICashSettings): void {
+        this._coloringSettings.settings = { ...this._coloringSettings.settings, ...settings };
     }
 
+    /**
+     * init coloring event
+     * @param id image id
+     */
     private _eventInit(id: number | null): void {
-        if (!id) {
-            //
-        } else {
+        if (id) {
             this._loadById(id);
+        } else {
+            //
         }
     }
 
     private _loadById(id: number) {
-        const clear = this.settings.imageId !== id;
-        this.settings = { ...this.settings, fileName: null, imageId: id };
+        const clear = this._coloringSettings.settings.imageId !== id;
+        this._coloringSettings.settings = { ...this._coloringSettings.settings, fileName: null, imageId: id };
         this._load(clear);
     }
 
     private _fileLoad(files: FileList): void {
         const fileToUpload = files.item(0) as File;
-        const clear = this.settings.fileName !== fileToUpload.name;
-        this.settings = { ...this.settings, fileName: fileToUpload.name, imageId: null };
+        const clear = this._coloringSettings.settings.fileName !== fileToUpload.name;
+        this._coloringSettings.settings = { ...this._coloringSettings.settings, fileName: fileToUpload.name, imageId: null };
         this._load(clear, fileToUpload);
     }
 
     private _load(clear: boolean, fileToUpload?: File): void {
         this._loading(true);
-        const fromCash = this._cash.loadFromCash(this.settings);
+        const fromCash = this._cash.loadFromCash(this._coloringSettings.settings);
 
-        const contentTask = (fromCash
+        (fromCash
             ? of(fromCash)
             : fileToUpload
-                ? this._http.convertToPoints<IRecColor>(fileToUpload, this.settings)
-                : this._http.convertToPointsById<IRecColor>(this.settings)
+                ? this._http.convertToPoints<IRecColor>(fileToUpload, this._coloringSettings.settings)
+                : this._http.convertToPointsById<IRecColor>(this._coloringSettings.settings)
         ).pipe(
             catchError((error: Error) => {
                 this._loading(false);
                 console.error(error);
                 return of(null);
-            }),
-            switchMap((res: IRecColor) => {
-                if (!res) {
-                    return of(null as IRecUpdate);
-                }
-                this._cash.saveToCash(res, this.settings);
-                return of({
-                    recColor: res,
-                    clear: clear,
-                    colorSave: this.settings.colorSave,
-                } as IRecUpdate);
             }),
             catchError((error: Error) => {
                 this._loading(false);
@@ -139,9 +126,18 @@ export class ColoringComponent implements OnInit, OnDestroy {
                 this.onGameLoad.emit(true);
                 this._loading(false);
             })
-        );
+        ).subscribe((res: IRecColor) => {
+            if (!res) {
+                return of(null as IRecUpdate);
+            }
+            this._cash.saveToCash(res, this._coloringSettings.settings);
+            this._board.updateCanvas({
+                recColor: res,
+                clear: clear,
+                colorSave: this._coloringSettings.settings.colorSave,
+            } as IRecUpdate);
+        });
 
-        this.updatePoints.next(contentTask);
     }
 
     private _loading(loading: boolean): void {

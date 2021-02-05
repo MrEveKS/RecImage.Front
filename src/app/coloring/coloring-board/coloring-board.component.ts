@@ -1,37 +1,36 @@
 import { DOCUMENT } from "@angular/common";
-import { AfterViewChecked, AfterViewInit, Component, ElementRef, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, Renderer2, ViewChild } from "@angular/core";
-import { fromEvent, Observable, of, Subject, Subscription } from "rxjs";
-import { catchError, map } from "rxjs/operators";
+import {
+    AfterViewChecked, AfterViewInit, Component, ElementRef, Inject, Input, OnInit, Renderer2, ViewChild
+} from "@angular/core";
+import { fromEvent } from "rxjs";
 
 // interfaces
 import { IColRow } from "src/app/coloring/models/col-row.interface";
 import { IRecColor } from "src/app/coloring/models/rec-color.interface";
-import { IRecUpdate } from "../game.component";
+import { IRecUpdate } from "src/app/game/game.component";
+import { ColoringHelperService } from "../services/coloring-helper.service";
 
 @Component({
-    selector: 'game-board',
-    styleUrls: ['./game-board.component.scss'],
-    templateUrl: './game-board.component.html',
+    selector: 'coloring-board',
+    styleUrls: ['./coloring-board.component.scss'],
+    templateUrl: './coloring-board.component.html',
 })
-export class GameBoardComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
+export class ColoringBoardComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
     @Input()
-    public updatePoints!: Subject<Observable<IRecUpdate>>;
+    public coloringHelper: ColoringHelperService;
 
-    @Output()
-    public onProgressUpdate = new EventEmitter<number>();
-
-    public zoom!: number;
     public recColor!: IRecColor;
-
     public colorPoint: { [key: string]: IColRow[] } = {};
 
-    private _updateSubscription: Subscription;
+    public get zoom(): number {
+        return this.coloringHelper.coloringSettings.zoom;
+    }
 
-    @ViewChild('canvasContainer', { read: ElementRef })
-    private _canvasContainer: ElementRef<HTMLDivElement>;
     @ViewChild('container', { read: ElementRef })
-    private _container: ElementRef<HTMLCanvasElement>;
+    private _container: ElementRef<HTMLDivElement>;
+    @ViewChild('canvasContainer', { read: ElementRef })
+    private _canvasContainer: ElementRef<HTMLCanvasElement>;
     private _context: CanvasRenderingContext2D;
 
     private _totalColors = 0;
@@ -47,10 +46,6 @@ export class GameBoardComponent implements OnInit, AfterViewInit, AfterViewCheck
         this._defaultView = document.defaultView;
     }
 
-    public ngOnDestroy(): void {
-        this._updateSubscription && this._updateSubscription.unsubscribe();
-    }
-
     public ngAfterViewChecked(): void {
         if (!this._updatePosition) return;
         this._updatePosition = false;
@@ -58,26 +53,16 @@ export class GameBoardComponent implements OnInit, AfterViewInit, AfterViewCheck
     }
 
     public ngAfterViewInit(): void {
-        this._context = this._container.nativeElement
+        this._context = this._canvasContainer.nativeElement
             .getContext('2d', { alpha: false });
         this._context.imageSmoothingEnabled = false;
         this._context.globalCompositeOperation = 'source-over';
     }
 
     public ngOnInit(): void {
-        this._updateSubscription = this.updatePoints.asObservable()
-            .subscribe((recUpdate: Observable<IRecUpdate>) => this._updateCanvasAsync(recUpdate));
+        this.coloringHelper.onZoomChange.subscribe(() => this._updatePosition = true);
         fromEvent(this._defaultView, 'resize')
             .subscribe(this._updateCanvasPosition.bind(this))
-    }
-
-    /**
-     * Resize board by zoom
-     * @param zoom
-     */
-    public resize(zoom: number): void {
-        this._updatePosition = true;
-        this.zoom = zoom;
     }
 
     /**
@@ -89,7 +74,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, AfterViewCheck
         const size = this._defaultRecSize;
         const zoomSize = this._defaultRecSize * this.zoom / 100;
         const context = this._context;
-        const position = this._getCursorPosition(this._container.nativeElement, $event);
+        const position = this._getCursorPosition(this._canvasContainer.nativeElement, $event);
 
         const row = Math.floor((position.y - position.y % zoomSize) / zoomSize);
         const col = Math.floor((position.x - position.x % zoomSize) / zoomSize);
@@ -108,23 +93,11 @@ export class GameBoardComponent implements OnInit, AfterViewInit, AfterViewCheck
         this._updateProgress();
     }
 
-    private _updateCanvasAsync(recUpdate$: Observable<IRecUpdate>): void {
-        recUpdate$
-            .pipe(
-                map((res) => res[1]),
-                catchError((error: Error) => {
-                    console.error(error);
-                    return of(null);
-                })
-            )
-            .subscribe((recUpdate) => this._updateCanvas(recUpdate));
-    }
-
     /**
      * Update canvas
      * @param recUpdate clear updated colors
      */
-    private _updateCanvas(recUpdate: IRecUpdate): void {
+    public updateCanvas(recUpdate: IRecUpdate): void {
         if (recUpdate.clear) {
             this._updated = {};
         }
@@ -234,7 +207,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, AfterViewCheck
     }
 
     private _resizeCanvas(): void {
-        const canvas = this._container.nativeElement;
+        const canvas = this._canvasContainer.nativeElement;
         const points = this.recColor.cells;
 
         const height = points.length * this._defaultRecSize;
@@ -246,15 +219,15 @@ export class GameBoardComponent implements OnInit, AfterViewInit, AfterViewCheck
 
     private _updateCanvasPosition(): void {
         if (this.zoom === 100) return;
-        const canvas = this._container.nativeElement;
+        const canvas = this._canvasContainer.nativeElement;
         const canvasWidth = +canvas.width * this.zoom / 100;
         const canvasHeight = +canvas.height * this.zoom / 100;
         this._canvasPositionChange({ canvasWidth, canvasHeight })
     }
 
     private _canvasPositionChange({ canvasWidth, canvasHeight }): void {
-        const canvas = this._container.nativeElement;
-        const canvasContainer = this._canvasContainer.nativeElement;
+        const canvas = this._canvasContainer.nativeElement;
+        const canvasContainer = this._container.nativeElement;
         const canvasContainerWidth = +canvasContainer.clientWidth;
         const canvasContainerHeight = +canvasContainer.clientHeight;
         const styleValues = this._defaultView.getComputedStyle(canvas);
@@ -277,7 +250,7 @@ export class GameBoardComponent implements OnInit, AfterViewInit, AfterViewCheck
     }
 
     private _progress(progress: number): void {
-        this.onProgressUpdate.emit(progress);
+        this.coloringHelper.coloringSettings.progress = progress;
     }
 
 }
