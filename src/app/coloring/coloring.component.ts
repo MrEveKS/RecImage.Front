@@ -5,7 +5,6 @@ import { Observable, of } from 'rxjs';
 import { catchError, finalize, map } from 'rxjs/operators';
 // interfaces
 import { IRecUpdate } from '../game/game.component';
-import { ICashSettings } from './models/cash-settings.interface';
 import { IRecColor } from './models/rec-color.interface';
 import { IColoringSettings } from './models/coloring-settings.interface';
 // services
@@ -49,32 +48,15 @@ export class ColoringComponent implements OnInit {
 
     public ngOnInit(): void {
         this._coloringSettings = this.coloringHelper.coloringSettings;
+        this.coloringHelper.onSettingsChange.subscribe(() => this._settingsChange());
+        this.coloringHelper.onFilesSelect.subscribe(() => this._filesSelect());
         this._queryObservable.subscribe((id: number | null) => {
             this._eventInit(id);
         });
     }
 
-    public filesSelect(files: FileList): void {
-        this._coloringSettings.imageFiles = files;
-        this._fileLoad(files);
-    }
-
     public imageSelect(id: number): void {
         this._loadById(id);
-    }
-
-    public settingsChange(settings: ICashSettings): void {
-        this.settingsSet(settings);
-
-        if (this._coloringSettings.settings.fileName) {
-            this.filesSelect(this._coloringSettings.imageFiles);
-        } else {
-            this._loadById(this._coloringSettings.settings.imageId);
-        }
-    }
-
-    public settingsSet(settings: ICashSettings): void {
-        this._coloringSettings.settings = { ...this._coloringSettings.settings, ...settings };
     }
 
     /**
@@ -85,8 +67,20 @@ export class ColoringComponent implements OnInit {
         if (id) {
             this._loadById(id);
         } else {
-            //
+            // TODO: image select
         }
+    }
+
+    private _settingsChange(): void {
+        if (this._coloringSettings.settings.fileName) {
+            this._filesSelect();
+        } else {
+            this._loadById(this._coloringSettings.settings.imageId);
+        }
+    }
+
+    private _filesSelect(): void {
+        this._fileLoad(this._coloringSettings.imageFiles);
     }
 
     private _loadById(id: number) {
