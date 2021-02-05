@@ -9,4 +9,6 @@ import { ColoringComponent } from './coloring.component';
     imports: [ColoringRoutingModule, CommonModule, ColoringRoutingModule],
     declarations: [ColoringComponent,]
 })
-export class ColoringModule { }
+export class ColoringModule {
+    
+ }

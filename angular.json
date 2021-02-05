@@ -49,8 +49,7 @@
               }
             ],
             "scripts": [],
-            "aot": true,
-            "webWorkerTsConfig": "tsconfig.worker.json"
+            "aot": true
           },
           "configurations": {
             "dev": {

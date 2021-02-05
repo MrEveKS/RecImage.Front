@@ -5,10 +5,10 @@ import { catchError, finalize, switchMap } from "rxjs/operators";
 import { ImageConverterService } from "./services/image-converter.service";
 
 // interfaces
-import { IGameSettings } from "./models/game-settings.interface";
-import { IRecColor } from "./models/rec-color.interface";
+import { IGameSettings } from "../coloring/models/game-settings.interface";
+import { IRecColor } from "../coloring/models/rec-color.interface";
 import { InMemoryCashService } from "./services/in-memory-cash.service";
-import { ICashSettings } from "./models/cash-settings.interface";
+import { ICashSettings } from "../coloring/models/cash-settings.interface";
 
 export interface IRecUpdate {
     recColor: IRecColor;
