@@ -2,12 +2,12 @@ import { Component, EventEmitter, OnDestroy, Output } from "@angular/core";
 import { Observable, of, Subject } from "rxjs";
 import { catchError, finalize, switchMap } from "rxjs/operators";
 
-import { ImageConverterService } from "./services/image-converter.service";
+import { ImageConverterService } from "../coloring/services/image-converter.service";
 
 // interfaces
 import { IGameSettings } from "../coloring/models/game-settings.interface";
 import { IRecColor } from "../coloring/models/rec-color.interface";
-import { InMemoryCashService } from "./services/in-memory-cash.service";
+import { InMemoryCashService } from "../coloring/services/in-memory-cash.service";
 import { ICashSettings } from "../coloring/models/cash-settings.interface";
 
 export interface IRecUpdate {

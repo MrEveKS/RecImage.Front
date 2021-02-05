@@ -37,13 +37,18 @@ export class ColoringComponent implements OnInit, OnDestroy {
         private _http: ImageConverterService,
         private _cash: InMemoryCashService) {
         this._queryObservable = route.params.pipe(
-            map((params: Params) => params['id'])
+            map((params: Params) => {
+                const param = params['id'];
+                return Number.isNaN(param)
+                    ? null
+                    : Number(param);
+            })
         );
     }
 
     public ngOnInit(): void {
-        this._queryObservable.subscribe((id) => {
-            console.log('%cid: %O', 'color: red', id);
+        this._queryObservable.subscribe((id: number | null) => {
+            this._eventInit(id);
         });
     }
 
@@ -76,6 +81,14 @@ export class ColoringComponent implements OnInit, OnDestroy {
 
     public settingsSet(settings: IGameSettings): void {
         this.settings = { ...this.settings, ...settings };
+    }
+
+    private _eventInit(id: number | null): void {
+        if (!id) {
+            //
+        } else {
+            this._loadById(id);
+        }
     }
 
     private _loadById(id: number) {

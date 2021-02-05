@@ -4,12 +4,12 @@
         <p class="text">Раскрашивая квадрат за квадратом, мы получим полноценное пиксельное изображение разных картинок.
         </p>
         <div class="select-buttons">
-            <a type="button" class="btn btn-lg btn-info" routerLink="/coloring">
+            <a class="btn btn-lg btn-info" routerLink="/coloring">
                 Загрузить изображение
             </a>
-            <a type="button" class="btn btn-lg btn-info light" routerLink="/coloring/0">
+            <button type="button" class="btn btn-lg btn-info light" (click)="randomSelect()">
                 Случайный выбор
-            </a>
+            </button>
         </div>
     </div>
 </div>
