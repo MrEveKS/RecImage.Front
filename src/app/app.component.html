@@ -3,7 +3,7 @@
 <nav-bar></nav-bar>
 <router-outlet></router-outlet>
 <footer-select *ngIf="!(hideFooterSelect$ | async)"></footer-select>
-<footer></footer>
+<footer *ngIf="!(hideFooterSelect$ | async)"></footer>
 <!--<preview [hidden]="!showPreview" (onFilesSelect)="gameTemplate.filesSelect($event)"
     (onImageSelect)="gameTemplate.imageSelect($event)">
 </preview>
