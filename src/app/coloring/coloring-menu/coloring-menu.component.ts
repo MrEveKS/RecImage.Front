@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 // interfaces
 import { IColoringSettings } from "../models/coloring-settings.interface";
 import { ColoringHelperService } from "../services/coloring-helper.service";
@@ -10,9 +10,6 @@ const { clearTimeout, setTimeout } = window;
     templateUrl: './coloring-menu.component.html',
 })
 export class ColoringMenuComponent implements OnInit {
-
-    @Input()
-    public coloringHelper: ColoringHelperService;
 
     public coloringSettings!: IColoringSettings;
 
@@ -29,18 +26,21 @@ export class ColoringMenuComponent implements OnInit {
 
     private _timeId: number;
 
+    public constructor(private _coloringHelper: ColoringHelperService) {
+    }
+
     public ngOnInit(): void {
-        this.coloringSettings = this.coloringHelper.coloringSettings;
+        this.coloringSettings = this._coloringHelper.coloringSettings;
     }
 
     public resize(zoom: number): void {
         this.coloringSettings.zoom = zoom;
-        this.coloringHelper.onZoomChange.emit();
+        this._coloringHelper.onZoomChange.emit();
     }
 
     public filesSelect(files: FileList): void {
         this.coloringSettings.imageFiles = files;
-        this.coloringHelper.onFilesSelect.emit();
+        this._coloringHelper.onFilesSelect.emit();
     }
 
     public handleColorSave(): void {
@@ -88,7 +88,7 @@ export class ColoringMenuComponent implements OnInit {
     }
 
     private _settingsChange(): void {
-        this.coloringHelper.onSettingsChange.emit();
+        this._coloringHelper.onSettingsChange.emit();
     }
 
     private _showElement(html: HTMLElement): void {

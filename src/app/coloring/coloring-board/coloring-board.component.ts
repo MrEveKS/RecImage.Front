@@ -1,6 +1,6 @@
 import { DOCUMENT } from "@angular/common";
 import {
-    AfterViewChecked, AfterViewInit, Component, ElementRef, Inject, Input, OnDestroy, OnInit, Renderer2, ViewChild
+    AfterViewChecked, AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit, Renderer2, ViewChild
 } from "@angular/core";
 import { fromEvent, ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
@@ -19,14 +19,11 @@ import { ColoringHelperService } from "../services/coloring-helper.service";
 })
 export class ColoringBoardComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
 
-    @Input()
-    public coloringHelper: ColoringHelperService;
-
     public recColor!: IRecColor;
     public colorPoint: { [key: string]: IColRow[] } = {};
 
     public get zoom(): number {
-        return this.coloringHelper.coloringSettings.zoom;
+        return this._coloringHelper.coloringSettings.zoom;
     }
 
     @ViewChild('container', { read: ElementRef })
@@ -43,11 +40,21 @@ export class ColoringBoardComponent implements OnInit, AfterViewInit, AfterViewC
     private readonly _defaultView: WindowProxy;
     private readonly _defaultRecSize = 25;
 
+    /**
+     * Expectation ViewChild init
+     */
+    private _afterInitAction: () => void;
+
     private _destroy = new ReplaySubject<number>(1);
 
     constructor(private _renderer: Renderer2,
+        private _coloringHelper: ColoringHelperService,
         @Inject(DOCUMENT) document: Document) {
         this._defaultView = document.defaultView;
+
+        this._coloringHelper.onUpdateCanvas
+            .pipe(takeUntil(this._destroy))
+            .subscribe((recUpdate: IRecUpdate) => this._updateCanvas(recUpdate));
     }
 
     public ngAfterViewChecked(): void {
@@ -63,15 +70,15 @@ export class ColoringBoardComponent implements OnInit, AfterViewInit, AfterViewC
         this._context.globalCompositeOperation = 'source-over';
         canvas.width = 0;
         canvas.height = 0;
+
+        this._afterViewChildInitCall();
     }
 
     public ngOnInit(): void {
-        this.coloringHelper.onZoomChange
+        this._coloringHelper.onZoomChange
             .pipe(takeUntil(this._destroy))
             .subscribe(() => this._updatePosition = true);
-        this.coloringHelper.onUpdateCanvas
-            .pipe(takeUntil(this._destroy))
-            .subscribe((recUpdate: IRecUpdate) => this._updateCanvas(recUpdate));
+
         fromEvent(this._defaultView, 'resize')
             .pipe(takeUntil(this._destroy))
             .subscribe(this._updateCanvasPosition.bind(this))
@@ -118,14 +125,23 @@ export class ColoringBoardComponent implements OnInit, AfterViewInit, AfterViewC
         if (recUpdate.clear) {
             this._updated = {};
         }
-        this.recColor = recUpdate.recColor;
-        this._totalColors = Object.keys(this.recColor.cellsColor).length;
-        this._emptyData(recUpdate.colorSave);
-        this._generateColorPoint();
-        this._resizeCanvas();
-        this._generateCanvas();
-        if (!recUpdate.clear && recUpdate.colorSave) {
-            this._updateProgress();
+
+        const updateCanvasAction = () => {
+            this.recColor = recUpdate.recColor;
+            this._totalColors = Object.keys(this.recColor.cellsColor).length;
+            this._emptyData(recUpdate.colorSave);
+            this._generateColorPoint();
+            this._resizeCanvas();
+            this._generateCanvas();
+            if (!recUpdate.clear && recUpdate.colorSave) {
+                this._updateProgress();
+            }
+        };
+
+        if (!this._container || !this._canvasContainer) {
+            this._afterInitAction = updateCanvasAction;
+        } else {
+            updateCanvasAction();
         }
     }
 
@@ -267,7 +283,14 @@ export class ColoringBoardComponent implements OnInit, AfterViewInit, AfterViewC
     }
 
     private _progress(progress: number): void {
-        this.coloringHelper.coloringSettings.progress = progress;
+        this._coloringHelper.coloringSettings.progress = progress;
+    }
+
+    private _afterViewChildInitCall(): void {
+        if (this._afterInitAction) {
+            this._afterInitAction();
+            this._afterInitAction = null;
+        }
     }
 
 }
