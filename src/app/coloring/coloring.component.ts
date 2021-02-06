@@ -1,8 +1,8 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
-import { Observable, of } from 'rxjs';
-import { catchError, finalize, map } from 'rxjs/operators';
+import { Observable, of, ReplaySubject } from 'rxjs';
+import { catchError, map, takeUntil } from 'rxjs/operators';
 // interfaces
 import { IRecUpdate } from './models/rec-update.interface';
 import { IRecColor } from './models/rec-color.interface';
@@ -10,8 +10,6 @@ import { IColoringSettings } from './models/coloring-settings.interface';
 // services
 import { ImageConverterService } from './services/image-converter.service';
 import { InMemoryCashService } from './services/in-memory-cash.service';
-
-import { ColoringBoardComponent } from './coloring-board/coloring-board.component';
 import { ColoringHelperService } from './services/coloring-helper.service';
 
 @Component({
@@ -19,18 +17,15 @@ import { ColoringHelperService } from './services/coloring-helper.service';
     styleUrls: ['./coloring.component.scss'],
     templateUrl: './coloring.component.html',
 })
-export class ColoringComponent implements OnInit {
+export class ColoringComponent implements OnInit, OnDestroy {
 
-    @Output()
-    public onGameLoad = new EventEmitter<boolean>();
     @Output()
     public onGameLoading = new EventEmitter<boolean>();
 
     private _coloringSettings!: IColoringSettings;
     private readonly _queryObservable: Observable<number | null>;
 
-    @ViewChild(ColoringBoardComponent)
-    private _board: ColoringBoardComponent;
+    private _destroy = new ReplaySubject<number>(1);
 
     public constructor(route: ActivatedRoute,
         public coloringHelper: ColoringHelperService,
@@ -48,11 +43,22 @@ export class ColoringComponent implements OnInit {
 
     public ngOnInit(): void {
         this._coloringSettings = this.coloringHelper.coloringSettings;
-        this.coloringHelper.onSettingsChange.subscribe(() => this._settingsChange());
-        this.coloringHelper.onFilesSelect.subscribe(() => this._filesSelect());
-        this._queryObservable.subscribe((id: number | null) => {
-            this._eventInit(id);
-        });
+        this.coloringHelper.onSettingsChange
+            .pipe(takeUntil(this._destroy))
+            .subscribe(() => this._settingsChange());
+        this.coloringHelper.onFilesSelect
+            .pipe(takeUntil(this._destroy))
+            .subscribe(() => this._filesSelect());
+        this._queryObservable
+            .pipe(takeUntil(this._destroy))
+            .subscribe((id: number | null) => {
+                this._eventInit(id);
+            });
+    }
+
+    public ngOnDestroy(): void {
+        this._destroy.next(null);
+        this._destroy.complete();
     }
 
     public imageSelect(id: number): void {
@@ -116,20 +122,20 @@ export class ColoringComponent implements OnInit {
                 console.error(error);
                 return of(null as IRecUpdate);
             }),
-            finalize(() => {
-                this.onGameLoad.emit(true);
-                this._loading(false);
-            })
+            takeUntil(this._destroy),
         ).subscribe((res: IRecColor) => {
             if (!res) {
                 return of(null as IRecUpdate);
             }
             this._cash.saveToCash(res, this._coloringSettings.settings);
-            this._board.updateCanvas({
-                recColor: res,
-                clear: clear,
-                colorSave: this._coloringSettings.settings.colorSave,
-            } as IRecUpdate);
+            this.coloringHelper.onUpdateCanvas
+                .emit({
+                    recColor: res,
+                    clear: clear,
+                    colorSave: this._coloringSettings.settings.colorSave,
+                });
+            this._loading(false);
+
         });
 
     }

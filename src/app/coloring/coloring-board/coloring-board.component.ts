@@ -1,8 +1,9 @@
 import { DOCUMENT } from "@angular/common";
 import {
-    AfterViewChecked, AfterViewInit, Component, ElementRef, Inject, Input, OnInit, Renderer2, ViewChild
+    AfterViewChecked, AfterViewInit, Component, ElementRef, Inject, Input, OnDestroy, OnInit, Renderer2, ViewChild
 } from "@angular/core";
-import { fromEvent } from "rxjs";
+import { fromEvent, ReplaySubject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 // interfaces
 import { IColRow } from "src/app/coloring/models/col-row.interface";
@@ -16,7 +17,7 @@ import { ColoringHelperService } from "../services/coloring-helper.service";
     styleUrls: ['./coloring-board.component.scss'],
     templateUrl: './coloring-board.component.html',
 })
-export class ColoringBoardComponent implements OnInit, AfterViewInit, AfterViewChecked {
+export class ColoringBoardComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
 
     @Input()
     public coloringHelper: ColoringHelperService;
@@ -42,6 +43,8 @@ export class ColoringBoardComponent implements OnInit, AfterViewInit, AfterViewC
     private readonly _defaultView: WindowProxy;
     private readonly _defaultRecSize = 25;
 
+    private _destroy = new ReplaySubject<number>(1);
+
     constructor(private _renderer: Renderer2,
         @Inject(DOCUMENT) document: Document) {
         this._defaultView = document.defaultView;
@@ -63,9 +66,20 @@ export class ColoringBoardComponent implements OnInit, AfterViewInit, AfterViewC
     }
 
     public ngOnInit(): void {
-        this.coloringHelper.onZoomChange.subscribe(() => this._updatePosition = true);
+        this.coloringHelper.onZoomChange
+            .pipe(takeUntil(this._destroy))
+            .subscribe(() => this._updatePosition = true);
+        this.coloringHelper.onUpdateCanvas
+            .pipe(takeUntil(this._destroy))
+            .subscribe((recUpdate: IRecUpdate) => this._updateCanvas(recUpdate));
         fromEvent(this._defaultView, 'resize')
+            .pipe(takeUntil(this._destroy))
             .subscribe(this._updateCanvasPosition.bind(this))
+    }
+
+    public ngOnDestroy(): void {
+        this._destroy.next(null);
+        this._destroy.complete();
     }
 
     /**
@@ -100,7 +114,7 @@ export class ColoringBoardComponent implements OnInit, AfterViewInit, AfterViewC
      * Update canvas
      * @param recUpdate clear updated colors
      */
-    public updateCanvas(recUpdate: IRecUpdate): void {
+    private _updateCanvas(recUpdate: IRecUpdate): void {
         if (recUpdate.clear) {
             this._updated = {};
         }

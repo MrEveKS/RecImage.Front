@@ -3,7 +3,7 @@ import { Observable } from "rxjs";
 
 import { ImageListService } from "src/services/image-list.service";
 
-import { IImageListItem } from "src/app/preview/models/image-list-item.interface";
+import { IImageListItem } from "src/app/image-collection/models/image-list-item.interface";
 import { environment } from "src/environments/environment";
 import { map } from "rxjs/operators";
 

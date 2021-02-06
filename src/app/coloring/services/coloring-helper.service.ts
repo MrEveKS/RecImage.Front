@@ -1,6 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 // interfaces
 import { IColoringSettings } from '../models/coloring-settings.interface';
+import { IRecUpdate } from '../models/rec-update.interface';
 // contants
 import { COLOR_STEPS } from '../models/constants/color-steps.constant';
 import { DEFAULT_ZOOM, DEFAULT_COLOR_STEPS_INDEX, DEFAULT_SIZES_INDEX } from '../models/constants/coloring-settings.constants';
@@ -16,12 +17,10 @@ export class ColoringHelperService {
     public onZoomChange = new EventEmitter();
     public onSettingsChange = new EventEmitter();
     public onFilesSelect = new EventEmitter();
+    public onUpdateCanvas = new EventEmitter<IRecUpdate>();
 
     constructor() {
         this._initDefaultSettings();
-        this.onZoomChange.subscribe(() => {
-            console.log(this.coloringSettings.zoom);
-        });
     }
 
     private _initDefaultSettings(): void {
