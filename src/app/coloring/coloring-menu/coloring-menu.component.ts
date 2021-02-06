@@ -1,4 +1,6 @@
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { ReplaySubject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 // interfaces
 import { IColoringSettings } from "../models/coloring-settings.interface";
 import { ColoringHelperService } from "../services/coloring-helper.service";
@@ -9,7 +11,7 @@ const { clearTimeout, setTimeout } = window;
     styleUrls: ['./coloring-menu.component.scss'],
     templateUrl: './coloring-menu.component.html',
 })
-export class ColoringMenuComponent implements OnInit {
+export class ColoringMenuComponent implements AfterViewInit, OnInit, OnDestroy {
 
     public coloringSettings!: IColoringSettings;
 
@@ -25,12 +27,30 @@ export class ColoringMenuComponent implements OnInit {
     private _sizeInfo: ElementRef<HTMLDivElement>;
 
     private _timeId: number;
+    private _destroy = new ReplaySubject<number>(1);
+
+    /**
+     * On navigate emiit after init view
+     */
+    private _afterInitAction: () => void;
 
     public constructor(private _coloringHelper: ColoringHelperService) {
+        this._coloringHelper.onFilesSelectFromNavigate
+            .pipe(takeUntil(this._destroy))
+            .subscribe(() => this.handleSelectPhoto());
     }
 
     public ngOnInit(): void {
         this.coloringSettings = this._coloringHelper.coloringSettings;
+    }
+
+    public ngAfterViewInit(): void {
+        this._afterInitCall();
+    }
+
+    public ngOnDestroy(): void {
+        this._destroy.next(null);
+        this._destroy.complete();
     }
 
     public resize(zoom: number): void {
@@ -84,7 +104,15 @@ export class ColoringMenuComponent implements OnInit {
     }
 
     public handleSelectPhoto(): void {
-        this._fileInput.nativeElement.click();
+        const selectPhoto = () => {
+            this._fileInput.nativeElement.click();
+        };
+
+        if (!this._fileInput || !this._fileInput.nativeElement) {
+            this._afterInitAction = selectPhoto;
+        } else {
+            selectPhoto();
+        }
     }
 
     private _settingsChange(): void {
@@ -108,5 +136,12 @@ export class ColoringMenuComponent implements OnInit {
 
     private _hideElement(html: HTMLElement): void {
         html.style.display = 'none';
+    }
+
+    private _afterInitCall(): void {
+        if (this._afterInitAction) {
+            this._afterInitAction();
+            this._afterInitAction = null;
+        }
     }
 }

@@ -73,7 +73,7 @@ export class ColoringComponent implements OnInit, OnDestroy {
         if (id) {
             this._loadById(id);
         } else {
-            // TODO: image select
+            this._coloringHelper.onFilesSelectFromNavigate.emit();
         }
     }
 

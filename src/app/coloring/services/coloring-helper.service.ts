@@ -17,6 +17,7 @@ export class ColoringHelperService {
     public onZoomChange = new EventEmitter();
     public onSettingsChange = new EventEmitter();
     public onFilesSelect = new EventEmitter();
+    public onFilesSelectFromNavigate = new EventEmitter();
     public onUpdateCanvas = new EventEmitter<IRecUpdate>();
 
     constructor() {
