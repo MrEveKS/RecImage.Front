@@ -19,7 +19,7 @@
                 </div>
                 <div class="col-sm-6 col-md">
                     <h2 class="h2">Отправить сообщение</h2>
-                    <form [formGroup]="contactForm">
+                    <form [formGroup]="contactForm" autocomplete="off">
                         <div class="form-group">
                             <label for="name"><span>Имя</span> (обязательно)</label>
                             <input class="form-control" name="name" formControlName="userName" aria-label="name"
@@ -49,12 +49,10 @@
                             </div>
                         </div>
                         <button type="button" class="btn btn-primary" (click)="submit()"
-                            [disabled]="contactForm.invalid">Отправить</button>
+                            [disabled]="contactForm.invalid || contactForm.disabled">Отправить</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<!--<footer-select></footer-select>-->

@@ -1,31 +1,64 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ReplaySubject } from 'rxjs';
+import { catchError, takeUntil } from 'rxjs/operators';
 // interfaces
-import { IContectMessage } from './contact-message.interface';
+import { IContactMessage } from './models/contact-message.interface';
+
+import { ContactService } from './services/contact.service';
 
 @Component({
     selector: 'contact',
     styleUrls: ['./contact.component.scss'],
     templateUrl: './contact.component.html',
 })
-export class ContactComponent implements OnInit {
+export class ContactComponent implements OnInit, OnDestroy {
 
     public contactForm: FormGroup;
+
+    private _destroy = new ReplaySubject<number>(1);
+
+    public constructor(private _contactService: ContactService) {
+    }
 
     public ngOnInit(): void {
         this._itinForm();
     }
 
+    public ngOnDestroy(): void {
+        this._destroy.next(null);
+        this._destroy.complete();
+    }
+
     public submit(): void {
-        const message = this.contactForm.value as IContectMessage;
-        console.log(message);
+        if (!this.contactForm.valid) {
+            Object.keys(this.contactForm.controls)
+                .forEach((controlName) => this.contactForm.controls[controlName].markAsTouched());
+            return;
+        }
+
+        this.contactForm.disable();
+        const message = this.contactForm.value as IContactMessage;
+        this._contactService.postMessage(message)
+            .pipe(
+                catchError((error: Error) => {
+                    this.contactForm.enable();
+                    console.error(error);
+                    return null;
+                }),
+                takeUntil(this._destroy)
+            )
+            .subscribe(() => {
+                this.contactForm.enable();
+                this.contactForm.reset();
+            });
     }
 
     private _itinForm(): void {
         this.contactForm = new FormGroup({
-            "userName": new FormControl("", [ Validators.required ]),
-            "userEmail": new FormControl("", [ Validators.required, Validators.email ]),
-            "userMessage": new FormControl("", [ Validators.required ])
+            "userName": new FormControl("", [Validators.required, Validators.maxLength(50)]),
+            "userEmail": new FormControl("", [Validators.required, Validators.email, Validators.maxLength(50)]),
+            "userMessage": new FormControl("", [Validators.required, Validators.maxLength(500)])
         });
     }
 

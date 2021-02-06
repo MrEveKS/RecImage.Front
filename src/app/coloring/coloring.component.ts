@@ -28,7 +28,7 @@ export class ColoringComponent implements OnInit, OnDestroy {
     private _destroy = new ReplaySubject<number>(1);
 
     public constructor(route: ActivatedRoute,
-        public coloringHelper: ColoringHelperService,
+        private _coloringHelper: ColoringHelperService,
         private _http: ImageConverterService,
         private _cash: InMemoryCashService) {
         this._queryObservable = route.params.pipe(
@@ -42,11 +42,11 @@ export class ColoringComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        this._coloringSettings = this.coloringHelper.coloringSettings;
-        this.coloringHelper.onSettingsChange
+        this._coloringSettings = this._coloringHelper.coloringSettings;
+        this._coloringHelper.onSettingsChange
             .pipe(takeUntil(this._destroy))
             .subscribe(() => this._settingsChange());
-        this.coloringHelper.onFilesSelect
+        this._coloringHelper.onFilesSelect
             .pipe(takeUntil(this._destroy))
             .subscribe(() => this._filesSelect());
         this._queryObservable
@@ -128,7 +128,7 @@ export class ColoringComponent implements OnInit, OnDestroy {
                 return of(null as IRecUpdate);
             }
             this._cash.saveToCash(res, this._coloringSettings.settings);
-            this.coloringHelper.onUpdateCanvas
+            this._coloringHelper.onUpdateCanvas
                 .emit({
                     recColor: res,
                     clear: clear,
