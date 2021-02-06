@@ -53,10 +53,12 @@ export class ColoringBoardComponent implements OnInit, AfterViewInit, AfterViewC
     }
 
     public ngAfterViewInit(): void {
-        this._context = this._canvasContainer.nativeElement
-            .getContext('2d', { alpha: false });
+        const canvas = this._canvasContainer.nativeElement;
+        this._context = canvas.getContext('2d', { alpha: false, desynchronized: true });
         this._context.imageSmoothingEnabled = false;
         this._context.globalCompositeOperation = 'source-over';
+        canvas.width = 0;
+        canvas.height = 0;
     }
 
     public ngOnInit(): void {
