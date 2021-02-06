@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+
 
 import { ColoringRoutingModule } from './coloring-routing.module';
 
@@ -10,9 +12,14 @@ import { ColoringBoardComponent } from './coloring-board/coloring-board.componen
 import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 
 @NgModule({
-    imports: [ColoringRoutingModule, CommonModule, FormsModule, ColoringRoutingModule],
+    imports: [
+        NgbDropdownModule,
+        ColoringRoutingModule,
+        CommonModule,
+        FormsModule,
+        ColoringRoutingModule
+    ],
     declarations: [ColoringComponent, ColoringMenuComponent, ProgressBarComponent, ColoringBoardComponent]
 })
 export class ColoringModule {
-
 }
