@@ -7,7 +7,8 @@ import { fromEvent } from "rxjs";
 // interfaces
 import { IColRow } from "src/app/coloring/models/col-row.interface";
 import { IRecColor } from "src/app/coloring/models/rec-color.interface";
-import { IRecUpdate } from "src/app/game/game.component";
+import { IRecUpdate } from "../models/rec-update.interface";
+
 import { ColoringHelperService } from "../services/coloring-helper.service";
 
 @Component({

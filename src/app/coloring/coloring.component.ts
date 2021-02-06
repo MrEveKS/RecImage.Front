@@ -4,7 +4,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, finalize, map } from 'rxjs/operators';
 // interfaces
-import { IRecUpdate } from '../game/game.component';
+import { IRecUpdate } from './models/rec-update.interface';
 import { IRecColor } from './models/rec-color.interface';
 import { IColoringSettings } from './models/coloring-settings.interface';
 // services

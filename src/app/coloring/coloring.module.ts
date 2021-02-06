@@ -17,7 +17,6 @@ import { ProgressBarComponent } from './progress-bar/progress-bar.component';
         ColoringRoutingModule,
         CommonModule,
         FormsModule,
-        ColoringRoutingModule
     ],
     declarations: [ColoringComponent, ColoringMenuComponent, ProgressBarComponent, ColoringBoardComponent]
 })

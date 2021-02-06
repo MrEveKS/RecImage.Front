@@ -42,5 +42,13 @@
 }
 
 .form-group span {
-    font-weight: 600;
+  font-weight: 600;
+}
+
+.ng-invalid.ng-touched {
+  border-color: #dc3545;
+}
+
+.ng-valid.ng-touched {
+  border-color: #28a745;
 }
