@@ -55,6 +55,10 @@ export class ColoringMenuComponent implements AfterViewInit, OnInit, OnDestroy {
         this._destroy.complete();
     }
 
+    public toggleMenu(): void {
+        this.showMenu = !this.showMenu;
+    }
+
     public resize(zoom: number): void {
         this.coloringSettings.zoom = zoom;
         this._coloringHelper.onZoomChange.emit();
