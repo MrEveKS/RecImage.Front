@@ -2,6 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { AppTitleService } from 'src/services/app-title.service';
 
 import { ImageListService } from 'src/services/image-list.service';
 
@@ -15,9 +16,11 @@ export class HomeComponent implements OnDestroy {
     private _destroy = new ReplaySubject<number>(1);
 
     public constructor(
+        titleService: AppTitleService,
         private _imageListService: ImageListService,
         private _route: ActivatedRoute,
         private _router: Router) {
+            titleService.setTitle('главная страница');
     }
 
     public ngOnDestroy(): void {

@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReplaySubject } from 'rxjs';
 import { catchError, takeUntil } from 'rxjs/operators';
+import { AppTitleService } from 'src/services/app-title.service';
 // interfaces
 import { IContactMessage } from './models/contact-message.interface';
 
@@ -18,7 +19,11 @@ export class ContactComponent implements OnInit, OnDestroy {
 
     private _destroy = new ReplaySubject<number>(1);
 
-    public constructor(private _contactService: ContactService) {
+    public constructor(
+        titleService: AppTitleService,
+        private _contactService: ContactService
+    ) {
+        titleService.setTitle('контакты');
     }
 
     public ngOnInit(): void {

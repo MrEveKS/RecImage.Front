@@ -11,6 +11,7 @@ import { IColoringSettings } from './models/coloring-settings.interface';
 import { ImageConverterService } from './services/image-converter.service';
 import { InMemoryCashService } from './services/in-memory-cash.service';
 import { ColoringHelperService } from './services/coloring-helper.service';
+import { AppTitleService } from 'src/services/app-title.service';
 
 @Component({
     selector: 'coloring',
@@ -27,10 +28,13 @@ export class ColoringComponent implements OnInit, OnDestroy {
 
     private _destroy = new ReplaySubject<number>(1);
 
-    public constructor(route: ActivatedRoute,
+    public constructor(
+        titleService: AppTitleService,
+        route: ActivatedRoute,
         private _coloringHelper: ColoringHelperService,
         private _http: ImageConverterService,
         private _cash: InMemoryCashService) {
+        titleService.setTitle('раскраска');
         this._queryObservable = route.params.pipe(
             map((params: Params) => {
                 const param = params['id'];

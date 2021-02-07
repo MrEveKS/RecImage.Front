@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AppTitleService } from 'src/services/app-title.service';
 
 @Component({
     selector: 'about',
@@ -6,4 +7,9 @@ import { Component } from '@angular/core';
     templateUrl: './about.component.html',
 })
 export class AboutComponent {
+
+    constructor(titleService: AppTitleService) {
+        titleService.setTitle('о нас');
+    }
+
 }
