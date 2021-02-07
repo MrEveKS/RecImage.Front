@@ -9,9 +9,8 @@ export class AppTitleService {
     constructor(private titleService: Title) { }
 
     public setTitle(newTitle: string): void {
-        const currentTitle = this._getTitle();
-
-        this.titleService.setTitle(`${currentTitle.split(':')[0]}: ${newTitle}`);
+        const currentTitle = this._getTitle().split('|')[0].trim();
+        this.titleService.setTitle(`${currentTitle} | ${newTitle}`);
     }
 
     private _getTitle(): string {
