@@ -5,6 +5,7 @@ import { ICashSettings } from "./cash-settings.interface";
  * Coloring Settins
  */
 export interface IColoringSettings {
+    loading: boolean;
     zoom: number;
     imageFiles: FileList;
     settings: ICashSettings;

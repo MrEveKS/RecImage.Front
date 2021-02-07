@@ -26,6 +26,7 @@ export class ColoringHelperService {
 
     private _initDefaultSettings(): void {
         this.coloringSettings = {
+            loading: false,
             zoom: DEFAULT_ZOOM,
             colorSteps: COLOR_STEPS,
             imageFiles: null,

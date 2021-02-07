@@ -221,7 +221,10 @@ export class ColoringBoardComponent implements OnInit, AfterViewInit, AfterViewC
             this._fillContext(small, size);
         }
 
-        setTimeout(() => this._updateCanvasPosition());
+        setTimeout(() => {
+            this._updateCanvasPosition();
+            this._loading(false);
+        });
     }
 
     private _fillContext(points: IColRow[], size: number) {
@@ -291,6 +294,10 @@ export class ColoringBoardComponent implements OnInit, AfterViewInit, AfterViewC
             this._afterInitAction();
             this._afterInitAction = null;
         }
+    }
+
+    private _loading(loading: boolean): void {
+        this._coloringHelper.coloringSettings.loading = loading;
     }
 
 }

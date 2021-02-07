@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
 import { Observable, of, ReplaySubject } from 'rxjs';
@@ -19,9 +19,6 @@ import { AppTitleService } from 'src/services/app-title.service';
     templateUrl: './coloring.component.html',
 })
 export class ColoringComponent implements OnInit, OnDestroy {
-
-    @Output()
-    public onGameLoading = new EventEmitter<boolean>();
 
     private _coloringSettings!: IColoringSettings;
     private readonly _queryObservable: Observable<number | null>;
@@ -129,6 +126,7 @@ export class ColoringComponent implements OnInit, OnDestroy {
             takeUntil(this._destroy),
         ).subscribe((res: IRecColor) => {
             if (!res) {
+                this._loading(false);
                 return of(null as IRecUpdate);
             }
             this._cash.saveToCash(res, this._coloringSettings.settings);
@@ -138,14 +136,12 @@ export class ColoringComponent implements OnInit, OnDestroy {
                     clear: clear,
                     colorSave: this._coloringSettings.settings.colorSave,
                 });
-            this._loading(false);
-
         });
 
     }
 
     private _loading(loading: boolean): void {
-        this.onGameLoading.emit(loading);
+        this._coloringSettings.loading = loading;
     }
 
 }

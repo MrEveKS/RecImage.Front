@@ -10,8 +10,6 @@ import { filter, map } from 'rxjs/operators';
 })
 export class AppComponent {
 
-    public loading: boolean;
-
     public hideFooterSelect$: Observable<boolean>;
 
     public constructor(router: Router) {
@@ -20,10 +18,6 @@ export class AppComponent {
                 filter((event: RouterEvent) => event instanceof NavigationEnd),
                 map((data: NavigationEnd) => data.url.indexOf('coloring') !== -1)
             );
-    }
-
-    public gameLoading(loading: boolean): void {
-        this.loading = loading;
     }
 
 }

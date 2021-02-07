@@ -8,6 +8,7 @@ import { ColoringComponent } from './coloring.component';
 import { ColoringMenuComponent } from './coloring-menu/coloring-menu.component';
 import { ColoringBoardComponent } from './coloring-board/coloring-board.component';
 import { ProgressBarComponent } from './progress-bar/progress-bar.component';
+import { SpinnerComponent } from './spinner/spinner.component';
 
 @NgModule({
     imports: [
@@ -15,7 +16,7 @@ import { ProgressBarComponent } from './progress-bar/progress-bar.component';
         CommonModule,
         FormsModule,
     ],
-    declarations: [ColoringComponent, ColoringMenuComponent, ProgressBarComponent, ColoringBoardComponent]
+    declarations: [ColoringComponent, ColoringMenuComponent, ProgressBarComponent, ColoringBoardComponent, SpinnerComponent]
 })
 export class ColoringModule {
 }

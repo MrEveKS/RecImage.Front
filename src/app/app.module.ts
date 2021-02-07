@@ -11,7 +11,6 @@ import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
-import { SpinnerComponent } from './spinner/spinner.component';
 import { NavComponent } from './nav/nav.component';
 import { FooterSelectComponent } from './footer/footer-select/footer-select.component';
 import { FooterComponent } from './footer/footer.component';
@@ -33,7 +32,6 @@ import { FooterComponent } from './footer/footer.component';
     ],
     declarations: [
         AppComponent,
-        SpinnerComponent,
         NavComponent,
         FooterComponent,
         FooterSelectComponent,
