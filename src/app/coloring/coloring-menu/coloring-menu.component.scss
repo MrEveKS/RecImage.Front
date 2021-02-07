@@ -1,8 +1,38 @@
+.main-nav {
+  z-index: 1;
+  background-color: white;
+  position: relative;
+  height: 3rem;
+  padding: 6px;
+  .range-menu {
+    max-width: 80%;
+  }
+  .form-control-range {
+    padding: 0;
+  }
+  .btn-nav {
+    position: absolute;
+    bottom: 6px;
+    z-index: 2;
+    background-color: transparent;
+    padding: 0.1rem;
+    border-color: #343a40;
+    opacity: 0.6;
+  }
+  .btn-nav:hover,
+  .btn-nav:active,
+  .btn-nav:focus {
+    opacity: 1;
+  }
+  .btn-back {
+    left: 4px;
+  }
+  .btn-menu {
+    right: 4px;
+  }
+}
+
 .game-menu {
-  position: absolute;
-  right: 4px;
-  bottom: 22px;
-  z-index: 2;
   ::after {
     display: none;
   }
@@ -57,34 +87,5 @@
         min-width: 7rem;
       }
     }
-  }
-}
-
-.main-nav {
-  z-index: 1;
-  background-color: white;
-  position: relative;
-  height: 50px;
-  padding: 6px;
-  .range-menu {
-    max-width: 80%;
-  }
-  .form-control-range {
-    padding: 0;
-  }
-  .btn-back {
-    position: absolute;
-    bottom: 6px;
-    z-index: 2;
-    left: 4px;
-    background-color: transparent;
-    padding: 0.1rem;
-    border-color: #343a40;
-    opacity: 0.6;
-  }
-  .btn-back:hover,
-  .btn-back:active,
-  .btn-back:focus {
-    opacity: 1;
   }
 }
