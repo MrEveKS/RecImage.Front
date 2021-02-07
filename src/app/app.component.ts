@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavigationEnd, Router, RouterEvent } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
 @Component({
@@ -10,7 +10,7 @@ import { filter, map } from 'rxjs/operators';
 })
 export class AppComponent {
 
-    public hideFooterSelect$: Observable<boolean>;
+    public hideFooterSelect$: Observable<boolean> = of(true);
 
     public constructor(router: Router) {
         this.hideFooterSelect$ = router.events
