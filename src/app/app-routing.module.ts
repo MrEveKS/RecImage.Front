@@ -10,7 +10,10 @@ const mainRoutes: Routes = [
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(mainRoutes)],
+    imports: [RouterModule.forRoot(mainRoutes, {
+        scrollPositionRestoration: 'enabled',
+        scrollOffset: [0, 0],
+    })],
     exports: [RouterModule]
 })
 export class AppRoutingModule { }
