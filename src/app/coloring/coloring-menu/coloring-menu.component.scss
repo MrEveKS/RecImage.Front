@@ -17,11 +17,13 @@
     background-color: transparent;
     padding: 0.1rem;
     border-color: #343a40;
+  }
+  .btn-hovered {
     opacity: 0.6;
   }
-  .btn-nav:hover,
-  .btn-nav:active,
-  .btn-nav:focus {
+  .btn-hovered:hover,
+  .btn-hovered:active,
+  .btn-hovered:focus {
     opacity: 1;
   }
   .btn-back {
@@ -44,8 +46,10 @@
     min-width: 3.8rem;
     background-color: #000000a0;
     border-radius: 3px;
-    padding: 0.175rem;
-    top: -14px !important;
+    padding: 0.25rem;
+    position: absolute;
+    right: 4px;
+    bottom: calc(100% + 0.75rem);
     button {
       position: relative;
       background-color: #ffffffd0;

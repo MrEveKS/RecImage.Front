@@ -15,6 +15,8 @@ export class ColoringMenuComponent implements AfterViewInit, OnInit, OnDestroy {
 
     public coloringSettings!: IColoringSettings;
 
+    public showMenu = false;
+
     @ViewChild('fileInput', { read: ElementRef })
     private _fileInput: ElementRef<HTMLInputElement>;
     @ViewChild('saveInfo', { read: ElementRef })
