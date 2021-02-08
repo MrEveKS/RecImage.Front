@@ -60,14 +60,12 @@ export class ColoringBoardComponent implements OnInit, AfterViewInit, AfterViewC
     public ngAfterViewChecked(): void {
         if (!this._updatePosition) return;
         this._updatePosition = false;
-        this._updateCanvasPosition();
+        this._updateCanvasPosition(this._context.canvas);
     }
 
     public ngAfterViewInit(): void {
         const canvas = this._canvasContainer.nativeElement;
-        this._context = canvas.getContext('2d', { alpha: false, desynchronized: true });
-        this._context.imageSmoothingEnabled = false;
-        this._context.globalCompositeOperation = 'source-over';
+        this._context = this._getContext(canvas, false);
         canvas.width = 0;
         canvas.height = 0;
 
@@ -131,8 +129,9 @@ export class ColoringBoardComponent implements OnInit, AfterViewInit, AfterViewC
             this._totalColors = Object.keys(this.recColor.cellsColor).length;
             this._emptyData(recUpdate.colorSave);
             this._generateColorPoint();
-            this._resizeCanvas();
-            this._generateCanvas();
+
+            this._fillCanvas();
+
             if (!recUpdate.clear && recUpdate.colorSave) {
                 this._updateProgress();
             }
@@ -143,6 +142,27 @@ export class ColoringBoardComponent implements OnInit, AfterViewInit, AfterViewC
         } else {
             updateCanvasAction();
         }
+    }
+
+    private _getContext(canvas: HTMLCanvasElement, desynchronized: boolean): CanvasRenderingContext2D {
+        const context = canvas.getContext('2d', { alpha: false, desynchronized: desynchronized });
+        context.imageSmoothingEnabled = false;
+        context.globalCompositeOperation = 'source-over';
+        return context;
+    }
+
+    private _fillCanvas(): void {
+        const canvas = this._renderer.createElement('canvas');
+        const context = this._getContext(canvas, true);
+        const originCanvas = this._canvasContainer.nativeElement;
+
+        this._resizeCanvas(canvas);
+        this._resizeCanvas(originCanvas);
+
+        this._generateCanvas(context);
+        this._canvasPositionChange(originCanvas);
+
+        this._context.drawImage(canvas, 0, 0);
     }
 
     private _emptyData(colorSave: boolean): void {
@@ -175,14 +195,12 @@ export class ColoringBoardComponent implements OnInit, AfterViewInit, AfterViewC
         return { x, y };
     }
 
-    private _generateCanvas(): void {
+    private _generateCanvas(context: CanvasRenderingContext2D): void {
         const size: number = this._defaultRecSize;
         const updated: { [key: string]: boolean } = this._updated;
         const colorPoint: { [key: string]: IColRow[] } = this.colorPoint;
         const updatedColors = Object.keys(updated).filter((key) => updated[key]);
         const colors = Object.keys(colorPoint).filter((key) => updatedColors.indexOf(key) === -1);
-
-        const context = this._context;
 
         for (let index = 0, length = updatedColors.length; index < length; index += 1) {
             const color = updatedColors[index];
@@ -212,57 +230,53 @@ export class ColoringBoardComponent implements OnInit, AfterViewInit, AfterViewC
             context.textAlign = "center";
             context.textBaseline = "middle";
 
-            this._fillContext(big, size);
+            this._fillContext(context, big, size);
 
             context.font = "11px Arial";
             context.textAlign = "center";
             context.textBaseline = "middle";
 
-            this._fillContext(small, size);
+            this._fillContext(context, small, size);
         }
 
         setTimeout(() => {
-            this._updateCanvasPosition();
+            this._updateCanvasPosition(context.canvas);
             this._loading(false);
         });
     }
 
-    private _fillContext(points: IColRow[], size: number) {
+    private _fillContext(context: CanvasRenderingContext2D, points: IColRow[], size: number) {
         for (let pointIndex = 0; pointIndex < points.length; pointIndex++) {
             const point = points[pointIndex];
             const x = point.col * size;
             const y = point.row * size;
 
-            this._context.fillStyle = '#fff';
-            this._context.fillRect(x, y, size, size);
-            this._context.fillStyle = '#666';
+            context.fillStyle = '#fff';
+            context.fillRect(x, y, size, size);
+            context.fillStyle = '#666';
 
-            this._context.strokeRect(x + 2, y + 2, size - 4, size - 4);
-            this._context.fillText(point.num.toString(), (x - size / 2) + size, (y - size / 2) + size);
+            context.strokeRect(x + 2, y + 2, size - 4, size - 4);
+            context.fillText(point.num.toString(), (x - size / 2) + size, (y - size / 2) + size);
         }
     }
 
-    private _resizeCanvas(): void {
-        const canvas = this._canvasContainer.nativeElement;
+    private _resizeCanvas(canvas: HTMLCanvasElement): void {
         const points = this.recColor.cells;
-
         const height = points.length * this._defaultRecSize;
         const width = points[0].length * this._defaultRecSize;
         canvas.height = height;
         canvas.width = width;
-        this._canvasPositionChange({ canvasWidth: width * this.zoom / 100, canvasHeight: height * this.zoom / 100 });
     }
 
-    private _updateCanvasPosition(): void {
+    private _updateCanvasPosition(canvas: HTMLCanvasElement): void {
         if (this.zoom === 100) return;
-        const canvas = this._canvasContainer.nativeElement;
+        this._canvasPositionChange(canvas);
+    }
+
+    private _canvasPositionChange(canvas: HTMLCanvasElement): void {
         const canvasWidth = +canvas.width * this.zoom / 100;
         const canvasHeight = +canvas.height * this.zoom / 100;
-        this._canvasPositionChange({ canvasWidth, canvasHeight })
-    }
 
-    private _canvasPositionChange({ canvasWidth, canvasHeight }): void {
-        const canvas = this._canvasContainer.nativeElement;
         const canvasContainer = this._container.nativeElement;
         const canvasContainerWidth = +canvasContainer.clientWidth;
         const canvasContainerHeight = +canvasContainer.clientHeight;
