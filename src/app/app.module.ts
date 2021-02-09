@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { NgbCollapseModule, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { MetrikaModule } from 'ng-yandex-metrika';
 
 import { APP_BASE_HREF, CommonModule, LocationStrategy, PathLocationStrategy } from '@angular/common';
 
@@ -28,6 +29,9 @@ import { FooterComponent } from './footer/footer.component';
         BrowserModule,
         FormsModule,
         HttpClientModule,
+        MetrikaModule.forRoot({
+            id: 70474984, webvisor: true, clickmap: true,
+        }),
         ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
     ],
     declarations: [
@@ -39,3 +43,16 @@ import { FooterComponent } from './footer/footer.component';
     bootstrap: [AppComponent]
 })
 export class AppModule { }
+/*
+    params?: any;
+    clickmap?: boolean;
+    trackLinks?: boolean;
+    accurateTrackBounce?: boolean;
+    webvisor?: boolean;
+    trackHash?: boolean;
+    ut?: string;
+    ecommerce?: string;
+    triggerEvent?: boolean;
+    alternative?: boolean;
+
+*/

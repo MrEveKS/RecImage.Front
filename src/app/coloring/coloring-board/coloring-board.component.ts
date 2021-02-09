@@ -2,6 +2,7 @@ import { DOCUMENT } from "@angular/common";
 import {
     AfterViewChecked, AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit, Renderer2, ViewChild
 } from "@angular/core";
+import { Metrika } from "ng-yandex-metrika";
 import { fromEvent, ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 
@@ -9,7 +10,9 @@ import { takeUntil } from "rxjs/operators";
 import { IColRow } from "src/app/coloring/models/col-row.interface";
 import { IRecColor } from "src/app/coloring/models/rec-color.interface";
 import { IRecUpdate } from "../models/rec-update.interface";
-
+// constants
+import { COLORING_CLICK, COLORING_TOMING } from "../models/constants/metrik.constant";
+// services
 import { ColoringHelperService } from "../services/coloring-helper.service";
 
 @Component({
@@ -46,12 +49,14 @@ export class ColoringBoardComponent implements OnInit, AfterViewInit, AfterViewC
     private _afterInitAction: () => void;
 
     private _destroy = new ReplaySubject<number>(1);
+    private _visitTime: number;
 
-    constructor(private _renderer: Renderer2,
+    constructor(
+        private _metrika: Metrika,
+        private _renderer: Renderer2,
         private _coloringHelper: ColoringHelperService,
         @Inject(DOCUMENT) document: Document) {
         this._defaultView = document.defaultView;
-
         this._coloringHelper.onUpdateCanvas
             .pipe(takeUntil(this._destroy))
             .subscribe((recUpdate: IRecUpdate) => this._updateCanvas(recUpdate));
@@ -70,6 +75,7 @@ export class ColoringBoardComponent implements OnInit, AfterViewInit, AfterViewC
         canvas.height = 0;
 
         this._afterViewChildInitCall();
+        this._visitEventEmmit();
     }
 
     public ngOnInit(): void {
@@ -92,6 +98,8 @@ export class ColoringBoardComponent implements OnInit, AfterViewInit, AfterViewC
      * @param $event click event
      */
     public onCkick($event: MouseEvent): void {
+        this._metrika.fireEvent(COLORING_CLICK);
+
         const recColor = this.recColor;
         const size = this._defaultRecSize;
         const zoomSize = this._defaultRecSize * this.zoom / 100;
@@ -312,6 +320,15 @@ export class ColoringBoardComponent implements OnInit, AfterViewInit, AfterViewC
 
     private _loading(loading: boolean): void {
         this._coloringHelper.coloringSettings.loading = loading;
+    }
+
+    private _visitEventEmmit(): void {
+        if (this._visitTime) {
+            this._defaultView.clearTimeout(this._visitTime);
+        }
+        this._visitTime = this._defaultView.setTimeout(() => {
+            this._metrika.fireEvent(COLORING_TOMING);
+        }, 5 * 60 * 1000);
     }
 
 }
