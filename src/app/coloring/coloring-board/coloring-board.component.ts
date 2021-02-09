@@ -49,6 +49,8 @@ export class ColoringBoardComponent implements OnInit, AfterViewInit, AfterViewC
     private _afterInitAction: () => void;
 
     private _destroy = new ReplaySubject<number>(1);
+
+    private _coloringClicked = false;
     private _visitTime: number;
 
     constructor(
@@ -98,7 +100,10 @@ export class ColoringBoardComponent implements OnInit, AfterViewInit, AfterViewC
      * @param $event click event
      */
     public onCkick($event: MouseEvent): void {
-        this._metrika.fireEvent(COLORING_CLICK);
+        if (!this._coloringClicked) {
+            this._coloringClicked = true;
+            this._metrika.fireEvent(COLORING_CLICK);
+        }
 
         const recColor = this.recColor;
         const size = this._defaultRecSize;
