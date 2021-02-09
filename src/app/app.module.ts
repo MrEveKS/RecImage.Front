@@ -16,6 +16,8 @@ import { NavComponent } from './nav/nav.component';
 import { FooterSelectComponent } from './footer/footer-select/footer-select.component';
 import { FooterComponent } from './footer/footer.component';
 
+const yaMetrikId = environment.production ? 70474984 : 72180016;
+
 @NgModule({
     providers: [
         { provide: APP_BASE_HREF, useValue: '' },
@@ -30,7 +32,7 @@ import { FooterComponent } from './footer/footer.component';
         FormsModule,
         HttpClientModule,
         MetrikaModule.forRoot({
-            id: 70474984, webvisor: true, clickmap: true,
+            id: yaMetrikId, webvisor: true, clickmap: true,
         }),
         ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
     ],
