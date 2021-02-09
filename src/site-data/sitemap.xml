@@ -4,19 +4,19 @@
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 
   <url>
-    <loc>https://recimage.ru/</loc>
+    <loc>https://www.recimage.ru/</loc>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://recimage.ru/about</loc>
+    <loc>https://www.recimage.ru/about</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recimage.ru/contact</loc>
+    <loc>https://www.recimage.ru/contact</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://recimage.ru/coloring</loc>
+    <loc>https://www.recimage.ru/coloring</loc>
     <priority>0.1</priority>
   </url>
 
