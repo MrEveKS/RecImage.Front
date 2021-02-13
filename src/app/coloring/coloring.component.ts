@@ -81,7 +81,7 @@ export class ColoringComponent implements OnInit, OnDestroy {
     private _settingsChange(): void {
         if (this._coloringSettings.settings.fileName) {
             this._filesSelect();
-        } else {
+        } else if (this._coloringSettings.settings.imageId) {
             this._loadById(this._coloringSettings.settings.imageId);
         }
     }
