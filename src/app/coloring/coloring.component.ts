@@ -74,6 +74,8 @@ export class ColoringComponent implements OnInit, OnDestroy {
         if (id) {
             this._loadById(id);
         } else {
+            this._coloringSettings.settings.fileName = null;
+            this._coloringSettings.settings.imageId = null;
             this._coloringHelper.onFilesSelectFromNavigate.emit();
         }
     }
