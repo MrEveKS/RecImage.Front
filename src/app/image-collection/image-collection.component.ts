@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import {Observable} from "rxjs";
 
 import {ImageListService} from "src/services/image-list.service";
@@ -13,9 +13,6 @@ import {map} from "rxjs/operators";
     templateUrl: './image-collection.component.html',
 })
 export class ImageCollectionComponent implements OnInit {
-
-    @Output()
-    public onImageSelect = new EventEmitter<number>();
 
     public url = environment.url;
     public imageList: Observable<IImageListItem[]>;
@@ -32,10 +29,6 @@ export class ImageCollectionComponent implements OnInit {
                 this.count = res.length;
                 return res;
             }));
-    }
-
-    public imageSelect(id: number): void {
-        this.onImageSelect.emit(id);
     }
 
 }

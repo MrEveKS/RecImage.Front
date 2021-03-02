@@ -61,11 +61,7 @@ export class ColoringComponent implements OnInit, OnDestroy {
         this._destroy.next(null);
         this._destroy.complete();
     }
-
-    public imageSelect(id: number): void {
-        this._loadById(id);
-    }
-
+    
     /**
      * init coloring event
      * @param id image id

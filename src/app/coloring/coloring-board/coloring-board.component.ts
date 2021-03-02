@@ -62,7 +62,7 @@ export class ColoringBoardComponent implements OnInit, AfterViewInit, AfterViewC
     private _visitTime: number;
 
     constructor(
-        private _metrika: Metrika,
+        private _metric: Metrika,
         private _renderer: Renderer2,
         private _coloringHelper: ColoringHelperService,
         @Inject(DOCUMENT) document: Document) {
@@ -107,10 +107,10 @@ export class ColoringBoardComponent implements OnInit, AfterViewInit, AfterViewC
      * On point click
      * @param $event click event
      */
-    public onCkick($event: MouseEvent): void {
+    public onClick($event: MouseEvent): void {
         if (!this._coloringClicked) {
             this._coloringClicked = true;
-            this._metrika.fireEvent(COLORING_CLICK);
+            this._metric.fireEvent(COLORING_CLICK);
         }
 
         const recColor = this.recColor;
@@ -340,7 +340,7 @@ export class ColoringBoardComponent implements OnInit, AfterViewInit, AfterViewC
             this._defaultView.clearTimeout(this._visitTime);
         }
         this._visitTime = this._defaultView.setTimeout(() => {
-            this._metrika.fireEvent(COLORING_TOMING);
+            this._metric.fireEvent(COLORING_TOMING);
         }, 5 * 60 * 1000);
     }
 

@@ -33,7 +33,7 @@ export class ColoringMenuComponent implements AfterViewInit, OnInit, OnDestroy {
     private _destroy = new ReplaySubject<number>(1);
 
     /**
-     * On navigate emiit after init view
+     * On navigate emit after init view
      */
     private _afterInitAction: () => void;
 
@@ -130,18 +130,18 @@ export class ColoringMenuComponent implements AfterViewInit, OnInit, OnDestroy {
         this._timeId && clearTimeout(this._timeId);
         html.style.display = 'block';
         this._timeId = setTimeout(() => {
-            this._hideElement(html);
+            ColoringMenuComponent._hideElement(html);
         }, 2000);
     }
 
     private _hideElements(skip: string): void {
-        skip !== 'saveInfo' && this._hideElement(this._saveInfo.nativeElement);
-        skip !== 'coloredInfo' && this._hideElement(this._coloredInfo.nativeElement);
-        skip !== 'qualityInfo' && this._hideElement(this._qualityInfo.nativeElement);
-        skip !== 'sizeInfo' && this._hideElement(this._sizeInfo.nativeElement);
+        skip !== 'saveInfo' && ColoringMenuComponent._hideElement(this._saveInfo.nativeElement);
+        skip !== 'coloredInfo' && ColoringMenuComponent._hideElement(this._coloredInfo.nativeElement);
+        skip !== 'qualityInfo' && ColoringMenuComponent._hideElement(this._qualityInfo.nativeElement);
+        skip !== 'sizeInfo' && ColoringMenuComponent._hideElement(this._sizeInfo.nativeElement);
     }
 
-    private _hideElement(html: HTMLElement): void {
+    private static _hideElement(html: HTMLElement): void {
         html.style.display = 'none';
     }
 
