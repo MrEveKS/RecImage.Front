@@ -1,19 +1,27 @@
-import { DOCUMENT } from "@angular/common";
+import {DOCUMENT} from "@angular/common";
 import {
-    AfterViewChecked, AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit, Renderer2, ViewChild
+    AfterViewChecked,
+    AfterViewInit,
+    Component,
+    ElementRef,
+    Inject,
+    OnDestroy,
+    OnInit,
+    Renderer2,
+    ViewChild
 } from "@angular/core";
-import { Metrika } from "ng-yandex-metrika";
-import { fromEvent, ReplaySubject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import {Metrika} from "ng-yandex-metrika";
+import {fromEvent, ReplaySubject} from "rxjs";
+import {takeUntil} from "rxjs/operators";
 
 // interfaces
-import { IColRow } from "src/app/coloring/models/col-row.interface";
-import { IRecColor } from "src/app/coloring/models/rec-color.interface";
-import { IRecUpdate } from "../models/rec-update.interface";
+import {IColRow} from "src/app/coloring/models/col-row.interface";
+import {IRecColor} from "src/app/coloring/models/rec-color.interface";
+import {IRecUpdate} from "../models/rec-update.interface";
 // constants
-import { COLORING_CLICK, COLORING_TOMING } from "../models/constants/metrik.constant";
+import {COLORING_CLICK, COLORING_TOMING} from "../models/constants/metrik.constant";
 // services
-import { ColoringHelperService } from "../services/coloring-helper.service";
+import {ColoringHelperService} from "../services/coloring-helper.service";
 
 @Component({
     selector: 'coloring-board',
@@ -29,9 +37,9 @@ export class ColoringBoardComponent implements OnInit, AfterViewInit, AfterViewC
         return this._coloringHelper.coloringSettings.zoom;
     }
 
-    @ViewChild('container', { read: ElementRef })
+    @ViewChild('container', {read: ElementRef})
     private _container: ElementRef<HTMLDivElement>;
-    @ViewChild('canvasContainer', { read: ElementRef })
+    @ViewChild('canvasContainer', {read: ElementRef})
     private _canvasContainer: ElementRef<HTMLCanvasElement>;
     private _context: CanvasRenderingContext2D;
 
@@ -158,7 +166,7 @@ export class ColoringBoardComponent implements OnInit, AfterViewInit, AfterViewC
     }
 
     private _getContext(canvas: HTMLCanvasElement, desynchronized: boolean): CanvasRenderingContext2D {
-        const context = canvas.getContext('2d', { alpha: false, desynchronized: desynchronized });
+        const context = canvas.getContext('2d', {alpha: false, desynchronized: desynchronized});
         context.imageSmoothingEnabled = false;
         context.globalCompositeOperation = 'source-over';
         return context;
@@ -195,7 +203,7 @@ export class ColoringBoardComponent implements OnInit, AfterViewInit, AfterViewC
                 const num = cells[row][col];
                 const color = cellsColor[num];
                 !this.colorPoint[color] && (this.colorPoint[color] = []);
-                this.colorPoint[color].push({ col, row, num });
+                this.colorPoint[color].push({col, row, num});
             }
         }
     }
@@ -205,7 +213,7 @@ export class ColoringBoardComponent implements OnInit, AfterViewInit, AfterViewC
         const rect = canvas.getBoundingClientRect();
         const x = $event.clientX - rect.left;
         const y = $event.clientY - rect.top;
-        return { x, y };
+        return {x, y};
     }
 
     private _generateCanvas(context: CanvasRenderingContext2D): void {

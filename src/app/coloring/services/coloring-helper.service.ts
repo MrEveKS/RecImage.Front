@@ -1,11 +1,15 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 // interfaces
-import { IColoringSettings } from '../models/coloring-settings.interface';
-import { IRecUpdate } from '../models/rec-update.interface';
+import {IColoringSettings} from '../models/coloring-settings.interface';
+import {IRecUpdate} from '../models/rec-update.interface';
 // contants
-import { COLOR_STEPS } from '../models/constants/color-steps.constant';
-import { DEFAULT_ZOOM, DEFAULT_COLOR_STEPS_INDEX, DEFAULT_SIZES_INDEX } from '../models/constants/coloring-settings.constants';
-import { CORING_SIZES } from '../models/constants/coloring-sizes.constant';
+import {COLOR_STEPS} from '../models/constants/color-steps.constant';
+import {
+    DEFAULT_COLOR_STEPS_INDEX,
+    DEFAULT_SIZES_INDEX,
+    DEFAULT_ZOOM
+} from '../models/constants/coloring-settings.constants';
+import {CORING_SIZES} from '../models/constants/coloring-sizes.constant';
 
 @Injectable({
     providedIn: 'root'

@@ -1,4 +1,4 @@
-import { IColoringImageSettings } from "./coloring-image-settings.interface";
+import {IColoringImageSettings} from "./coloring-image-settings.interface";
 
 /**
  * Settins of image converting

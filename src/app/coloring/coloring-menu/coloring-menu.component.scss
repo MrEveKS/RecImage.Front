@@ -4,12 +4,15 @@
   position: relative;
   height: 3rem;
   padding: 6px;
+
   .range-menu {
     max-width: 80%;
   }
+
   .form-control-range {
     padding: 0;
   }
+
   .btn-nav {
     position: absolute;
     bottom: 6px;
@@ -18,17 +21,21 @@
     padding: 0.1rem;
     border-color: #343a40;
   }
+
   .btn-hovered {
     opacity: 0.6;
   }
+
   .btn-hovered:hover,
   .btn-hovered:active,
   .btn-hovered:focus {
     opacity: 1;
   }
+
   .btn-back {
     left: 4px;
   }
+
   .btn-menu {
     right: 4px;
   }
@@ -38,10 +45,12 @@
   ::after {
     display: none;
   }
+
   .dropdown-toggle {
     background-color: transparent;
     padding: 0.1rem;
   }
+
   .menu-btns {
     min-width: 3.8rem;
     background-color: #000000a0;
@@ -50,24 +59,29 @@
     position: absolute;
     right: 4px;
     bottom: calc(100% + 0.75rem);
+
     button {
       position: relative;
       background-color: #ffffffd0;
       padding: 0.1rem;
       display: block;
     }
+
     button:not(:last-of-type) {
       margin-bottom: 0.175rem;
     }
   }
+
   .show {
     .dropdown-toggle {
       opacity: 0.6;
     }
   }
+
   .custom-file-input {
     display: none;
   }
+
   .settings-info {
     display: none;
     position: absolute;
@@ -77,6 +91,7 @@
     background-color: #000000a0;
     border-radius: 3px;
     padding: 0.175rem;
+
     .settings-info__text {
       position: relative;
       background-color: #ffffffd0;
@@ -85,6 +100,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+
       .settings-info__text-center {
         margin: 0;
         text-align: center;

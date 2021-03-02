@@ -1,12 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ReplaySubject } from 'rxjs';
-import { catchError, takeUntil } from 'rxjs/operators';
-import { AppTitleService } from 'src/services/app-title.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {ReplaySubject} from 'rxjs';
+import {catchError, takeUntil} from 'rxjs/operators';
+import {AppTitleService} from 'src/services/app-title.service';
 // interfaces
-import { IContactMessage } from './models/contact-message.interface';
+import {IContactMessage} from './models/contact-message.interface';
 
-import { ContactService } from './services/contact.service';
+import {ContactService} from './services/contact.service';
 
 @Component({
     selector: 'contact',

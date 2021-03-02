@@ -1,9 +1,9 @@
-import { Component, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ReplaySubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import {Component, OnDestroy} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ReplaySubject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
-import { ImageListService } from 'src/services/image-list.service';
+import {ImageListService} from 'src/services/image-list.service';
 
 @Component({
     selector: 'footer-select',
@@ -29,7 +29,7 @@ export class FooterSelectComponent implements OnDestroy {
         this._imageListService.getRandomId()
             .pipe(takeUntil(this._destroy))
             .subscribe((id) => {
-                this._router.navigate(['coloring', id], { relativeTo: this._route });
+                this._router.navigate(['coloring', id], {relativeTo: this._route});
             });
     }
 

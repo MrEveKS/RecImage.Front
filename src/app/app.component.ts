@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
-import { NavigationEnd, Router, RouterEvent } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import {Component} from '@angular/core';
+import {NavigationEnd, Router, RouterEvent} from '@angular/router';
+import {Observable, of} from 'rxjs';
+import {filter, map} from 'rxjs/operators';
 
 @Component({
     selector: 'main-app',

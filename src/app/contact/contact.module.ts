@@ -1,10 +1,10 @@
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import {CommonModule} from '@angular/common';
+import {NgModule} from '@angular/core';
+import {ReactiveFormsModule} from '@angular/forms';
 
-import { ContactRoutingModule } from './contact-routing.module';
+import {ContactRoutingModule} from './contact-routing.module';
 
-import { ContactComponent } from './contact.component';
+import {ContactComponent} from './contact.component';
 
 @NgModule({
     imports: [
@@ -14,4 +14,5 @@ import { ContactComponent } from './contact.component';
     ],
     declarations: [ContactComponent],
 })
-export class ContactModule { }
+export class ContactModule {
+}

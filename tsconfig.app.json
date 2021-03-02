@@ -3,9 +3,16 @@
   "compilerOptions": {
     "types": []
   },
-  "files": ["src/main.ts", "src/polyfills.ts"],
-  "include": ["src/**/*.d.ts"],
-  "exclude": ["src/**/*.worker.ts"],
+  "files": [
+    "src/main.ts",
+    "src/polyfills.ts"
+  ],
+  "include": [
+    "src/**/*.d.ts"
+  ],
+  "exclude": [
+    "src/**/*.worker.ts"
+  ],
   "angularCompilerOptions": {
     "enableIvy": true,
     "disableTypeScriptVersionCheck": true

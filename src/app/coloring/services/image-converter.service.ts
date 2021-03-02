@@ -1,9 +1,9 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { BaseHttpService } from '../../../services/base-http.service';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {BaseHttpService} from '../../../services/base-http.service';
 
-import { IConvertOptions } from 'src/app/coloring/models/convert-options.interface';
+import {IConvertOptions} from 'src/app/coloring/models/convert-options.interface';
 
 @Injectable({
     providedIn: 'root'

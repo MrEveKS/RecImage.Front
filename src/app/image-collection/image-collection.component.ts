@@ -1,11 +1,11 @@
-import { Component, EventEmitter, OnInit, Output } from "@angular/core";
-import { Observable } from "rxjs";
+import {Component, EventEmitter, OnInit, Output} from "@angular/core";
+import {Observable} from "rxjs";
 
-import { ImageListService } from "src/services/image-list.service";
+import {ImageListService} from "src/services/image-list.service";
 
-import { IImageListItem } from "src/app/image-collection/models/image-list-item.interface";
-import { environment } from "src/environments/environment";
-import { map } from "rxjs/operators";
+import {IImageListItem} from "src/app/image-collection/models/image-list-item.interface";
+import {environment} from "src/environments/environment";
+import {map} from "rxjs/operators";
 
 @Component({
     selector: 'image-collection',

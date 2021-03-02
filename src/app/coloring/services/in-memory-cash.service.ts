@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
 // interfaces
-import { IRecColor } from 'src/app/coloring/models/rec-color.interface';
-import { ICashSettings } from '../models/cash-settings.interface';
+import {IRecColor} from 'src/app/coloring/models/rec-color.interface';
+import {ICashSettings} from '../models/cash-settings.interface';
 
 @Injectable({
     providedIn: 'root'

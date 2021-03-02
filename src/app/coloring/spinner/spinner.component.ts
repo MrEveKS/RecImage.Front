@@ -1,8 +1,8 @@
-import { Component, OnInit } from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 
-import { IColoringSettings } from "../models/coloring-settings.interface";
+import {IColoringSettings} from "../models/coloring-settings.interface";
 
-import { ColoringHelperService } from "../services/coloring-helper.service";
+import {ColoringHelperService} from "../services/coloring-helper.service";
 
 @Component({
     selector: 'spinner',

@@ -1,26 +1,26 @@
 <nav class="main-nav">
     <a class="btn btn-nav btn-hovered btn-back" routerLink="">
-        <img class="btn-icon" src="assets/btn-back.svg" width="32" height="32" alt="Menu" />
+        <img class="btn-icon" src="assets/btn-back.svg" width="32" height="32" alt="Menu"/>
     </a>
     <div class="d-flex justify-content-center">
         <div class="col-sm-9 col-md-4 range-menu">
             <div class="input-group range-input">
                 <input type="range" class="form-control form-control-range" min="5" max="150" name="zoom"
-                    aria-label="Zoom" [ngModel]="coloringSettings.zoom" (ngModelChange)="resize($event)">
+                       aria-label="Zoom" [ngModel]="coloringSettings.zoom" (ngModelChange)="resize($event)">
             </div>
         </div>
     </div>
     <nav class="game-menu">
         <button class="btn-menu btn-nav btn-menu btn-hovered btn" type="button" aria-expanded="false"
-            (click)="toggleMenu()">
+                (click)="toggleMenu()">
             <img class="btn-icon" src="assets/menu-icons/settings.icon.svg" width="32" height="32" alt="Menu">
         </button>
         <div class="menu-btns" [hidden]="!showMenu">
             <button class="btn" type="button" (click)="handleColorSave()">
                 <img src="assets/menu-icons/save.svg" [hidden]="!coloringSettings.settings.colorSave" width="48"
-                    height="48" alt="save">
+                     height="48" alt="save">
                 <img src="assets/menu-icons/not-save.svg" [hidden]="coloringSettings.settings.colorSave" width="48"
-                    height="48" alt="save">
+                     height="48" alt="save">
                 <div class="settings-info" #saveInfo>
                     <div class="settings-info__text">
                         <div class="settings-info__text-center">
@@ -31,9 +31,9 @@
             </button>
             <button class="btn" type="button" (click)="handleColored()">
                 <img src="assets/menu-icons/coloring.svg" [hidden]="!coloringSettings.settings.colored" width="48"
-                    height="48" alt="coloring">
+                     height="48" alt="coloring">
                 <img src="assets/menu-icons/no-coloring.svg" [hidden]="coloringSettings.settings.colored" width="48"
-                    height="48" alt="coloring">
+                     height="48" alt="coloring">
                 <div class="settings-info" #coloredInfo>
                     <div class="settings-info__text">
                         <div class="settings-info__text-center">
@@ -66,7 +66,7 @@
                 <img src="assets/menu-icons/select-file.svg" width="48" height="48" alt="select-file">
             </button>
             <input type="file" class="custom-file-input" (change)="filesSelect($event.target.files)" accept="image/*"
-                #fileInput />
+                   #fileInput/>
         </div>
     </nav>
 </nav>

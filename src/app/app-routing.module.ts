@@ -1,12 +1,12 @@
-import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
+import {NgModule} from "@angular/core";
+import {RouterModule, Routes} from "@angular/router";
 
 const mainRoutes: Routes = [
-    { path: 'about', loadChildren: () => import('./about/about-routing.module').then(m => m.AboutRoutingModule) },
-    { path: 'contact', loadChildren: () => import('./contact/contact.module').then(m => m.ContactModule) },
-    { path: 'coloring', loadChildren: () => import('./coloring/coloring.module').then(m => m.ColoringModule) },
-    { path: '', loadChildren: () => import('./home/home.module').then(m => m.HomeModule) },
-    { path: '**', redirectTo: '/' }
+    {path: 'about', loadChildren: () => import('./about/about-routing.module').then(m => m.AboutRoutingModule)},
+    {path: 'contact', loadChildren: () => import('./contact/contact.module').then(m => m.ContactModule)},
+    {path: 'coloring', loadChildren: () => import('./coloring/coloring.module').then(m => m.ColoringModule)},
+    {path: '', loadChildren: () => import('./home/home.module').then(m => m.HomeModule)},
+    {path: '**', redirectTo: '/'}
 ];
 
 @NgModule({
@@ -16,4 +16,5 @@ const mainRoutes: Routes = [
     })],
     exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

@@ -1,11 +1,12 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { ReplaySubject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from "@angular/core";
+import {ReplaySubject} from "rxjs";
+import {takeUntil} from "rxjs/operators";
 // interfaces
-import { IColoringSettings } from "../models/coloring-settings.interface";
-import { ColoringHelperService } from "../services/coloring-helper.service";
+import {IColoringSettings} from "../models/coloring-settings.interface";
+import {ColoringHelperService} from "../services/coloring-helper.service";
 
-const { clearTimeout, setTimeout } = window;
+const {clearTimeout, setTimeout} = window;
+
 @Component({
     selector: 'coloring-menu',
     styleUrls: ['./coloring-menu.component.scss'],
@@ -17,15 +18,15 @@ export class ColoringMenuComponent implements AfterViewInit, OnInit, OnDestroy {
 
     public showMenu = false;
 
-    @ViewChild('fileInput', { read: ElementRef })
+    @ViewChild('fileInput', {read: ElementRef})
     private _fileInput: ElementRef<HTMLInputElement>;
-    @ViewChild('saveInfo', { read: ElementRef })
+    @ViewChild('saveInfo', {read: ElementRef})
     private _saveInfo: ElementRef<HTMLDivElement>;
-    @ViewChild('coloredInfo', { read: ElementRef })
+    @ViewChild('coloredInfo', {read: ElementRef})
     private _coloredInfo: ElementRef<HTMLDivElement>;
-    @ViewChild('qualityInfo', { read: ElementRef })
+    @ViewChild('qualityInfo', {read: ElementRef})
     private _qualityInfo: ElementRef<HTMLDivElement>;
-    @ViewChild('sizeInfo', { read: ElementRef })
+    @ViewChild('sizeInfo', {read: ElementRef})
     private _sizeInfo: ElementRef<HTMLDivElement>;
 
     private _timeId: number;

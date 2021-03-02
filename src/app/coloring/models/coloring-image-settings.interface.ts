@@ -1,5 +1,5 @@
-import { IConvertOptions } from "./convert-options.interface";
-import { IColoringObjectSettings } from "./coloring-object-settings.interface";
+import {IConvertOptions} from "./convert-options.interface";
+import {IColoringObjectSettings} from "./coloring-object-settings.interface";
 
 /**
  * Settins of image converting

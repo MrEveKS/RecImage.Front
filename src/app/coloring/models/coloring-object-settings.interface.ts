@@ -1,4 +1,4 @@
-import { ColorStep } from "./color-step.enum";
+import {ColorStep} from "./color-step.enum";
 
 /**
  * Settins of image converting

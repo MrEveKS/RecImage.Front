@@ -1,17 +1,17 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute, Params} from '@angular/router';
 
-import { Observable, of, ReplaySubject } from 'rxjs';
-import { catchError, map, takeUntil } from 'rxjs/operators';
+import {Observable, of, ReplaySubject} from 'rxjs';
+import {catchError, map, takeUntil} from 'rxjs/operators';
 // interfaces
-import { IRecUpdate } from './models/rec-update.interface';
-import { IRecColor } from './models/rec-color.interface';
-import { IColoringSettings } from './models/coloring-settings.interface';
+import {IRecUpdate} from './models/rec-update.interface';
+import {IRecColor} from './models/rec-color.interface';
+import {IColoringSettings} from './models/coloring-settings.interface';
 // services
-import { ImageConverterService } from './services/image-converter.service';
-import { InMemoryCashService } from './services/in-memory-cash.service';
-import { ColoringHelperService } from './services/coloring-helper.service';
-import { AppTitleService } from 'src/services/app-title.service';
+import {ImageConverterService} from './services/image-converter.service';
+import {InMemoryCashService} from './services/in-memory-cash.service';
+import {ColoringHelperService} from './services/coloring-helper.service';
+import {AppTitleService} from 'src/services/app-title.service';
 
 @Component({
     selector: 'coloring',
@@ -94,14 +94,18 @@ export class ColoringComponent implements OnInit, OnDestroy {
 
     private _loadById(id: number) {
         const clear = this._coloringSettings.settings.imageId !== id;
-        this._coloringSettings.settings = { ...this._coloringSettings.settings, fileName: null, imageId: id };
+        this._coloringSettings.settings = {...this._coloringSettings.settings, fileName: null, imageId: id};
         this._load(clear);
     }
 
     private _fileLoad(files: FileList): void {
         const fileToUpload = files.item(0) as File;
         const clear = this._coloringSettings.settings.fileName !== fileToUpload.name;
-        this._coloringSettings.settings = { ...this._coloringSettings.settings, fileName: fileToUpload.name, imageId: null };
+        this._coloringSettings.settings = {
+            ...this._coloringSettings.settings,
+            fileName: fileToUpload.name,
+            imageId: null
+        };
         this._load(clear, fileToUpload);
     }
 
@@ -110,10 +114,10 @@ export class ColoringComponent implements OnInit, OnDestroy {
         const fromCash = this._cash.loadFromCash(this._coloringSettings.settings);
 
         (fromCash
-            ? of(fromCash)
-            : fileToUpload
-                ? this._http.convertToPoints<IRecColor>(fileToUpload, this._coloringSettings.settings)
-                : this._http.convertToPointsById<IRecColor>(this._coloringSettings.settings)
+                ? of(fromCash)
+                : fileToUpload
+                    ? this._http.convertToPoints<IRecColor>(fileToUpload, this._coloringSettings.settings)
+                    : this._http.convertToPointsById<IRecColor>(this._coloringSettings.settings)
         ).pipe(
             catchError((error: Error) => {
                 this._loading(false);

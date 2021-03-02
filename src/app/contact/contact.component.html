@@ -23,33 +23,34 @@
                         <div class="form-group">
                             <label for="name"><span>Имя</span> (обязательно)</label>
                             <input class="form-control" name="name" formControlName="userName" aria-label="name"
-                                aria-describedby="namelHelp">
+                                   aria-describedby="namelHelp">
                             <div class="alert alert-danger"
-                                *ngIf="contactForm.controls['userName'].invalid && contactForm.controls['userName'].touched">
+                                 *ngIf="contactForm.controls['userName'].invalid && contactForm.controls['userName'].touched">
                                 Не указано имя
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="email"><span>Email</span> (обязательно)</label>
                             <input class="form-control" name="email" formControlName="userEmail" aria-label="email"
-                                aria-describedby="emailHelp">
+                                   aria-describedby="emailHelp">
                             <div class="alert alert-danger"
-                                *ngIf="contactForm.controls['userEmail'].invalid && contactForm.controls['userEmail'].touched">
+                                 *ngIf="contactForm.controls['userEmail'].invalid && contactForm.controls['userEmail'].touched">
                                 Некорректный email
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="email"><span>Сообщение</span> (обязательно)</label>
                             <textarea name="" id="" cols="30" rows="3" class="form-control" name="email"
-                                formControlName="userMessage" aria-label="text" aria-describedby="textlHelp">
+                                      formControlName="userMessage" aria-label="text" aria-describedby="textlHelp">
                             </textarea>
                             <div class="alert alert-danger"
-                                *ngIf="contactForm.controls['userMessage'].invalid && contactForm.controls['userMessage'].touched">
+                                 *ngIf="contactForm.controls['userMessage'].invalid && contactForm.controls['userMessage'].touched">
                                 Необхлдимо ввести сообщение
                             </div>
                         </div>
                         <button type="button" class="btn btn-primary" (click)="submit()"
-                            [disabled]="contactForm.invalid || contactForm.disabled">Отправить</button>
+                                [disabled]="contactForm.invalid || contactForm.disabled">Отправить
+                        </button>
                     </form>
                 </div>
             </div>

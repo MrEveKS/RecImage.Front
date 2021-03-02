@@ -1,13 +1,16 @@
 .container {
   padding: 1rem 0;
   text-align: center;
+
   .image-block {
     display: inline-block;
   }
+
   .image-container {
     display: inline-block;
     padding: .125rem;
   }
+
   img {
     cursor: pointer;
     object-fit: cover;

@@ -1,6 +1,6 @@
-import { Component, OnInit } from "@angular/core";
-import { IColoringSettings } from "../models/coloring-settings.interface";
-import { ColoringHelperService } from "../services/coloring-helper.service";
+import {Component, OnInit} from "@angular/core";
+import {IColoringSettings} from "../models/coloring-settings.interface";
+import {ColoringHelperService} from "../services/coloring-helper.service";
 
 @Component({
     selector: 'progress-bar',

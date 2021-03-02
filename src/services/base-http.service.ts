@@ -1,14 +1,13 @@
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {environment} from 'src/environments/environment';
 
 export class BaseHttpService {
 
     private readonly _apiUrl = environment.apiUrl;
     private readonly _controller;
     private readonly _httpParams = {
-        headers: {
-        }
+        headers: {}
     };
 
     constructor(controller: string, private _http: HttpClient) {
