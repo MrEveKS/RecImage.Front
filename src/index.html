@@ -1,96 +1,134 @@
 <!DOCTYPE html>
 <html lang="ru">
-
-<head>
-    <meta charset="utf-8"/>
+  <head>
+    <meta charset="utf-8" />
     <title>Rec Image: раскраска по пикселям</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="icon" type="image/vnd.microsoft.icon" href="/favicon.ico">
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="icon" href="/favicon.ico"/>
-    <link rel="icon" type="image/png" sizes="48x48" href="assets/icons/icon-48x48.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/icon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/icon-16x16.png">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/vnd.microsoft.icon" href="/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" href="/favicon.ico" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="48x48"
+      href="assets/icons/icon-48x48.png" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="assets/icons/icon-32x32.png" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="assets/icons/icon-16x16.png" />
 
-    <link rel="apple-touch-icon" href="assets/icons/icon-192x192.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="assets/icons/icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="167x167" href="assets/icons/icon-167x167.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/icon-180x180.png">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192x192.png" />
+    <link
+      rel="apple-touch-icon"
+      sizes="152x152"
+      href="assets/icons/icon-152x152.png" />
+    <link
+      rel="apple-touch-icon"
+      sizes="167x167"
+      href="assets/icons/icon-167x167.png" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="assets/icons/icon-180x180.png" />
 
-    <link rel="canonical" href="https://recimage.ru/"/>
-    <meta name="robots" content="index, fallow">
-    <meta name="description"
-          content="Увлекательное времяпрепровождение - раскраска по пикселям. Раскрашивая квадрат за квадратом, мы получим полноценное пиксельное изображение.">
-    <meta name="Keywords"
-          content="раскраска, раскраска +по пикселям, pixel art, пиксел игра, пиксел программа, пиксел онлайн, пиксель номерам раскраска, раскраска по квадратам, pаскраска по клеточкам онлайн, пиксельная раскраска, пиксельная раскраска по номерам, oнлайн раскраска по номерам, pixel coloring, coloring, recimage, кусшьфпу, кус шьфпу, rec image,картина номер,раскраски,пиксел фото,раскраска по номерам, игра раскраска по номерам, раскраска номер,pixel color, раскраска онлайн, игра раскраска, раскраска по пикселям">
-    <link rel="manifest" href="/manifest.webmanifest">
-    <meta name="theme-color" content="#1976d2">
+    <link rel="canonical" href="https://recimage.ru/" />
+    <meta name="robots" content="index, fallow" />
+    <meta
+      name="description"
+      content="Увлекательное времяпрепровождение - раскраска по пикселям. Раскрашивая квадрат за квадратом, мы получим полноценное пиксельное изображение." />
+    <meta
+      name="Keywords"
+      content="раскраска, раскраска +по пикселям, pixel art, пиксел игра, пиксел программа, пиксел онлайн, пиксель номерам раскраска, раскраска по квадратам, pаскраска по клеточкам онлайн, пиксельная раскраска, пиксельная раскраска по номерам, oнлайн раскраска по номерам, pixel coloring, coloring, recimage, кусшьфпу, кус шьфпу, rec image,картина номер,раскраски,пиксел фото,раскраска по номерам, игра раскраска по номерам, раскраска номер,pixel color, раскраска онлайн, игра раскраска, раскраска по пикселям" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#1976d2" />
 
-    <meta name="msapplication-TileImage" content="https://recimage.ru/assets/icons/icon-256x256.png">
+    <meta
+      name="msapplication-TileImage"
+      content="https://recimage.ru/assets/icons/icon-256x256.png" />
 
-    <meta property="og:locale" content="ru_RU"/>
-    <meta property="og:site_name" content="Rec Image">
-    <meta property="og:title" content="Rec Image, pixel coloring"/>
-    <meta property="og:type" content="website"/>
-    <meta property="og:url" content="https://recimage.ru/"/>
-    <meta property="og:image" content="https://recimage.ru/assets/icons/icon-256x256.png"/>
-    <meta property="og:image:type" content="image/png">
-    <meta property="og:image:width" content="256">
-    <meta property="og:image:height" content="256">
-    <meta property="og:description" content="Увлекательное времяпрепровождение - раскраска по пикселям."/>
-    <meta content="summary" name="twitter:card">
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:site_name" content="Rec Image" />
+    <meta property="og:title" content="Rec Image, pixel coloring" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://recimage.ru/" />
+    <meta
+      property="og:image"
+      content="https://recimage.ru/assets/icons/icon-256x256.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="256" />
+    <meta property="og:image:height" content="256" />
+    <meta
+      property="og:description"
+      content="Увлекательное времяпрепровождение - раскраска по пикселям." />
+    <meta content="summary" name="twitter:card" />
 
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:site" content="https://recimage.ru/">
-    <meta name="twitter:title" content="Rec Image">
-    <meta name="twitter:description" content="Увлекательное времяпрепровождение - раскраска по пикселям.">
-    <meta name="twitter:creator" content="@EveKS_">
-    <meta name="twitter:image" content="https://recimage.ru/assets/icons/icon-120x120.png">
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="https://recimage.ru/" />
+    <meta name="twitter:title" content="Rec Image" />
+    <meta
+      name="twitter:description"
+      content="Увлекательное времяпрепровождение - раскраска по пикселям." />
+    <meta name="twitter:creator" content="@EveKS_" />
+    <meta
+      name="twitter:image"
+      content="https://recimage.ru/assets/icons/icon-120x120.png" />
 
-    <meta property="fb:admins" content="100002854838457"/>
-    <meta property="profile:first_name" content="Евгений"/>
-    <meta property="profile:last_name" content="Климов"/>
-    <meta property="profile:username" content="infettu"/>
+    <meta property="fb:admins" content="100002854838457" />
+    <meta property="profile:first_name" content="Евгений" />
+    <meta property="profile:last_name" content="Климов" />
+    <meta property="profile:username" content="infettu" />
 
-    <base href="/"/>
+    <base href="/" />
 
     <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@type": "Game",
-            "name": "Rec Image",
-            "review": {
-                "@type": "Review",
-                "reviewRating": {
-                    "@type": "Rating",
-                    "ratingValue": "5"
-                },
-                "author": {
-                    "@type": "Person",
-                    "name": "Evgenii Klimov"
-                },
-                "reviewBody": "Увлекательное времяпрепровождение - раскраска по пикселям."
-            }
+      {
+        "@context": "https://schema.org",
+        "@type": "Game",
+        "name": "Rec Image",
+        "review": {
+          "@type": "Review",
+          "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": "5"
+          },
+          "author": {
+            "@type": "Person",
+            "name": "Evgenii Klimov"
+          },
+          "reviewBody": "Увлекательное времяпрепровождение - раскраска по пикселям."
         }
+      }
     </script>
-</head>
+  </head>
 
-<body>
-<main-app>
-    <link rel="stylesheet" type="text/css" href="styles/preloader.min.css">
-    <div class="application-loading-container">
+  <body>
+    <app-main>
+      <link rel="stylesheet" type="text/css" href="styles/preloader.min.css" />
+      <div class="application-loading-container">
         <div class="logo">
-            <img loading="lazy" src="assets/icons/icon-72x72.png" width="72" height="72" alt="Rec Image">
+          <img
+            loading="lazy"
+            src="assets/icons/icon-72x72.png"
+            width="72"
+            height="72"
+            alt="Rec Image" />
         </div>
         <div class="application-loading-box">
-            <h1>Rec Image</h1>
-            <h5>Раскраска по пикселям</h5>
+          <h1>Rec Image</h1>
+          <h5>Раскраска по пикселям</h5>
         </div>
-    </div>
-</main-app>
-<noscript>Please enable JavaScript to continue using this application.</noscript>
-</body>
-
+      </div>
+    </app-main>
+    <noscript
+      >Please enable JavaScript to continue using this application.</noscript
+    >
+  </body>
 </html>

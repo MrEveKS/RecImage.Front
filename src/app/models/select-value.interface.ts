@@ -1,4 +1,4 @@
 export interface ISelectValue<TValue> {
-    title: string;
-    value: TValue
+  title: string;
+  value: TValue;
 }

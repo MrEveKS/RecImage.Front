@@ -1,4 +1,5 @@
-<nav-bar></nav-bar>
+<app-nav-bar></app-nav-bar>
 <router-outlet></router-outlet>
-<footer-select *ngIf="!(hideFooterSelect$ | async)"></footer-select>
-<footer *ngIf="!(hideFooterSelect$ | async)"></footer>
+<app-footer-select
+  *ngIf="(hideFooterSelect$ | async) === false"></app-footer-select>
+<app-footer *ngIf="(hideFooterSelect$ | async) === false"></app-footer>

@@ -1,4 +1,7 @@
-<div class="convas-container" #container>
-    <canvas class="m-auto" (click)="onClick($event)" [ngStyle]="{ 'transform' : 'scale(' + (zoom / 100) + ')'}"
-            #canvasContainer></canvas>
+<div class="canvas-container" #container>
+  <canvas
+    class="m-auto"
+    (click)="onClick($event)"
+    [ngStyle]="{ transform: 'scale(' + zoom / 100 + ')' }"
+    #canvasContainer></canvas>
 </div>

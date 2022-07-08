@@ -1,8 +1,8 @@
-import {IColoringImageSettings} from "./coloring-image-settings.interface";
+import { IColoringImageSettings } from './coloring-image-settings.interface';
 
 /**
- * Settins of image converting
+ * Settings of image converting
  */
 export interface ICashSettings extends IColoringImageSettings {
-    fileName?: string;
+  fileName?: string;
 }

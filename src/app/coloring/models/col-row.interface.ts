@@ -1,5 +1,5 @@
 export interface IColRow {
-    col: number;
-    row: number;
-    num: number;
+  col: number;
+  row: number;
+  num: number;
 }

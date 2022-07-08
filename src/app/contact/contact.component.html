@@ -1,59 +1,98 @@
 <div class="main-container container-fluid">
-    <div class="header">
-        <h1 class="h1">Контакты</h1>
-    </div>
-    <div class="row">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-6 col-md">
-                    <p class="d-inline-block text lead">
-                        Давайте общаться. Свяжитесь с нами, если возникли вопросы или предложения. Используя контактные
-                        данные ниже, или отправьте сообщение через специальную форму.
-                    </p>
-                    <h2 class="h2">Связаться с нами</h2>
-                    <div class="development-soc">
-                        <a class="btn btn-outline-info rounded-circle" target="_blanc" href="https://vk.com/recimage">
-                            <img loading="lazy" src="assets/vk-logo.svg" height="32px" width="32px" alt="Vk Group">
-                        </a>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md">
-                    <h2 class="h2">Отправить сообщение</h2>
-                    <form [formGroup]="contactForm" autocomplete="off">
-                        <div class="form-group">
-                            <label for="name"><span>Имя</span> (обязательно)</label>
-                            <input class="form-control" name="name" formControlName="userName" aria-label="name"
-                                   aria-describedby="namelHelp">
-                            <div class="alert alert-danger"
-                                 *ngIf="contactForm.controls['userName'].invalid && contactForm.controls['userName'].touched">
-                                Не указано имя
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="email"><span>Email</span> (обязательно)</label>
-                            <input class="form-control" name="email" formControlName="userEmail" aria-label="email"
-                                   aria-describedby="emailHelp">
-                            <div class="alert alert-danger"
-                                 *ngIf="contactForm.controls['userEmail'].invalid && contactForm.controls['userEmail'].touched">
-                                Некорректный email
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="email"><span>Сообщение</span> (обязательно)</label>
-                            <textarea name="" id="" cols="30" rows="3" class="form-control" name="email"
-                                      formControlName="userMessage" aria-label="text" aria-describedby="textlHelp">
-                            </textarea>
-                            <div class="alert alert-danger"
-                                 *ngIf="contactForm.controls['userMessage'].invalid && contactForm.controls['userMessage'].touched">
-                                Необхлдимо ввести сообщение
-                            </div>
-                        </div>
-                        <button type="button" class="btn btn-primary" (click)="submit()"
-                                [disabled]="contactForm.invalid || contactForm.disabled">Отправить
-                        </button>
-                    </form>
-                </div>
-            </div>
+  <div class="header">
+    <h1 class="h1">Контакты</h1>
+  </div>
+  <div class="row">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6 col-md">
+          <p class="d-inline-block text lead">
+            Давайте общаться. Свяжитесь с нами, если возникли вопросы или
+            предложения. Используя контактные данные ниже, или отправьте
+            сообщение через специальную форму.
+          </p>
+          <h2 class="h2">Связаться с нами</h2>
+          <div class="development-soc">
+            <a
+              class="btn btn-outline-info rounded-circle"
+              target="_blanc"
+              href="https://vk.com/recimage">
+              <img
+                loading="lazy"
+                src="assets/vk-logo.svg"
+                height="32px"
+                width="32px"
+                alt="Vk Group" />
+            </a>
+          </div>
         </div>
+        <div class="col-sm-6 col-md">
+          <h2 class="h2">Отправить сообщение</h2>
+          <form [formGroup]="contactForm" autocomplete="off">
+            <div class="form-group">
+              <label for="name"><span>Имя</span> (обязательно)</label>
+              <input
+                class="form-control"
+                id="name"
+                formControlName="userName"
+                aria-label="name"
+                aria-describedby="namelHelp" />
+              <div
+                class="alert alert-danger"
+                *ngIf="
+                  contactForm.controls['userName'].invalid &&
+                  contactForm.controls['userName'].touched
+                ">
+                Не указано имя
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="email"><span>Email</span> (обязательно)</label>
+              <input
+                class="form-control"
+                id="email"
+                formControlName="userEmail"
+                aria-label="email"
+                aria-describedby="emailHelp" />
+              <div
+                class="alert alert-danger"
+                *ngIf="
+                  contactForm.controls['userEmail'].invalid &&
+                  contactForm.controls['userEmail'].touched
+                ">
+                Некорректный email
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="email"><span>Сообщение</span> (обязательно)</label>
+              <textarea
+                cols="30"
+                rows="3"
+                class="form-control"
+                name="email"
+                formControlName="userMessage"
+                aria-label="text"
+                aria-describedby="textHelp">
+              </textarea>
+              <div
+                class="alert alert-danger"
+                *ngIf="
+                  contactForm.controls['userMessage'].invalid &&
+                  contactForm.controls['userMessage'].touched
+                ">
+                Необхлдимо ввести сообщение
+              </div>
+            </div>
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="submit()"
+              [disabled]="contactForm.invalid || contactForm.disabled">
+              Отправить
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
+  </div>
 </div>

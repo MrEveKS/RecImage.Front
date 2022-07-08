@@ -1,7 +1,7 @@
-import {IRecColor} from "./rec-color.interface";
+import { IRecColor } from './rec-color.interface';
 
 export interface IRecUpdate {
-    recColor: IRecColor;
-    clear: boolean;
-    colorSave: boolean;
+  recColor: IRecColor;
+  clear: boolean;
+  colorSave: boolean;
 }
