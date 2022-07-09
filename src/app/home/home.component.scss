@@ -9,10 +9,6 @@
   color: #1a1a1a;
 }
 
-.text {
-  padding: 0 1rem;
-}
-
 .head-container:before {
   position: absolute;
   top: 0;
@@ -25,14 +21,20 @@
   background-color: inherit;
 }
 
-.select-buttons .btn {
+.btn-info {
+  padding: 0.5rem 1rem;
+  font-size: 1.25rem;
+  line-height: 1.5;
   margin: 0.25rem;
-  border-radius: 0;
   text-transform: uppercase;
 }
 
 .btn-info.light:not(:hover) {
   background-color: #22bdd6;
+}
+
+.btn-info.dark:not(:hover) {
+  background-color: #0f7e90;
 }
 
 .center-block {

@@ -1,17 +1,18 @@
 <div class="head-container container-fluid">
   <div class="center-block">
-    <h1>Раскраска по пикселям.</h1>
-    <p class="text">
+    <h1>Раскраска по пикселям</h1>
+    <p class="mat-body">
       Раскрашивая квадрат за квадратом, мы получим полноценное пиксельное
       изображение разных картинок.
     </p>
-    <div class="select-buttons">
-      <a class="btn btn-lg btn-info" routerLink="/coloring">
+    <div>
+      <a mat-raised-button class="btn-info dark" routerLink="/coloring">
         Загрузить изображение
       </a>
       <button
+        mat-raised-button
         type="button"
-        class="btn btn-lg btn-info light"
+        class="btn-info light"
         (click)="randomSelect()">
         Случайный выбор
       </button>

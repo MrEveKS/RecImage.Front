@@ -1,21 +1,23 @@
-.text {
-  padding: 0 1rem;
-}
-
 .footer-container {
   background-color: rgb(26, 26, 26);
   min-height: 700px;
   position: relative;
 }
 
-.select-buttons .btn {
+.btn-info {
+  padding: 0.5rem 1rem;
+  font-size: 1.25rem;
+  line-height: 1.5;
   margin: 0.25rem;
-  border-radius: 0;
   text-transform: uppercase;
 }
 
 .btn-info.light:not(:hover) {
   background-color: #22bdd6;
+}
+
+.btn-info.dark:not(:hover) {
+  background-color: #0f7e90;
 }
 
 .center-block {
