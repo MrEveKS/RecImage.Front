@@ -1,13 +1,15 @@
 <footer>
-  <mat-toolbar class="bg-dark-b nav-center">
-    <a
-      mat-button
-      routerLinkActive="active"
-      routerLink=""
-      [routerLinkActiveOptions]="{ exact: true }"
-      >Главная Страница</a
-    >
-    <a mat-button routerLinkActive="active" routerLink="/about">О нас</a>
-    <a mat-button routerLinkActive="active" routerLink="/contact">Контакты</a>
+  <mat-toolbar class="bg-dark-b">
+    <mat-toolbar-row class="nav-center">
+      <a
+        mat-button
+        routerLinkActive="active"
+        routerLink="/"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >Главная Страница</a
+      >
+      <a mat-button routerLinkActive="active" routerLink="/about">О нас</a>
+      <a mat-button routerLinkActive="active" routerLink="/contact">Контакты</a>
+    </mat-toolbar-row>
   </mat-toolbar>
 </footer>

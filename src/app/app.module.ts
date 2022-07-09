@@ -17,7 +17,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
 import { FooterSelectComponent } from './footer/footer-select/footer-select.component';
-import { NavRowSmoothHeightComponent } from './components/NavRowSmoothHeightComponent';
+import { NavRowSmoothHeightComponent } from './components/nav-row-smooth-height.component';
 import { FooterComponent } from './footer/footer.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
