@@ -1,14 +1,13 @@
-<ul class="nav justify-content-center">
-  <li
-    class="nav-item"
-    routerLinkActive="active"
-    [routerLinkActiveOptions]="{ exact: true }">
-    <a class="nav-link" routerLink="">Главная Страница</a>
-  </li>
-  <li class="nav-item" routerLinkActive="active">
-    <a class="nav-link" routerLink="/about">О нас</a>
-  </li>
-  <li class="nav-item" routerLinkActive="active">
-    <a class="nav-link" routerLink="/contact">Контакты</a>
-  </li>
-</ul>
+<footer>
+  <mat-toolbar class="bg-dark-b nav-center">
+    <a
+      mat-button
+      routerLinkActive="active"
+      routerLink=""
+      [routerLinkActiveOptions]="{ exact: true }"
+      >Главная Страница</a
+    >
+    <a mat-button routerLinkActive="active" routerLink="/about">О нас</a>
+    <a mat-button routerLinkActive="active" routerLink="/contact">Контакты</a>
+  </mat-toolbar>
+</footer>

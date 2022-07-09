@@ -1,11 +1,16 @@
-li a {
-  color: rgba(255, 255, 255, 0.5);
+.mat-button.active {
+  background-color: #ffffff44;
 }
 
-li:hover a {
-  color: rgba(255, 255, 255, 0.75);
+.bg-dark-b {
+  background-color: #121212;
 }
 
-.active a {
-  color: #fff;
+.nav-center {
+  justify-content: center;
+}
+
+.nav-center .mat-button {
+  margin-left: .25rem;
+  margin-right: .25rem;
 }

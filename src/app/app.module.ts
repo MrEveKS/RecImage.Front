@@ -3,11 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import {
-  NgbCollapseModule,
-  NgbDropdownModule,
-} from '@ng-bootstrap/ng-bootstrap';
-import { MetrikaModule } from 'ng-yandex-metrika';
 
 import {
   APP_BASE_HREF,
@@ -22,9 +17,17 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
 import { FooterSelectComponent } from './footer/footer-select/footer-select.component';
+import { NavRowSmoothHeightComponent } from './components/NavRowSmoothHeightComponent';
 import { FooterComponent } from './footer/footer.component';
 
-const yaMetricId = environment.production ? 70474984 : 72180016;
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+import { LayoutModule } from '@angular/cdk/layout';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   providers: [
@@ -34,25 +37,27 @@ const yaMetricId = environment.production ? 70474984 : 72180016;
   imports: [
     CommonModule,
     AppRoutingModule,
-    NgbDropdownModule,
-    NgbCollapseModule,
     BrowserModule,
     FormsModule,
     HttpClientModule,
-    MetrikaModule.forRoot({
-      id: yaMetricId,
-      webvisor: true,
-      clickmap: true,
-    }),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
     }),
+    BrowserAnimationsModule,
+    LayoutModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatButtonModule,
+    MatMenuModule,
+    MatSidenavModule,
+    FlexLayoutModule,
   ],
   declarations: [
     AppComponent,
     NavComponent,
     FooterComponent,
     FooterSelectComponent,
+    NavRowSmoothHeightComponent,
   ],
   bootstrap: [AppComponent],
 })

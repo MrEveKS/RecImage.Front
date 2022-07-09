@@ -10,7 +10,6 @@ import {
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { Metrika } from 'ng-yandex-metrika';
 import { fromEvent, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -18,11 +17,7 @@ import { takeUntil } from 'rxjs/operators';
 import { IColRow } from 'src/app/coloring/models/col-row.interface';
 import { IRecColor } from 'src/app/coloring/models/rec-color.interface';
 import { IRecUpdate } from '../models/rec-update.interface';
-// constants
-import {
-  COLORING_CLICK,
-  COLORING_TOMING,
-} from '../models/constants/metrik.constant';
+
 // services
 import { ColoringHelperService } from '../services/coloring-helper.service';
 
@@ -66,7 +61,6 @@ export class ColoringBoardComponent
   private _visitTime: number;
 
   constructor(
-    private _metric: Metrika,
     private _renderer: Renderer2,
     private _coloringHelper: ColoringHelperService,
     @Inject(DOCUMENT) document: Document
@@ -161,7 +155,6 @@ export class ColoringBoardComponent
   public onClick($event: MouseEvent): void {
     if (!this._coloringClicked) {
       this._coloringClicked = true;
-      this._metric.fireEvent(COLORING_CLICK).then(_ => {});
     }
 
     const recColor = this.recColor;
@@ -373,8 +366,5 @@ export class ColoringBoardComponent
     if (this._visitTime) {
       this._defaultView.clearTimeout(this._visitTime);
     }
-    this._visitTime = this._defaultView.setTimeout(() => {
-      this._metric.fireEvent(COLORING_TOMING).then(_ => {});
-    }, 5 * 60 * 1000);
   }
 }

@@ -3,9 +3,7 @@
   "version": 1,
   "cli": {
     "packageManager": "yarn",
-    "warnings": {
-      "typescriptMismatch": false
-    }
+    "analytics": false
   },
   "newProjectRoot": "projects",
   "projects": {
@@ -41,10 +39,11 @@
               }
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
               "styles.scss",
               {
                 "input": "src/styles/preloader.scss",
-                "bundleName": "styles/preloader.min",
+                "bundleName": "preloader.min",
                 "inject": false
               }
             ],

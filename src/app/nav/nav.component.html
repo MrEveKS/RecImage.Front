@@ -1,4 +1,126 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark-b">
+<div class="nav-bar">
+  <mat-toolbar class="bg-dark-b">
+    <mat-toolbar-row class="nav-row">
+      <div fxShow="true" fxHide.gt-sm="true">
+        <button mat-icon-button (click)="toggleNavbar()">
+          <mat-icon>menu</mat-icon>
+        </button>
+      </div>
+
+      <a mat-button class="companyName" routerLink="/">
+        <img
+          src="/assets/icons/icon-32x32.png"
+          width="30"
+          height="30"
+          class="d-inline-block align-top"
+          alt="Logo"
+          loading="lazy" />
+        <span class="site-name">Rec Image</span>
+      </a>
+      <span class="nav-spacer"></span>
+      <div fxShow="true" fxHide.lt-md="true">
+        <a
+          mat-button
+          routerLinkActive="active"
+          routerLink="/"
+          [routerLinkActiveOptions]="{ exact: true }"
+          >Главная Страница</a
+        >
+        <a mat-button routerLinkActive="active" routerLink="/about">О нас</a>
+        <a mat-button routerLinkActive="active" routerLink="/contact"
+          >Контакты</a
+        >
+      </div>
+    </mat-toolbar-row>
+    <mat-toolbar-row
+      app-row-smooth
+      class="small-nav-row"
+      fxShow="{{ isNavbarCollapsed === false }}"
+      fxHide.gt-sm="true"
+      [trigger]="isNavbarCollapsed === false">
+      <div fxLayout="column" fxFlexFill>
+        <a
+          mat-button
+          routerLinkActive="active"
+          routerLink="/"
+          [routerLinkActiveOptions]="{ exact: true }"
+          >Главная Страница</a
+        >
+        <a mat-button routerLinkActive="active" routerLink="/about">О нас</a>
+        <a mat-button routerLinkActive="active" routerLink="/contact"
+          >Контакты</a
+        >
+      </div>
+    </mat-toolbar-row>
+  </mat-toolbar>
+  <!--<mat-sidenav-container fxFlexFill class="example-container">
+    <mat-sidenav
+      #sidenav
+      fxLayout="column"
+      mode="over"
+      opened="false"
+      fxHide.gt-sm="true">
+      <div fxLayout="column">
+        <a
+          mat-button
+          routerLinkActive="active"
+          routerLink="/about-us"
+          [routerLinkActiveOptions]="{ exact: true }"
+          >About us</a
+        >
+        <a mat-button routerLink="/prices">Prices</a>
+        <a mat-button routerLink="/start-page">Start page</a>
+        <a mat-button routerLink="/offer">Offer</a>
+        <a mat-button routerLink="/contact">Contact</a>
+      </div>
+    </mat-sidenav>
+  </mat-sidenav-container>-->
+</div>
+
+<!--<mat-toolbar color="primary">
+  <button mat-button routerLink="/">
+    <mat-icon>home</mat-icon>
+    RecImage
+  </button>
+
+  <span class="fill-remaining-space"></span>
+  <div fxLayout="row" fxShow="false" fxShow.gt-sm>
+    <button mat-button routerLink="/products">Products</button>
+    <button mat-button routerLink="/dashboard">Dashboard</button>
+  </div>
+  <button mat-button [mat-menu-trigger-for]="menu" fxHide="false" fxHide.gt-sm>
+    <mat-icon>menu</mat-icon>
+  </button>
+</mat-toolbar>
+<mat-menu x-position="before" #menu="matMenu">
+  <button mat-menu-item routerLink="/products">Products</button>
+  <button mat-menu-item routerLink="/dashboard">Dashboard</button>
+</mat-menu>-->
+
+<!--<mat-toolbar>
+  <button
+    mat-icon-button
+    class="example-icon"
+    aria-label="Example icon-button with menu icon">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>My App</span>
+  <span class="example-spacer"></span>
+  <button
+    mat-icon-button
+    class="example-icon favorite-icon"
+    aria-label="Example icon-button with heart icon">
+    <mat-icon>favorite</mat-icon>
+  </button>
+  <button
+    mat-icon-button
+    class="example-icon"
+    aria-label="Example icon-button with share icon">
+    <mat-icon>share</mat-icon>
+  </button>
+</mat-toolbar>-->
+
+<!--<nav class="navbar navbar-expand-lg navbar-dark bg-dark-b">
   <a class="navbar-brand" routerLink="">
     <img
       src="/assets/icons/icon-32x32.png"
@@ -40,4 +162,4 @@
       </li>
     </ul>
   </div>
-</nav>
+</nav>-->

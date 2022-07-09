@@ -1,18 +1,35 @@
-.navbar {
-  padding: 1rem;
-  min-height: 4.5rem;
+.nav-bar {
+  display: flex;
+}
+
+.nav-row {
+  height: 4rem;
+}
+
+.small-nav-row {
+  height: auto;
+}
+
+.site-name {
+  font-weight: 500;
+  margin-left: 1rem;
+  font-size: 1rem;
+  white-space: nowrap;
+}
+
+.nav-spacer {
+  flex: 1 1 auto;
+}
+
+.mat-button.active {
+  background-color: #ffffff44;
+}
+
+.nav-center .mat-button {
+  margin-left: .25rem;
+  margin-right: .25rem;
 }
 
 .bg-dark-b {
   background-color: #121212;
-}
-
-.nav-item {
-  text-transform: uppercase;
-  font-weight: 600;
-}
-
-.navbar-brand {
-  font-weight: 600;
-  margin-left: 1rem;
 }
