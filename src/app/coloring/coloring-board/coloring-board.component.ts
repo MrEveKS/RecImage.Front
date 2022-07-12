@@ -140,7 +140,7 @@ export class ColoringBoardComponent
 
     fromEvent(this._defaultView, 'resize')
       .pipe(takeUntil(this._destroy))
-      .subscribe(this._updateCanvasPosition.bind(this));
+      .subscribe(() => this._updateCanvasPosition(this._context.canvas));
   }
 
   public ngOnDestroy(): void {
@@ -318,8 +318,12 @@ export class ColoringBoardComponent
   }
 
   private _canvasPositionChange(canvas: HTMLCanvasElement): void {
+    console.log(`zoom: ${this.zoom}`);
     const canvasWidth = (+canvas.width * this.zoom) / 100;
     const canvasHeight = (+canvas.height * this.zoom) / 100;
+
+    console.dir(this._defaultView);
+    console.dir(canvas);
 
     const canvasContainer = this._container.nativeElement;
     const canvasContainerWidth = +canvasContainer.clientWidth;
@@ -327,6 +331,17 @@ export class ColoringBoardComponent
     const styleValues = this._defaultView.getComputedStyle(canvas);
     const marginTop = parseInt(styleValues.getPropertyValue('margin-top'));
     const marginLeft = parseInt(styleValues.getPropertyValue('margin-left'));
+
+    console.log(
+      `canvasWidth: ${canvasWidth}, canvasContainerWidth: ${canvasContainerWidth}, ${
+        canvasWidth < canvasContainerWidth
+      }`
+    );
+    console.log(
+      `canvasHeight: ${canvasHeight}, canvasContainerHeight: ${canvasContainerHeight}, ${
+        canvasHeight < canvasContainerHeight
+      }`
+    );
 
     const left =
       canvasWidth < canvasContainerWidth
@@ -336,6 +351,8 @@ export class ColoringBoardComponent
       canvasHeight < canvasContainerHeight
         ? `${(canvasContainerHeight - canvasHeight) / 2 - marginTop}px`
         : 'unset';
+
+    console.log(`left: ${left}, top: ${top}`);
 
     this._renderer.setStyle(canvas, 'left', left);
     this._renderer.setStyle(canvas, 'top', top);

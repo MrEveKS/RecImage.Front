@@ -2,7 +2,7 @@ import { ISelectValue } from 'src/app/models/select-value.interface';
 import { ICashSettings } from './cash-settings.interface';
 
 /**
- * Coloring Settins
+ * Coloring Settings
  */
 export interface IColoringSettings {
   loading: boolean;

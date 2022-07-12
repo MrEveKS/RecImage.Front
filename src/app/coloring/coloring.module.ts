@@ -9,9 +9,17 @@ import { ColoringMenuComponent } from './coloring-menu/coloring-menu.component';
 import { ColoringBoardComponent } from './coloring-board/coloring-board.component';
 import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import { SpinnerComponent } from './spinner/spinner.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatSliderModule } from '@angular/material/slider';
 
 @NgModule({
-  imports: [ColoringRoutingModule, CommonModule, FormsModule],
+  imports: [
+    ColoringRoutingModule,
+    CommonModule,
+    FormsModule,
+    FlexLayoutModule,
+    MatSliderModule,
+  ],
   declarations: [
     ColoringComponent,
     ColoringMenuComponent,

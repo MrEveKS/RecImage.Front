@@ -7,20 +7,15 @@
       height="32"
       alt="Menu" />
   </a>
-  <div class="d-flex justify-content-center">
-    <div class="col-sm-9 col-md-4 range-menu">
-      <div class="input-group range-input">
-        <input
-          type="range"
-          class="form-control form-control-range"
-          min="5"
-          max="150"
-          name="zoom"
-          aria-label="Zoom"
-          [ngModel]="coloringSettings.zoom"
-          (ngModelChange)="resize($event)" />
-      </div>
-    </div>
+  <div class="d-flex range-input">
+    <mat-slider
+      class="form-control-range"
+      [min]="5"
+      [max]="150"
+      [step]="1"
+      [ngModel]="coloringSettings.zoom"
+      (ngModelChange)="resize($event)"
+      aria-labelledby="Zoom"></mat-slider>
   </div>
   <nav class="game-menu">
     <button
