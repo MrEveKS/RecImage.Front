@@ -18,7 +18,12 @@
     "lint": "npx eslint src",
     "lint:fix": "npm run lint -- --fix",
     "prettier": "npx prettier src --check",
-    "prettier:fix": "npm run prettier -- --write"
+    "prettier:fix": "npm run prettier -- --write",
+    "docker:build": "docker build -t rec-image .",
+    "docker:run": "docker run -it --rm -p 9000:80 rec-image",
+    "docker:tag": "docker tag rec-image eveks/rec-image",
+    "docker:login": "docker login -u",
+    "docker:push": "docker push rec-image"
   },
   "repository": {
     "type": "git",
