@@ -146,7 +146,7 @@ export class ColoringBoardComponent
 
     fromEvent(this._defaultView, 'resize')
       .pipe(takeUntil(this._destroy))
-      .subscribe(this._updateCanvasPosition.bind(this));
+      .subscribe(() => this._updateCanvasPosition(this._context.canvas));
   }
 
   public ngOnDestroy(): void {
